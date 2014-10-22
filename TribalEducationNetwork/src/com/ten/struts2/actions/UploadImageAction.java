@@ -12,6 +12,13 @@ import com.ten.dao.implementation.DbAccessDaoImpl;
 import com.ten.dao.interfaces.DbAccessDaoInterface;
 import com.ten.triplestore.dao.implementation.VirtuosoAccessDaoImpl;
 import com.ten.triplestore.dao.interfaces.TriplestoreAccessDaoInterface;
+
+/**
+ * 
+ * @author Nita Karande
+ * This action invoked by upload_image.jsp 
+ * It invokes method to upload image to database and store annotations in triplestore
+ */
 public class UploadImageAction extends ActionSupport{
 
 	static Logger log = Logger.getLogger(UploadImageAction.class);
@@ -64,6 +71,11 @@ public class UploadImageAction extends ActionSupport{
 		this.annotate = annotate;
 	}
 
+	/**
+	 * This method is configured to be invoked in struts.xml, for image file uploading and annotations.
+	 * It makes calls to mysql dao implementation to store the uploaded file to database
+	 * It also stores annotations for image in triple store 
+	 */
 	public String execute() throws Exception {
 		//Get request method invoked
 		HttpServletRequest request = ServletActionContext.getRequest();

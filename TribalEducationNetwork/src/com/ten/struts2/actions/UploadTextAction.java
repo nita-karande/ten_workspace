@@ -1,6 +1,7 @@
 package com.ten.struts2.actions;
 
 import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -12,6 +13,12 @@ import com.ten.dao.implementation.DbAccessDaoImpl;
 import com.ten.dao.interfaces.DbAccessDaoInterface;
 import com.ten.triplestore.dao.implementation.VirtuosoAccessDaoImpl;
 import com.ten.triplestore.dao.interfaces.TriplestoreAccessDaoInterface;
+/**
+ * 
+ * @author Nita Karande
+ * This action invoked by upload_text.jsp 
+ * It invokes method to upload text to database and store annotations in triplestore
+ */
 public class UploadTextAction extends ActionSupport{
 
 	static Logger log = Logger.getLogger(UploadTextAction.class);
@@ -63,7 +70,12 @@ public class UploadTextAction extends ActionSupport{
 	public void setAnnotate(boolean annotate) {
 		this.annotate = annotate;
 	}
-
+	
+	/**
+	 * This method is configured to be invoked in struts.xml, for text file uploading and annotations.
+	 * It makes calls to mysql dao implementation to store the uploaded file to database
+	 * It also stores annotations for text in triple store 
+	 */
 	public String execute() throws Exception {
 		//Get request method invoked
 		HttpServletRequest request = ServletActionContext.getRequest();
