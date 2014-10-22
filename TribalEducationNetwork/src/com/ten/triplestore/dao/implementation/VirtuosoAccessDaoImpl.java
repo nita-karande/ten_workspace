@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
@@ -32,6 +33,23 @@ import com.ten.utils.Utils;
 public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 	static Logger log = Logger.getLogger(VirtuosoAccessDaoImpl.class);
 	
+	private static DataSource  m_ds = null;
+	//create datasource
+    static  
+    {  
+        try
+        {
+        	Context initContext = new InitialContext();
+			Context envContext  = (Context)initContext.lookup("java:/comp/env");
+			m_ds = (VirtuosoConnectionPoolDataSource)envContext.lookup(TripleStoreConstants.VIRTUOSO_JNDI_LOOKUP_NAME);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+            m_ds = null;
+        }
+    }
+	
 	@Override
 	/**
 	 * This method is invoked by uploadImageAction to store annotations of image in triple store
@@ -44,11 +62,7 @@ public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
 		VirtGraph graph = null;
 		try{
-			Context initContext = new InitialContext();
-			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			VirtuosoDataSource ds = (VirtuosoConnectionPoolDataSource )envContext.lookup(TripleStoreConstants.VIRTUOSO_JNDI_LOOKUP_NAME);
-			
-			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, ds);
+			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
 			
 			//Begin transaction
 			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
@@ -459,11 +473,7 @@ public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
 		VirtGraph graph = null;
 		try{
-			Context initContext = new InitialContext();
-			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			VirtuosoDataSource ds = (VirtuosoConnectionPoolDataSource )envContext.lookup(TripleStoreConstants.VIRTUOSO_JNDI_LOOKUP_NAME);
-			
-			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, ds);
+			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
 			
 			//Begin transaction
 			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
@@ -525,11 +535,7 @@ public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 	                     " }";			
 			
 			//STEP 1 - Connect to virtuoso database
-			Context initContext = new InitialContext();
-			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			VirtuosoDataSource ds = (VirtuosoConnectionPoolDataSource )envContext.lookup(TripleStoreConstants.VIRTUOSO_JNDI_LOOKUP_NAME);
-			
-			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, ds);
+			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
 			
 			//STEP 2 - Create query
 			Query sparql = QueryFactory.create(sparqlQueryString);
