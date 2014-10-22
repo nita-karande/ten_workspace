@@ -84,6 +84,7 @@ public class UploadImageAction extends ActionSupport{
 				}
 				
 	           //File uploaded successfully
+			   reset();
 			   addActionMessage(ActionConstants.FILE_UPLOAD_SUCCESS_MSG);
 	           result = ActionConstants.FORWARD_SUCCESS;
 			}catch(Exception ex){
