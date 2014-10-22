@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -19,7 +20,34 @@ import com.ten.dao.interfaces.DbAccessDaoInterface;
  * This class contains implementation method for access Relational database Mysql and functionality related to it
  */
 public class DbAccessDaoImpl implements DbAccessDaoInterface{
+
 	static Logger log = Logger.getLogger(DbAccessDaoImpl.class);
+	
+	private static DataSource  m_ds = null;
+	//create datasource
+    static  
+    {  
+        try
+        {
+        	Context initContext = new InitialContext();
+			Context envContext  = (Context)initContext.lookup("java:/comp/env");
+			m_ds = (DataSource)envContext.lookup(DaoConstants.DB_JNDI_LOOKUP_NAME);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+            m_ds = null;
+        }
+    }
+    
+    /**
+     * get connection to database from connection pooled datasource
+     * @return
+     * @throws SQLException
+     */
+    public static Connection getConnection() throws SQLException {  
+        return m_ds.getConnection();             
+    }
 	
 	@Override
 	/**
@@ -42,10 +70,7 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 		FileInputStream fis = null;		
 		int image_id = 0;		
 		try {
-			Context initContext = new InitialContext();
-			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			DataSource ds = (DataSource)envContext.lookup(DaoConstants.DB_JNDI_LOOKUP_NAME);
-			connection = ds.getConnection();
+			connection = getConnection();
 			
 			String sql_call = DaoConstants.INSERT_IMAGE_PROCEDURE_CALL;
 			callableStatement = connection.prepareCall(sql_call);
@@ -97,10 +122,7 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 		int video_id = 0;
 		
 		try {
-			Context initContext = new InitialContext();
-			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			DataSource ds = (DataSource)envContext.lookup(DaoConstants.DB_JNDI_LOOKUP_NAME);
-			connection = ds.getConnection();
+			connection = getConnection();
 			
 			String sql_call = DaoConstants.INSERT_VIDEO_PROCEDURE_CALL;
 			callableStatement = connection.prepareCall(sql_call);
@@ -151,10 +173,7 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 		int audio_id = 0;
 		
 		try {
-			Context initContext = new InitialContext();
-			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			DataSource ds = (DataSource)envContext.lookup(DaoConstants.DB_JNDI_LOOKUP_NAME);
-			connection = ds.getConnection();
+			connection = getConnection();
 			
 			String sql_call = DaoConstants.INSERT_AUDIO_PROCEDURE_CALL;
 			callableStatement = connection.prepareCall(sql_call);
@@ -205,10 +224,7 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 		int text_id = 0;
 		
 		try {
-			Context initContext = new InitialContext();
-			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			DataSource ds = (DataSource)envContext.lookup(DaoConstants.DB_JNDI_LOOKUP_NAME);
-			connection = ds.getConnection();
+			connection = getConnection();
 			
 			String sql_call = DaoConstants.INSERT_AUDIO_PROCEDURE_CALL;
 			callableStatement = connection.prepareCall(sql_call);
