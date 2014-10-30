@@ -1,13 +1,14 @@
 package com.ten.struts2.actions;
 
 import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.ten.beans.TenLearningObjectAnnotationsBean;
+import com.ten.beans.DigitalRightsManagementBean;
 import com.ten.dao.implementation.DbAccessDaoImpl;
 import com.ten.dao.interfaces.DbAccessDaoInterface;
 import com.ten.triplestore.dao.implementation.VirtuosoAccessDaoImpl;
@@ -27,10 +28,18 @@ public class UploadAudioAction extends ActionSupport{
 	private File file;
     private String contentType;
     private String fileName;
-    private TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean;
-    boolean annotate;
+    private DigitalRightsManagementBean digitalRightsManagementBean;
         
-    public void setUpload(File file) {
+    public DigitalRightsManagementBean getDigitalRightsManagementBean() {
+		return digitalRightsManagementBean;
+	}
+
+	public void setDigitalRightsManagementBean(
+			DigitalRightsManagementBean digitalRightsManagementBean) {
+		this.digitalRightsManagementBean = digitalRightsManagementBean;
+	}
+
+	public void setUpload(File file) {
        this.file = file;
     }
 
@@ -54,23 +63,6 @@ public class UploadAudioAction extends ActionSupport{
 		return fileName;
 	}
 
-	public TenLearningObjectAnnotationsBean getTenLearningObjectAnnotationsBean() {
-		return tenLearningObjectAnnotationsBean;
-	}
-
-	public void setTenLearningObjectAnnotationsBean(
-			TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean) {
-		this.tenLearningObjectAnnotationsBean = tenLearningObjectAnnotationsBean;
-	}
-	
-	public boolean getAnnotate() {
-		return annotate;
-	}
-
-	public void setAnnotate(boolean annotate) {
-		this.annotate = annotate;
-	}
-
 	/**
 	 * This method is configured to be invoked in struts.xml, for audio file uploading and annotations.
 	 * It makes calls to mysql dao implementation to store the uploaded file to database
@@ -87,17 +79,15 @@ public class UploadAudioAction extends ActionSupport{
 			try{
 				//Insert audio to RDBMS database
 				DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
-				int audioId = dbAccessDaoInterface.saveAudio(this.file,this.fileName, this.annotate);
+				int audioId = dbAccessDaoInterface.saveAudio(this.file,this.fileName, this.contentType, false);
 				
-				if(this.annotate){
-					//Insert annotation data in Triplestore
-					TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();
-					tdbAccessDaoInterface.insertAudio(this.tenLearningObjectAnnotationsBean, audioId);
-				}
-				
-	           //File uploaded successfully
-			   addActionMessage(ActionConstants.FILE_UPLOAD_SUCCESS_MSG);
-	           result = ActionConstants.FORWARD_SUCCESS;
+				//Insert annotation data in Triplestore
+				TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();
+				tdbAccessDaoInterface.insertAudioDigitalRightsManagementData(this.digitalRightsManagementBean, audioId);
+								
+				//File uploaded successfully
+				addActionMessage(ActionConstants.FILE_UPLOAD_SUCCESS_MSG);
+				result = ActionConstants.FORWARD_SUCCESS;
 			}catch(Exception ex){
 				log.error(ex);
 				reset();				
@@ -115,10 +105,9 @@ public class UploadAudioAction extends ActionSupport{
 	 * This method is invoked to reset the beans related to jsp
 	 */
 	public void reset(){
-		this.annotate = false;
 		this.contentType = "";
 		this.fileName = "";
 		this.file= null;
-		tenLearningObjectAnnotationsBean = new TenLearningObjectAnnotationsBean();
+		digitalRightsManagementBean = new DigitalRightsManagementBean();
 	}
 }

@@ -1,13 +1,14 @@
 package com.ten.struts2.actions;
 
 import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.ten.beans.TenLearningObjectAnnotationsBean;
+import com.ten.beans.DigitalRightsManagementBean;
 import com.ten.dao.implementation.DbAccessDaoImpl;
 import com.ten.dao.interfaces.DbAccessDaoInterface;
 import com.ten.triplestore.dao.implementation.VirtuosoAccessDaoImpl;
@@ -27,8 +28,7 @@ public class UploadImageAction extends ActionSupport{
 	private File file;
     private String contentType;
     private String fileName;
-    private TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean;
-    boolean annotate;
+    private DigitalRightsManagementBean digitalRightsManagementBean;
         
     public void setUpload(File file) {
        this.file = file;
@@ -54,23 +54,15 @@ public class UploadImageAction extends ActionSupport{
 		return fileName;
 	}
 
-	public TenLearningObjectAnnotationsBean getTenLearningObjectAnnotationsBean() {
-		return tenLearningObjectAnnotationsBean;
+	public DigitalRightsManagementBean getDigitalRightsManagementBean() {
+		return digitalRightsManagementBean;
 	}
 
-	public void setTenLearningObjectAnnotationsBean(
-			TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean) {
-		this.tenLearningObjectAnnotationsBean = tenLearningObjectAnnotationsBean;
+	public void setDigitalRightsManagementBean(
+			DigitalRightsManagementBean digitalRightsManagementBean) {
+		this.digitalRightsManagementBean = digitalRightsManagementBean;
 	}
 	
-	public boolean getAnnotate() {
-		return annotate;
-	}
-
-	public void setAnnotate(boolean annotate) {
-		this.annotate = annotate;
-	}
-
 	/**
 	 * This method is configured to be invoked in struts.xml, for image file uploading and annotations.
 	 * It makes calls to mysql dao implementation to store the uploaded file to database
@@ -87,14 +79,12 @@ public class UploadImageAction extends ActionSupport{
 			try{
 				//Insert image into Mysql database
 				DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
-				int imageId = dbAccessDaoInterface.saveImage(this.file,this.fileName, this.annotate);
+				int imageId = dbAccessDaoInterface.saveImage(this.file,this.fileName, this.contentType, false);
 				
-				if(this.annotate){
-					//Insert annotation data in Triplestore
-					TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();
-					tdbAccessDaoInterface.insertImage(this.tenLearningObjectAnnotationsBean, imageId);
-				}
-				
+				//Insert digital rights management data in Triplestore
+				TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();
+				tdbAccessDaoInterface.insertImageDigitalRightsManagementData(this.digitalRightsManagementBean, imageId);
+							
 	           //File uploaded successfully
 			   reset();
 			   addActionMessage(ActionConstants.FILE_UPLOAD_SUCCESS_MSG);
@@ -113,10 +103,9 @@ public class UploadImageAction extends ActionSupport{
 	}	
 	
 	public void reset(){
-		this.annotate = false;
 		this.contentType = "";
 		this.fileName = "";
 		this.file= null;
-		tenLearningObjectAnnotationsBean = new TenLearningObjectAnnotationsBean();
+		digitalRightsManagementBean = new DigitalRightsManagementBean();
 	}
 }

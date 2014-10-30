@@ -1,13 +1,14 @@
 package com.ten.struts2.actions;
 
 import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.ten.beans.TenLearningObjectAnnotationsBean;
+import com.ten.beans.DigitalRightsManagementBean;
 import com.ten.dao.implementation.DbAccessDaoImpl;
 import com.ten.dao.interfaces.DbAccessDaoInterface;
 import com.ten.triplestore.dao.implementation.VirtuosoAccessDaoImpl;
@@ -26,8 +27,7 @@ public class UploadVideoAction extends ActionSupport{
 	private File file;
     private String contentType;
     private String fileName;
-    private TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean;
-    boolean annotate;
+    private DigitalRightsManagementBean digitalRightsManagementBean;
         
     public void setUpload(File file) {
        this.file = file;
@@ -53,21 +53,13 @@ public class UploadVideoAction extends ActionSupport{
 		return fileName;
 	}
 
-	public TenLearningObjectAnnotationsBean getTenLearningObjectAnnotationsBean() {
-		return tenLearningObjectAnnotationsBean;
+	public DigitalRightsManagementBean getDigitalRightsManagementBean() {
+		return digitalRightsManagementBean;
 	}
 
-	public void setTenLearningObjectAnnotationsBean(
-			TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean) {
-		this.tenLearningObjectAnnotationsBean = tenLearningObjectAnnotationsBean;
-	}
-	
-	public boolean getAnnotate() {
-		return annotate;
-	}
-
-	public void setAnnotate(boolean annotate) {
-		this.annotate = annotate;
+	public void setDigitalRightsManagementBean(
+			DigitalRightsManagementBean digitalRightsManagementBean) {
+		this.digitalRightsManagementBean = digitalRightsManagementBean;
 	}
 
 	/**
@@ -85,17 +77,16 @@ public class UploadVideoAction extends ActionSupport{
 			try{
 				//Insert video into rdbms database
 				DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
-				int videoId = dbAccessDaoInterface.saveVideo(this.file,this.fileName, this.annotate);
+				int videoId = dbAccessDaoInterface.saveVideo(this.file, this.fileName,this.contentType,false);
 				
-				if(this.annotate){
-					//Insert annotation data in Triplestore
-					TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();
-					tdbAccessDaoInterface.insertVideo(this.tenLearningObjectAnnotationsBean, videoId);
-				}
+	
+				//Insert annotation data in Triplestore
+				TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();
+				tdbAccessDaoInterface.insertVideoDigitalRightsManagementData(this.digitalRightsManagementBean, videoId);
 				
-	           //File uploaded successfully
-			   addActionMessage(ActionConstants.FILE_UPLOAD_SUCCESS_MSG);
-	           result = ActionConstants.FORWARD_SUCCESS;
+				//File uploaded successfully
+				addActionMessage(ActionConstants.FILE_UPLOAD_SUCCESS_MSG);
+				result = ActionConstants.FORWARD_SUCCESS;
 			}catch(Exception ex){
 				log.error(ex);
 				reset();				
@@ -110,10 +101,9 @@ public class UploadVideoAction extends ActionSupport{
 	}	
 	
 	public void reset(){
-		this.annotate = false;
 		this.contentType = "";
 		this.fileName = "";
 		this.file = null;
-		tenLearningObjectAnnotationsBean = new TenLearningObjectAnnotationsBean();
+		digitalRightsManagementBean = new DigitalRightsManagementBean();
 	}
 }

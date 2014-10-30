@@ -22,6 +22,7 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.ten.beans.DigitalRightsManagementBean;
 import com.ten.beans.TenLearningObjectAnnotationsBean;
 import com.ten.triplestore.dao.interfaces.TriplestoreAccessDaoInterface;
 import com.ten.utils.Utils;
@@ -56,9 +57,9 @@ public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 	 * imageId passed as parameter forms part of URI to uniquely identify the image in triplestore
 	 * imageId is the primary key id created while storing the image in database
 	 */
-	public boolean insertImage(TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean, int imageId) throws Exception
+	public boolean insertImageAnnotations(TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean, int imageId) throws Exception
 	{		
-		String LOG_METHOD_NAME = "insertImage(TenLearningObjectAnnotationsBean, int)";
+		String LOG_METHOD_NAME = "insertImageAnnotations(TenLearningObjectAnnotationsBean, int)";
 		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
 		VirtGraph graph = null;
 		try{
@@ -70,13 +71,7 @@ public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 	
 			ArrayList<Triple> tripleList = new ArrayList<Triple>();			
 			Node image = NodeFactory.createURI(TripleStoreConstants.URI_IMAGE + imageId);
-			Node predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_RDF_TYPE);
-			Node predicate_value = NodeFactory.createURI(TripleStoreConstants.URI_TEN_ONTOLOGY_IMAGE_OBJECT);
-			tripleList.add(new Triple(image, predicate, predicate_value));
-			
-			//add dc annotation tuples
-			tripleList.addAll(createDCAnnotationTriples(image, tenLearningObjectAnnotationsBean));
-			
+						
 			//add ten common annotation triples
 			tripleList.addAll(createTenCommonAnnotationTriples(image, tenLearningObjectAnnotationsBean));
 			
@@ -102,14 +97,393 @@ public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 		}		
 	   	return true;
 	}
+
+	@Override
+	/**
+	 * This method is invoked by uploadVideoAction to store annotations of video in triple store
+	 * videoId passed as parameter forms part of URI to uniquely identify the video in triplestore
+	 * videoId is the primary key id created while storing the video in database
+	 */
+	public boolean insertVideoAnnotations(
+			TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean,
+			int videoId) throws Exception {
+		String LOG_METHOD_NAME = "insertVideoAnnotations(TenLearningObjectAnnotationsBean, int)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		VirtGraph graph = null;
+		try{
+			Context initContext = new InitialContext();
+			Context envContext  = (Context)initContext.lookup("java:/comp/env");
+			VirtuosoDataSource ds = (VirtuosoConnectionPoolDataSource )envContext.lookup(TripleStoreConstants.VIRTUOSO_JNDI_LOOKUP_NAME);
+			
+			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, ds);
+			
+			//Begin transaction
+			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
+			graph.getTransactionHandler().begin();
+	
+			ArrayList<Triple> tripleList = new ArrayList<Triple>();			
+			Node video = NodeFactory.createURI(TripleStoreConstants.URI_VIDEO + videoId);
+						
+			//add ten common annotation triples
+			tripleList.addAll(createTenCommonAnnotationTriples(video, tenLearningObjectAnnotationsBean));
+			
+			//add ten annotation triples
+			tripleList.addAll(createTenLearningObjectAnnotationTriples(video, tenLearningObjectAnnotationsBean));
+			
+			for(int i=0; i<tripleList.size(); i++){
+				graph.add(tripleList.get(i));
+			}
+		
+			//End transaction
+			graph.getTransactionHandler().commit();
+			log.debug(TripleStoreConstants.LOG_END_TRANSACTION);
+			
+		}catch (Exception ex) {
+			if(graph!=null){
+				graph.getTransactionHandler().abort();
+			}
+			log.error(ex);
+			throw ex;
+		}finally{			
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+	   	return true;
+	}
+
+	@Override
+	/**
+	 * This method is invoked by uploadAudioAction to store annotations of audio in triple store
+	 * audioId passed as parameter forms part of URI to uniquely identify the audio in triplestore
+	 * audioId is the primary key id created while storing the audio in database
+	 */
+	public boolean insertAudioAnnotations(
+			TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean,
+			int audioId) throws Exception {
+		
+		String LOG_METHOD_NAME = "insertAudioAnnotations(TenLearningObjectAnnotationsBean, int)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		VirtGraph graph = null;
+		try{
+			Context initContext = new InitialContext();
+			Context envContext  = (Context)initContext.lookup("java:/comp/env");
+			VirtuosoDataSource ds = (VirtuosoConnectionPoolDataSource )envContext.lookup(TripleStoreConstants.VIRTUOSO_JNDI_LOOKUP_NAME);
+			
+			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, ds);
+			
+			//Begin transaction
+			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
+			graph.getTransactionHandler().begin();
+	
+			ArrayList<Triple> tripleList = new ArrayList<Triple>();			
+			Node audio = NodeFactory.createURI(TripleStoreConstants.URI_AUDIO + audioId);
+				
+			//add ten common annotation triples
+			tripleList.addAll(createTenCommonAnnotationTriples(audio, tenLearningObjectAnnotationsBean));
+			
+			//add ten annotation triples
+			tripleList.addAll(createTenLearningObjectAnnotationTriples(audio, tenLearningObjectAnnotationsBean));
+			
+			for(int i=0; i<tripleList.size(); i++){
+				graph.add(tripleList.get(i));
+			}
+		
+			//End transaction
+			graph.getTransactionHandler().commit();
+			log.debug(TripleStoreConstants.LOG_END_TRANSACTION);
+			
+		}catch (Exception ex) {
+			if(graph!=null){
+				graph.getTransactionHandler().abort();
+			}
+			log.error(ex);
+			throw ex;
+		}finally{			
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+	   	return true;
+	}
+
+	@Override
+	/**
+	 * This method is invoked by uploadTextAction to store annotations of text/document in triple store
+	 * textId passed as parameter forms part of URI to uniquely identify the text/document in triplestore
+	 * textId is the primary key id created while storing the text/document in database
+	 */
+	public boolean insertTextAnnotations(
+			TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean,
+			int textId) throws Exception {
+		String LOG_METHOD_NAME = "insertTextAnnotations(TenLearningObjectAnnotationsBean, int)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		VirtGraph graph = null;
+		try{
+			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
+			
+			//Begin transaction
+			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
+			graph.getTransactionHandler().begin();
+	
+			ArrayList<Triple> tripleList = new ArrayList<Triple>();			
+			Node text = NodeFactory.createURI(TripleStoreConstants.URI_TEXT + textId);
+						
+			//add ten common annotation triples
+			tripleList.addAll(createTenCommonAnnotationTriples(text, tenLearningObjectAnnotationsBean));
+			
+			//add ten annotation triples
+			tripleList.addAll(createTenLearningObjectAnnotationTriples(text, tenLearningObjectAnnotationsBean));
+			
+			for(int i=0; i<tripleList.size(); i++){
+				graph.add(tripleList.get(i));
+			}
+		
+			//End transaction
+			graph.getTransactionHandler().commit();
+			log.debug(TripleStoreConstants.LOG_END_TRANSACTION);
+			
+		}catch (Exception ex) {
+			if(graph!=null){
+				graph.getTransactionHandler().abort();
+			}
+			log.error(ex);
+			throw ex;
+		}finally{			
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+	   	return true;
+	}
+	
+	@Override
+	/**
+	 * This method is used to query triple store for 
+	 */
+	public void queryLearningObject(String learningObjectType) throws Exception{
+		
+		String LOG_METHOD_NAME = "void queryLearningObject(String)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		try{
+			String sparqlQueryString = TripleStoreConstants.PREFIX_TEN_ONTOLOGY 
+					    + TripleStoreConstants.PREFIX_TEN_IMAGE			
+						+ " SELECT ?learning_object " +
+						" WHERE { " +
+	                     "   ?learning_object " +
+	                     "     a " +
+	                     "   TenOntology:" +
+	                     learningObjectType +
+	                     " }";			
+			
+			//STEP 1 - Connect to virtuoso database
+			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
+			
+			//STEP 2 - Create query
+			Query sparql = QueryFactory.create(sparqlQueryString);
+			
+			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql, graph);
+	
+			//STEP 3 - Execute
+			ResultSet results = vqe.execSelect();
+			while (results.hasNext()) {
+				QuerySolution result = results.nextSolution();
+			    RDFNode rdfNode = result.get("learning_object");
+			    log.debug(graph + " { " + rdfNode + "  }");
+			}
+		}catch (Exception ex) {
+			log.error(ex);
+			throw ex;
+		}finally{			
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}
+	}
+
+	@Override
+	public boolean insertImageDigitalRightsManagementData(
+			DigitalRightsManagementBean digitalRightsManagementBean, int imageId)
+			throws Exception {
+		String LOG_METHOD_NAME = "insertImageDigitalRightsManagementData(DigitalRightsManagementBean, int)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		VirtGraph graph = null;
+		try{
+			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
+			
+			//Begin transaction
+			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
+			graph.getTransactionHandler().begin();
+	
+			ArrayList<Triple> tripleList = new ArrayList<Triple>();			
+			Node image = NodeFactory.createURI(TripleStoreConstants.URI_IMAGE + imageId);
+			Node predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_RDF_TYPE);
+			Node predicate_value = NodeFactory.createURI(TripleStoreConstants.URI_TEN_ONTOLOGY_IMAGE_OBJECT);
+			tripleList.add(new Triple(image, predicate, predicate_value));
+			
+			//add dc annotation tuples
+			tripleList.addAll(createDigitalRightsAnnotationTriples(image, digitalRightsManagementBean));
+			
+			for(int i=0; i<tripleList.size(); i++){
+				graph.add(tripleList.get(i));
+			}
+		
+			//End transaction
+			graph.getTransactionHandler().commit();
+			log.debug(TripleStoreConstants.LOG_END_TRANSACTION);
+			
+		}catch (Exception ex) {
+			if(graph!=null){
+				graph.getTransactionHandler().abort();
+			}
+			log.error(ex);
+			throw ex;
+		}finally{			
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+	   	return true;
+	}
+
+	@Override
+	public boolean insertVideoDigitalRightsManagementData(
+			DigitalRightsManagementBean digitalRightsManagementBean, int videoId)
+			throws Exception {
+		String LOG_METHOD_NAME = "insertVideoDigitalRightsManagementData(digitalRightsManagementBean, int)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		VirtGraph graph = null;
+		try{
+			Context initContext = new InitialContext();
+			Context envContext  = (Context)initContext.lookup("java:/comp/env");
+			VirtuosoDataSource ds = (VirtuosoConnectionPoolDataSource )envContext.lookup(TripleStoreConstants.VIRTUOSO_JNDI_LOOKUP_NAME);
+			
+			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, ds);
+			
+			//Begin transaction
+			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
+			graph.getTransactionHandler().begin();
+	
+			ArrayList<Triple> tripleList = new ArrayList<Triple>();			
+			Node video = NodeFactory.createURI(TripleStoreConstants.URI_VIDEO + videoId);
+			Node predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_RDF_TYPE);
+			Node predicate_value = NodeFactory.createURI(TripleStoreConstants.URI_TEN_ONTOLOGY_VIDEO_OBJECT);
+			tripleList.add(new Triple(video, predicate, predicate_value));
+			
+			//add dc annotation tuples
+			tripleList.addAll(createDigitalRightsAnnotationTriples(video, digitalRightsManagementBean));
+			
+			for(int i=0; i<tripleList.size(); i++){
+				graph.add(tripleList.get(i));
+			}
+		
+			//End transaction
+			graph.getTransactionHandler().commit();
+			log.debug(TripleStoreConstants.LOG_END_TRANSACTION);
+			
+		}catch (Exception ex) {
+			if(graph!=null){
+				graph.getTransactionHandler().abort();
+			}
+			log.error(ex);
+			throw ex;
+		}finally{			
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+	   	return true;
+	}
+
+	@Override
+	public boolean insertAudioDigitalRightsManagementData(
+			DigitalRightsManagementBean digitalRightsManagementBean, int audioId)
+			throws Exception {
+		String LOG_METHOD_NAME = "insertAudioDigitalRightsManagementData(DigitalRightsManagementBean, int)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		VirtGraph graph = null;
+		try{
+			Context initContext = new InitialContext();
+			Context envContext  = (Context)initContext.lookup("java:/comp/env");
+			VirtuosoDataSource ds = (VirtuosoConnectionPoolDataSource )envContext.lookup(TripleStoreConstants.VIRTUOSO_JNDI_LOOKUP_NAME);
+			
+			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, ds);
+			
+			//Begin transaction
+			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
+			graph.getTransactionHandler().begin();
+	
+			ArrayList<Triple> tripleList = new ArrayList<Triple>();			
+			Node audio = NodeFactory.createURI(TripleStoreConstants.URI_AUDIO + audioId);
+			Node predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_RDF_TYPE);
+			Node predicate_value = NodeFactory.createURI(TripleStoreConstants.URI_TEN_ONTOLOGY_AUDIO_OBJECT);
+			tripleList.add(new Triple(audio, predicate, predicate_value));
+			
+			//add dc annotation tuples
+			tripleList.addAll(createDigitalRightsAnnotationTriples(audio, digitalRightsManagementBean));
+			
+			for(int i=0; i<tripleList.size(); i++){
+				graph.add(tripleList.get(i));
+			}
+		
+			//End transaction
+			graph.getTransactionHandler().commit();
+			log.debug(TripleStoreConstants.LOG_END_TRANSACTION);
+			
+		}catch (Exception ex) {
+			if(graph!=null){
+				graph.getTransactionHandler().abort();
+			}
+			log.error(ex);
+			throw ex;
+		}finally{			
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+	   	return true;
+	}
+
+	@Override
+	public boolean insertTextDigitalRightsManagementData(
+			DigitalRightsManagementBean digitalRightsManagementBean, int textId)
+			throws Exception {
+		String LOG_METHOD_NAME = "insertTextDigitalRightsManagementData(DigitalRightsManagementBean, int)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		VirtGraph graph = null;
+		try{
+			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
+			
+			//Begin transaction
+			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
+			graph.getTransactionHandler().begin();
+	
+			ArrayList<Triple> tripleList = new ArrayList<Triple>();			
+			Node text = NodeFactory.createURI(TripleStoreConstants.URI_TEXT + textId);
+			Node predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_RDF_TYPE);
+			Node predicate_value = NodeFactory.createURI(TripleStoreConstants.URI_TEN_ONTOLOGY_TEXT_OBJECT);
+			tripleList.add(new Triple(text, predicate, predicate_value));
+			
+			//add dc annotation tuples
+			tripleList.addAll(createDigitalRightsAnnotationTriples(text, digitalRightsManagementBean));
+			
+			for(int i=0; i<tripleList.size(); i++){
+				graph.add(tripleList.get(i));
+			}
+		
+			//End transaction
+			graph.getTransactionHandler().commit();
+			log.debug(TripleStoreConstants.LOG_END_TRANSACTION);
+			
+		}catch (Exception ex) {
+			if(graph!=null){
+				graph.getTransactionHandler().abort();
+			}
+			log.error(ex);
+			throw ex;
+		}finally{			
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+	   	return true;
+	}
+	
 	
 	/**
 	 * This method is invoked for creating Dublin core annotation triples of images,audios,videos and text
 	 * It creates an arraylist containing triples for the the learning object dublic core annotations, to be inserted in triple store.
 	 */
-	public ArrayList<Triple> createDCAnnotationTriples(Node subject ,TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean){
+	public ArrayList<Triple> createDigitalRightsAnnotationTriples(Node subject ,DigitalRightsManagementBean digitalRightsManagementBean){
 		
-		String LOG_METHOD_NAME = "ArrayList createDCAnnotationTriples(Node, TenLearningObjectAnnotationsBean)";
+		String LOG_METHOD_NAME = "ArrayList createDigitalRightsAnnotationTriples(Node, DigitalRightsManagementBean)";
 		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
 		
 		ArrayList<Triple> tripleList = new ArrayList<>();
@@ -117,109 +491,109 @@ public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 		try{
 			//DESCRIPTIVE
 			//title
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getTitle())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getTitle())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_TITLE);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getTitle());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getTitle());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//Subject
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getSubject())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getSubject())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_SUBJECT);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getSubject());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getSubject());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//description
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getDescription())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getDescription())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_DESCRIPTION);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getDescription());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getDescription());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//source
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getSource())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getSource())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_SOURCE);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getSource());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getSource());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//language	
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getLanguage())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getLanguage())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_LANGUAGE);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getLanguage());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getLanguage());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//relation	
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getRelation())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getRelation())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_RELATION);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getRelation());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getRelation());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//coverage		
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getCoverage())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCoverage())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_COVERAGE);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getCoverage());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getCoverage());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//ADMINISTRATIVE
 			//creator
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getCreator())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreator())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_CREATOR);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getCreator());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getCreator());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//publisher	
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getPublisher())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisher())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_PUBLISHER);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getPublisher());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getPublisher());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//contributor	
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getContributor())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributor())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_CONTRIBUTOR);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getContributor());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getContributor());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//rights	
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getRights())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getRights())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_RIGHTS);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getRights());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getRights());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//STRUCTURAL	
 			//date		
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getDate())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getDate())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_DATE);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getDate());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getDate());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//type	
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getType())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getType())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_TYPE);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getType());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getType());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//format
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getFormat())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getFormat())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_FORMAT);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getFormat());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getFormat());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//identifier	
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getIdentifier())){
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getIdentifier())){
 				predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_DC_IDENTIFIER);
-				predicate_value = NodeFactory.createURI(tenLearningObjectAnnotationsBean.getIdentifier());
+				predicate_value = NodeFactory.createURI(digitalRightsManagementBean.getIdentifier());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}			
 		}catch(Exception ex)
@@ -340,220 +714,5 @@ public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 		}
 		
 		return tripleList;
-	}
-
-	@Override
-	/**
-	 * This method is invoked by uploadVideoAction to store annotations of video in triple store
-	 * videoId passed as parameter forms part of URI to uniquely identify the video in triplestore
-	 * videoId is the primary key id created while storing the video in database
-	 */
-	public boolean insertVideo(
-			TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean,
-			int videoId) throws Exception {
-		String LOG_METHOD_NAME = "insertVideo(TenLearningObjectAnnotationsBean, int)";
-		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
-		
-		VirtGraph graph = null;
-		try{
-			Context initContext = new InitialContext();
-			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			VirtuosoDataSource ds = (VirtuosoConnectionPoolDataSource )envContext.lookup(TripleStoreConstants.VIRTUOSO_JNDI_LOOKUP_NAME);
-			
-			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, ds);
-			
-			//Begin transaction
-			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
-			graph.getTransactionHandler().begin();
-	
-			ArrayList<Triple> tripleList = new ArrayList<Triple>();			
-			Node video = NodeFactory.createURI(TripleStoreConstants.URI_VIDEO + videoId);
-			Node predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_RDF_TYPE);
-			Node predicate_value = NodeFactory.createURI(TripleStoreConstants.URI_TEN_ONTOLOGY_VIDEO_OBJECT);
-			tripleList.add(new Triple(video, predicate, predicate_value));
-			
-			//add dc annotation tuples
-			tripleList.addAll(createDCAnnotationTriples(video, tenLearningObjectAnnotationsBean));
-			
-			//add ten common annotation triples
-			tripleList.addAll(createTenCommonAnnotationTriples(video, tenLearningObjectAnnotationsBean));
-			
-			//add ten annotation triples
-			tripleList.addAll(createTenLearningObjectAnnotationTriples(video, tenLearningObjectAnnotationsBean));
-			
-			for(int i=0; i<tripleList.size(); i++){
-				graph.add(tripleList.get(i));
-			}
-		
-			//End transaction
-			graph.getTransactionHandler().commit();
-			log.debug(TripleStoreConstants.LOG_END_TRANSACTION);
-			
-		}catch (Exception ex) {
-			if(graph!=null){
-				graph.getTransactionHandler().abort();
-			}
-			log.error(ex);
-			throw ex;
-		}finally{			
-			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
-		}		
-	   	return true;
-	}
-
-	@Override
-	/**
-	 * This method is invoked by uploadAudioAction to store annotations of audio in triple store
-	 * audioId passed as parameter forms part of URI to uniquely identify the audio in triplestore
-	 * audioId is the primary key id created while storing the audio in database
-	 */
-	public boolean insertAudio(
-			TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean,
-			int audioId) throws Exception {
-		
-		String LOG_METHOD_NAME = "insertAudio(TenLearningObjectAnnotationsBean, int)";
-		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
-		VirtGraph graph = null;
-		try{
-			Context initContext = new InitialContext();
-			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			VirtuosoDataSource ds = (VirtuosoConnectionPoolDataSource )envContext.lookup(TripleStoreConstants.VIRTUOSO_JNDI_LOOKUP_NAME);
-			
-			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, ds);
-			
-			//Begin transaction
-			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
-			graph.getTransactionHandler().begin();
-	
-			ArrayList<Triple> tripleList = new ArrayList<Triple>();			
-			Node audio = NodeFactory.createURI(TripleStoreConstants.URI_AUDIO + audioId);
-			Node predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_RDF_TYPE);
-			Node predicate_value = NodeFactory.createURI(TripleStoreConstants.URI_TEN_ONTOLOGY_AUDIO_OBJECT);
-			tripleList.add(new Triple(audio, predicate, predicate_value));
-			
-			//add dc annotation tuples
-			tripleList.addAll(createDCAnnotationTriples(audio, tenLearningObjectAnnotationsBean));
-			
-			//add ten common annotation triples
-			tripleList.addAll(createTenCommonAnnotationTriples(audio, tenLearningObjectAnnotationsBean));
-			
-			//add ten annotation triples
-			tripleList.addAll(createTenLearningObjectAnnotationTriples(audio, tenLearningObjectAnnotationsBean));
-			
-			for(int i=0; i<tripleList.size(); i++){
-				graph.add(tripleList.get(i));
-			}
-		
-			//End transaction
-			graph.getTransactionHandler().commit();
-			log.debug(TripleStoreConstants.LOG_END_TRANSACTION);
-			
-		}catch (Exception ex) {
-			if(graph!=null){
-				graph.getTransactionHandler().abort();
-			}
-			log.error(ex);
-			throw ex;
-		}finally{			
-			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
-		}		
-	   	return true;
-	}
-
-	@Override
-	/**
-	 * This method is invoked by uploadTextAction to store annotations of text/document in triple store
-	 * textId passed as parameter forms part of URI to uniquely identify the text/document in triplestore
-	 * textId is the primary key id created while storing the text/document in database
-	 */
-	public boolean insertText(
-			TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean,
-			int textId) throws Exception {
-		String LOG_METHOD_NAME = "insertText(TenLearningObjectAnnotationsBean, int)";
-		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
-		VirtGraph graph = null;
-		try{
-			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
-			
-			//Begin transaction
-			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
-			graph.getTransactionHandler().begin();
-	
-			ArrayList<Triple> tripleList = new ArrayList<Triple>();			
-			Node text = NodeFactory.createURI(TripleStoreConstants.URI_TEXT + textId);
-			Node predicate = NodeFactory.createURI(TripleStoreConstants.URI_PREDICATE_RDF_TYPE);
-			Node predicate_value = NodeFactory.createURI(TripleStoreConstants.URI_TEN_ONTOLOGY_TEXT_OBJECT);
-			tripleList.add(new Triple(text, predicate, predicate_value));
-			
-			//add dc annotation tuples
-			tripleList.addAll(createDCAnnotationTriples(text, tenLearningObjectAnnotationsBean));
-			
-			//add ten common annotation triples
-			tripleList.addAll(createTenCommonAnnotationTriples(text, tenLearningObjectAnnotationsBean));
-			
-			//add ten annotation triples
-			tripleList.addAll(createTenLearningObjectAnnotationTriples(text, tenLearningObjectAnnotationsBean));
-			
-			for(int i=0; i<tripleList.size(); i++){
-				graph.add(tripleList.get(i));
-			}
-		
-			//End transaction
-			graph.getTransactionHandler().commit();
-			log.debug(TripleStoreConstants.LOG_END_TRANSACTION);
-			
-		}catch (Exception ex) {
-			if(graph!=null){
-				graph.getTransactionHandler().abort();
-			}
-			log.error(ex);
-			throw ex;
-		}finally{			
-			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
-		}		
-	   	return true;
-	}
-	
-	@Override
-	/**
-	 * This method is used to query triple store for 
-	 */
-	public void queryLearningObject(String learningObjectType) throws Exception{
-		
-		String LOG_METHOD_NAME = "void queryLearningObject(String)";
-		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
-		
-		try{
-			String sparqlQueryString = TripleStoreConstants.PREFIX_TEN_ONTOLOGY 
-					    + TripleStoreConstants.PREFIX_TEN_IMAGE			
-						+ " SELECT ?learning_object " +
-						" WHERE { " +
-	                     "   ?learning_object " +
-	                     "     a " +
-	                     "   TenOntology:" +
-	                     learningObjectType +
-	                     " }";			
-			
-			//STEP 1 - Connect to virtuoso database
-			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
-			
-			//STEP 2 - Create query
-			Query sparql = QueryFactory.create(sparqlQueryString);
-			
-			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql, graph);
-	
-			//STEP 3 - Execute
-			ResultSet results = vqe.execSelect();
-			while (results.hasNext()) {
-				QuerySolution result = results.nextSolution();
-			    RDFNode rdfNode = result.get("learning_object");
-			    log.debug(graph + " { " + rdfNode + "  }");
-			}
-		}catch (Exception ex) {
-			log.error(ex);
-			throw ex;
-		}finally{			
-			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
-		}
 	}
 }

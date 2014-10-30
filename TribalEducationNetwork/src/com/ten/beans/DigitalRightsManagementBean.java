@@ -5,7 +5,7 @@ package com.ten.beans;
  * This is the bean used data transfer between jsp and action classes
  * This class will fields for dublin core annotations
  */
-public class DublinCoreAnnotationsBean {
+public class DigitalRightsManagementBean {
 	//Descriptive tags
 	String title;
 	String subject;
@@ -118,7 +118,7 @@ public class DublinCoreAnnotationsBean {
 		this.identifier = identifier;
 	}
 	
-	public DublinCoreAnnotationsBean(){
+	public DigitalRightsManagementBean(){
 		super();
 		title = "";
 		subject = "";

@@ -1,7 +1,7 @@
 package com.ten.beans;
 
 //Fields common for all the classes in ten ontology
-public class TenCommonAnnoationsBean extends DublinCoreAnnotationsBean{
+public class TenCommonAnnoationsBean{
 	String modified;
 	String rightsHolder;
 	

@@ -39,7 +39,7 @@
 		     <result name="input">/WEB-INF/jsp/main.jsp</result>
 		 </action>
 		 
-		 <!-- Action for handling upload & annotation process of image -->
+		 <!-- Action for handling upload & digital rights management process of image -->
     	 <action name="upload/uploadimage" 
             class="com.ten.struts2.actions.UploadImageAction" 
             method="execute">
@@ -51,6 +51,23 @@
             <result name="input">/WEB-INF/jsp/upload_image.jsp</result>
             <result name="showjsp">/WEB-INF/jsp/upload_image.jsp</result>
      	 </action>
+     	 
+     	 <action name="annotate/annotateimagemain" 
+            class="com.ten.struts2.actions.AnnotateImageMainAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/annotate_image_main.jsp</result>
+            <result name="input">/WEB-INF/jsp/annotate_image_main.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/annotate_image_main.jsp</result>
+     	 </action>
+     	 
+     	  <action name="annotate/annotateimage" 
+            class="com.ten.struts2.actions.AnnotateImageAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/annotate_image.jsp</result>
+            <result name="input">/WEB-INF/jsp/annotate_image.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/annotate_image.jsp</result>
+     	 </action>
+     	 
      	 
      	 <!-- Action for handling upload & annotation process of video -->
      	 <action name="upload/uploadvideo" 

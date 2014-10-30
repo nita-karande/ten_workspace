@@ -3,9 +3,13 @@ package com.ten.dao.implementation;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -13,6 +17,8 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
+import com.ten.beans.LearningObjectBean;
+import com.ten.beans.LearningObjectDetailsBean;
 import com.ten.dao.interfaces.DbAccessDaoInterface;
 
 /**
@@ -55,9 +61,9 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 	 * Method returns an integer which is the primary key of the image stored in database.
 	 * This image is related to its annotations stored in triple store through the image id primary key.
 	 */
-	public int saveImage(File file, String fileName, boolean annotated) throws Exception
+	public int saveImage(File file, String fileName, String fileType,  boolean annotated) throws Exception
 	{
-		String LOG_METHOD_NAME = "int saveImage(File, String, boolean)";
+		String LOG_METHOD_NAME = "int saveImage(File, String, String, boolean)";
 		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
 		
 		// declare a connection by using Connection interface 
@@ -76,14 +82,15 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			callableStatement = connection.prepareCall(sql_call);
 			fis = new FileInputStream(file);
 			callableStatement.setBinaryStream(1, (InputStream)fis, (int)(file.length()));
-			callableStatement.setString(2, fileName);
-			callableStatement.setInt(3, annotated?1:0);
-			callableStatement.registerOutParameter(4, java.sql.Types.INTEGER);
+			callableStatement.setString(2, fileType);
+			callableStatement.setString(3, fileName);
+			callableStatement.setInt(4, annotated?1:0);
+			callableStatement.registerOutParameter(5, java.sql.Types.INTEGER);
 			 
 			// execute store procedure
 			callableStatement.executeUpdate();
 			
-			image_id = callableStatement.getInt(4);
+			image_id = callableStatement.getInt(5);
 			
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.
@@ -105,10 +112,10 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 	 * Method returns an integer which is the primary key of the video stored in database.
 	 * This video is related to its annotations stored in triple store through the video id primary key.
 	 */
-	public int saveVideo(File file, String fileName, boolean annotated)
+	public int saveVideo(File file, String fileName, String fileType, boolean annotated)
 			throws Exception 
 	{
-		String LOG_METHOD_NAME = "int saveVideo(File, String, boolean)";
+		String LOG_METHOD_NAME = "int saveVideo(File, String, String, boolean)";
 		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
 		
 		// declare a connection by using Connection interface 
@@ -128,14 +135,15 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			callableStatement = connection.prepareCall(sql_call);
 			fis = new FileInputStream(file);
 			callableStatement.setBinaryStream(1, (InputStream)fis, (int)(file.length()));
-			callableStatement.setString(2, fileName);
-			callableStatement.setInt(3, annotated?1:0);
-			callableStatement.registerOutParameter(4, java.sql.Types.INTEGER);
+			callableStatement.setString(2, fileType);
+			callableStatement.setString(3, fileName);
+			callableStatement.setInt(4, annotated?1:0);
+			callableStatement.registerOutParameter(5, java.sql.Types.INTEGER);
 			 
 			// execute store procedure
 			callableStatement.executeUpdate();
 			
-			video_id = callableStatement.getInt(4);			
+			video_id = callableStatement.getInt(5);			
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.
 			log.error(ex);
@@ -156,10 +164,10 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 	 * Method returns an integer which is the primary key of the audio stored in database.
 	 * This audio is related to its annotations stored in triple store through the audio id primary key.
 	 */
-	public int saveAudio(File file, String fileName, boolean annotated)
+	public int saveAudio(File file, String fileName, String fileType, boolean annotated)
 			throws Exception 
 	{
-		String LOG_METHOD_NAME = "int saveAudio(File, String, boolean)";
+		String LOG_METHOD_NAME = "int saveAudio(File, String, String, boolean)";
 		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
 		
 		// declare a connection by using Connection interface 
@@ -179,14 +187,15 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			callableStatement = connection.prepareCall(sql_call);
 			fis = new FileInputStream(file);
 			callableStatement.setBinaryStream(1, (InputStream)fis, (int)(file.length()));
-			callableStatement.setString(2, fileName);
-			callableStatement.setInt(3, annotated?1:0);
-			callableStatement.registerOutParameter(4, java.sql.Types.INTEGER);
+			callableStatement.setString(2, fileType);
+			callableStatement.setString(3, fileName);
+			callableStatement.setInt(4, annotated?1:0);
+			callableStatement.registerOutParameter(5, java.sql.Types.INTEGER);
 			 
 			// execute store procedure
 			callableStatement.executeUpdate();
 			
-			audio_id = callableStatement.getInt(4);			
+			audio_id = callableStatement.getInt(5);			
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.
 			log.error(ex);
@@ -207,10 +216,10 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 	 * Method returns an integer which is the primary key of the text stored in database.
 	 * This text is related to its annotations stored in triple store through the text id primary key.
 	 */
-	public int saveText(File file, String fileName, boolean annotated)
+	public int saveText(File file, String fileName, String fileType, boolean annotated)
 			throws Exception 
 	{
-		String LOG_METHOD_NAME = "int saveText(File, String, boolean)";
+		String LOG_METHOD_NAME = "int saveText(File, String, String, boolean)";
 		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
 		
 		// declare a connection by using Connection interface 
@@ -230,14 +239,15 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			callableStatement = connection.prepareCall(sql_call);
 			fis = new FileInputStream(file);
 			callableStatement.setBinaryStream(1, (InputStream)fis, (int)(file.length()));
-			callableStatement.setString(2, fileName);
-			callableStatement.setInt(3, annotated?1:0);
-			callableStatement.registerOutParameter(4, java.sql.Types.INTEGER);
+			callableStatement.setString(2, fileType);
+			callableStatement.setString(3, fileName);
+			callableStatement.setInt(4, annotated?1:0);
+			callableStatement.registerOutParameter(5, java.sql.Types.INTEGER);
 			 
 			// execute store procedure
 			callableStatement.executeUpdate();
 			
-			text_id = callableStatement.getInt(4);			
+			text_id = callableStatement.getInt(5);			
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.
 			log.error(ex);
@@ -250,5 +260,101 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
 		}		
 		return text_id;
-	}		
+	}
+
+	@Override
+	public ArrayList<LearningObjectBean> getUnannotatedImages()
+			throws Exception {
+		String LOG_METHOD_NAME = "ArrayList<LearningObjectBean> getUnannotatedImages()";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		ResultSet rset = null;
+		
+		//return result
+		ArrayList<LearningObjectBean> listLearningObjects = new ArrayList<LearningObjectBean>();
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.GET_UNANNOTATED_IMAGES_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, 0);
+			rset = preparedStatement.executeQuery();
+			
+			while (rset.next ())
+		    {   
+				LearningObjectBean learningObjectBean = new LearningObjectBean();
+				learningObjectBean.setId(rset.getInt(1));
+				learningObjectBean.setFileName(rset.getString(2));
+				listLearningObjects.add(learningObjectBean);
+		     }    
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			rset.close();
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return listLearningObjects;
+	}
+	
+	@Override
+	public LearningObjectDetailsBean getImage(int id)
+			throws Exception {
+		String LOG_METHOD_NAME = "LearningObjectDetailsBean getImage()";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		ResultSet rset = null;
+		
+		//return result
+		LearningObjectDetailsBean learningObjectDetailsBean = null;
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.GET_IMAGE_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			rset = preparedStatement.executeQuery();
+			
+			while (rset.next ())
+		    {   
+				learningObjectDetailsBean = new LearningObjectDetailsBean();
+				learningObjectDetailsBean.setId(id);
+				learningObjectDetailsBean.setFileName(rset.getString(1));
+				learningObjectDetailsBean.setFileType(rset.getString(2));
+				Blob blob = rset.getBlob(3);
+				learningObjectDetailsBean.setContent(blob.getBytes(1,(int)blob.length()));
+			}    
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			rset.close();
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return learningObjectDetailsBean;
+	}
 }

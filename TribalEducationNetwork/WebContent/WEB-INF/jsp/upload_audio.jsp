@@ -11,13 +11,8 @@
 	<title>Tribal Education Network Audio Upload</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>
-		function onAnnotateChange(){
-			$("#annotations_div").toggle();
-		}
-		
 		function onFileUpload(){
-			$("#uploadPreview_div").show();
-			
+			//check for supported file types
 			var supportedFileTypes = ['audio/mpeg','audio/ogg', 'audio/wav'];
 			var file = document.getElementById("upload").files[0];
 			if(supportedFileTypes.indexOf(file.type) == -1){
@@ -25,8 +20,12 @@
 				$("#uploadPreview_div").empty();
 				$("#uploadPreview_div").hide();
 				document.getElementById("upload").value = '';
+				$("#annotations_div").hide();
 				return false;
 			}
+			
+			$("#uploadPreview_div").show();
+			$("#annotations_div").show();
 			
 			var oFReader = new FileReader();
 			oFReader.readAsDataURL(file);			
@@ -74,21 +73,13 @@
 	
 	<table>
 		 <tr><td><input type="file" id="upload" name="upload" size="50" onchange="onFileUpload()"/></td></tr>
-		 <tr><td></td></tr>
 		 <tr><td><div id="uploadPreview_div" style="display:none;"></div></td></tr>
-  		  <tr><td>
-  		 	Annotate: No <input type="radio" name="annotate" value="false" onchange="onAnnotateChange();" <c:if test="${annotate == false}">checked</c:if> />
-  		 			  Yes <input type="radio" name="annotate" onchange="onAnnotateChange();" value="true" <c:if test="${annotate == true}">checked</c:if>/>
-  		 </td></tr>  		 
-  		<tr><td></td></tr>
   		 <tr><td>
-	  		 <div id="annotations_div" style="display:<c:choose><c:when test='${annotate == true}'>block</c:when><c:otherwise>none</c:otherwise></c:choose>">
-	  		    <%@include file="dc_annotations.jsp"%>	
-	  		    <%@include file="ten_annotations.jsp"%>					 
+	  		 <div id="annotations_div" style="display:none;">
+	  		    <%@include file="digital_rights_management.jsp"%>	  		    		 
 			 </div>
 		 </td></tr>
-		 
-		 <tr><td><input type="submit" value="Upload File" /></td></tr>
+		 <tr><td><input type="submit" value="Upload Audio" /></td></tr>
 	</table>
 	</section>
 			

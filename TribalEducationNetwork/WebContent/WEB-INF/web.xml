@@ -23,7 +23,7 @@
 	  	<filter-name>struts2</filter-name>
 	  	<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+			
 	<security-constraint>   
         <web-resource-collection>   
              <web-resource-name>Any url access is protected</web-resource-name>   
@@ -39,7 +39,7 @@
     </security-constraint>  
         
 	<security-constraint>
-        <display-name>Intaker security constraint</display-name>
+        <display-name>upload security constraint</display-name>
         <web-resource-collection>
             <web-resource-name>Protected Area</web-resource-name>
             <url-pattern>/upload/*</url-pattern>
@@ -50,11 +50,30 @@
         </web-resource-collection>
         <auth-constraint>
             <role-name>intaker</role-name>
+            <role-name>annotator</role-name>
         </auth-constraint>
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
         </user-data-constraint>
-    </security-constraint>    
+    </security-constraint> 
+    
+    <security-constraint>
+        <display-name>annotate security constraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>Protected Area</web-resource-name>
+            <url-pattern>/annotate/*</url-pattern>
+            <http-method>DELETE</http-method>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+            <http-method>PUT</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+             <role-name>annotator</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>     
 	
 	<login-config>
         <auth-method>FORM</auth-method>        
@@ -91,9 +110,7 @@
     </security-role>
 
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
     
     <resource-ref>
@@ -102,5 +119,4 @@
       <res-type>javax.sql.DataSource</res-type>
       <res-auth>Container</res-auth>
   </resource-ref>
-	
 </web-app>
