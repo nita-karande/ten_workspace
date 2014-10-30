@@ -77,8 +77,7 @@ public class UploadVideoAction extends ActionSupport{
 			try{
 				//Insert video into rdbms database
 				DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
-				int videoId = dbAccessDaoInterface.saveVideo(this.file, this.fileName,this.contentType,false);
-				
+				int videoId = dbAccessDaoInterface.saveVideo(this.file, this.fileName,this.contentType,false);				
 	
 				//Insert annotation data in Triplestore
 				TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();

@@ -13,7 +13,7 @@
 	<script>
 		function onFileUpload(){
 			//check file type
-			var supportedFileTypes = ['text/plain', 'application/pdf'];
+			var supportedFileTypes = ['video/mp4','video/webm','video/ogg'];
 			var file = document.getElementById("upload").files[0];
 			if(supportedFileTypes.indexOf(file.type) == -1){
 				alert("File type not supported");

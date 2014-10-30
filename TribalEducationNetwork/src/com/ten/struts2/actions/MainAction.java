@@ -24,19 +24,23 @@ public class MainAction extends ActionSupport {
          //check if user is logged in
          if(!Utils.isEmptyOrNull(user_name)){
         	 //create user details object and store in session
-        	HttpSession session =  request.getSession();
+        	HttpSession session =  request.getSession();        	
+        	UserDetailsBean userDetailsBean = null;
         	
-        	UserDetailsBean userDetailsBean = new UserDetailsBean();
-        	userDetailsBean.setUser_name(user_name);
-        	ArrayList<String> roles = new ArrayList<String>();
-        	for(String role : ActionConstants.ALL_ROLES){
-        		 if(request.isUserInRole(role)) { 
-        			 roles.add(role);
-        		 }
+        	Object object = session.getAttribute(ActionConstants.KEY_USER_DETAILS);
+        	//check if user details not already present
+        	if((object == null)){
+        		userDetailsBean = new UserDetailsBean();
+	        	userDetailsBean.setUser_name(user_name);
+	        	ArrayList<String> roles = new ArrayList<String>();
+	        	for(String role : ActionConstants.ALL_ROLES){
+	        		 if(request.isUserInRole(role)) { 
+	        			 roles.add(role);
+	        		 }
+	        	}
+	        	userDetailsBean.setRoles(roles);
+	        	session.setAttribute(ActionConstants.KEY_USER_DETAILS, userDetailsBean);
         	}
-        	userDetailsBean.setRoles(roles);
-        	
-        	session.setAttribute(ActionConstants.KEY_USER_DETAILS, userDetailsBean);
         	
         	result = ActionConstants.FORWARD_SUCCESS;
          }else{

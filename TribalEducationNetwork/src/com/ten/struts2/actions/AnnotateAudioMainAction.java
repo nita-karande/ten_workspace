@@ -16,11 +16,11 @@ import com.ten.dao.interfaces.DbAccessDaoInterface;
  * 
  * @author Nita Karande
  * This action invoked by main.jsp 
- * It invokes method to display all unannotated images in database
+ * It invokes method to display all unannotated audios in database
  */
-public class AnnotateImageMainAction extends ActionSupport{
+public class AnnotateAudioMainAction extends ActionSupport{
 
-	static Logger log = Logger.getLogger(AnnotateImageMainAction.class);
+	static Logger log = Logger.getLogger(AnnotateAudioMainAction.class);
 	
 	private static final long serialVersionUID = 1L;
 	ArrayList<LearningObjectBean> learningObjects;
@@ -34,8 +34,8 @@ public class AnnotateImageMainAction extends ActionSupport{
 	}
 
 	/**
-	 * This method is configured to be invoked in struts.xml, for retreiving all the unannotated images.
-	 * It makes calls to mysql dao implementation display all the unannotated images
+	 * This method is configured to be invoked in struts.xml, for retrieving all the unannotated videos.
+	 * It makes calls to mysql dao implementation display all the unannotated videos
 	 */
 	public String execute() throws Exception {
 		//Get request method invoked
@@ -46,15 +46,15 @@ public class AnnotateImageMainAction extends ActionSupport{
 		
 		if(ActionConstants.METHOD_GET.equalsIgnoreCase(method)){
 			try{
-				//get images from database
+				//get audios from database
 				DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
-				learningObjects = dbAccessDaoInterface.getUnannotatedImages();
+				learningObjects = dbAccessDaoInterface.getUnannotatedAudios();
 				
 				result = ActionConstants.FORWARD_SUCCESS;
 			}catch(Exception ex){
 				log.error(ex);
 				reset();				
-				addActionError(ActionConstants.RETRIEVE_IMAGES_ERROR_MSG);
+				addActionError(ActionConstants.RETRIEVE_AUDIOS_ERROR_MSG);
 				result = ActionConstants.FORWARD_INPUT;
 			}           
 		}else if(ActionConstants.METHOD_POST.equalsIgnoreCase(method)){	

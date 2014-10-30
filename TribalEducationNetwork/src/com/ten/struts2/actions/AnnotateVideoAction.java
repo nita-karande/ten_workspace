@@ -16,12 +16,12 @@ import com.ten.triplestore.dao.interfaces.TriplestoreAccessDaoInterface;
 /**
  * 
  * @author Nita Karande
- * This action invoked by annotatate_images_main.jsp
- * It get image details from database as well as stores image annotations in triplestore
+ * This action invoked by annotatate_videos_main.jsp
+ * It get video details from database as well as stores video annotations in triplestore
  */
-public class AnnotateImageAction extends ActionSupport{
+public class AnnotateVideoAction extends ActionSupport{
 
-	static Logger log = Logger.getLogger(AnnotateImageAction.class);
+	static Logger log = Logger.getLogger(AnnotateVideoAction.class);
 	
 	private static final long serialVersionUID = 1L;
 	LearningObjectDetailsBean learningObjectDetailsBean;
@@ -64,9 +64,9 @@ public class AnnotateImageAction extends ActionSupport{
 	}
 
 	/**
-	 * This method is configured to be invoked in struts.xml, for retrieving the image to be annotated
-	 * It makes calls to mysql dao implementation to get image content from database
-	 * It also is invoked to store image annotations to triplestore
+	 * This method is configured to be invoked in struts.xml, for retrieving the video to be annotated
+	 * It makes calls to mysql dao implementation to get video content from database
+	 * It also is invoked to store video annotations to triplestore
 	 */
 	public String execute() throws Exception {
 		//Get request method invoked
@@ -78,32 +78,32 @@ public class AnnotateImageAction extends ActionSupport{
 		if(ActionConstants.METHOD_POST.equalsIgnoreCase(method)){
 			if(this.actionType.equals(ActionConstants.ACTION_DISPLAY)){
 				try{
-					//get image from database
+					//get video from database
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
-					learningObjectDetailsBean = dbAccessDaoInterface.getImage(this.learningObjectId);
+					learningObjectDetailsBean = dbAccessDaoInterface.getVideo(this.learningObjectId);
 					
 					result = ActionConstants.FORWARD_SUCCESS;
 				}catch(Exception ex){
 					log.error(ex);
 					reset();				
-					addActionError(ActionConstants.RETRIEVE_IMAGES_ERROR_MSG);
+					addActionError(ActionConstants.RETRIEVE_VIDEOS_ERROR_MSG);
 					result = ActionConstants.FORWARD_INPUT;
 				}
 			}else if (this.actionType.equals(ActionConstants.ACTION_ANNOTATE)){
 				try{
 					//save annotations to triple store
 					TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();
-					tdbAccessDaoInterface.insertImageAnnotations(this.tenLearningObjectAnnotationsBean, this.learningObjectId);
+					tdbAccessDaoInterface.insertVideoAnnotations(this.tenLearningObjectAnnotationsBean, this.learningObjectId);
 					
-					//set image status to being annotated
+					//set video status to being annotated
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
-					dbAccessDaoInterface.updateImage(this.learningObjectId);
+					dbAccessDaoInterface.updateVideo(this.learningObjectId);
 					
 					result = ActionConstants.FORWARD_SUCCESS;
 				}catch(Exception ex){
 					log.error(ex);
 					reset();				
-					addActionError(ActionConstants.RETRIEVE_IMAGES_ERROR_MSG);
+					addActionError(ActionConstants.RETRIEVE_VIDEOS_ERROR_MSG);
 					result = ActionConstants.FORWARD_INPUT;
 				}
 			}

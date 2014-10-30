@@ -105,7 +105,179 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 		}		
 		return image_id;
 	}
+	
+	@Override
+	/**
+	 * This method is invoked by annotateImageAction to change the status of image as being annotated.
+	 */
+	public boolean updateImage(int id) throws Exception
+	{
+		String LOG_METHOD_NAME = "boolean updateImage(int)";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
 
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		boolean result = false;
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.UPDATE_IMAGE_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			preparedStatement.setInt(2, 1); //set as annotated
+			int rowsChanged = preparedStatement.executeUpdate();
+			
+			if(rowsChanged==1){
+				result = true;
+			}
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return result;
+	}
+	
+	@Override
+	/**
+	 * This method is invoked by annotateVideoAction to change the status of video as being annotated.
+	 */
+	public boolean updateVideo(int id) throws Exception
+	{
+		String LOG_METHOD_NAME = "boolean updateVideo(int)";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		boolean result = false;
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.UPDATE_VIDEO_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			preparedStatement.setInt(2, 1); //set as annotated
+			int rowsChanged = preparedStatement.executeUpdate();
+			
+			if(rowsChanged==1){
+				result = true;
+			}
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return result;
+	}
+	
+	@Override
+	/**
+	 * This method is invoked by annotateAudioAction to change the status of audio as being annotated.
+	 */
+	public boolean updateAudio(int id) throws Exception
+	{
+		String LOG_METHOD_NAME = "boolean updateAudio(int)";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		boolean result = false;
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.UPDATE_AUDIO_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			preparedStatement.setInt(2, 1); //set as annotated
+			int rowsChanged = preparedStatement.executeUpdate();
+			
+			if(rowsChanged==1){
+				result = true;
+			}
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return result;
+	}
+
+	@Override
+	/**
+	 * This method is invoked by annotateTextAction to change the status of text as being annotated.
+	 */
+	public boolean updateText(int id) throws Exception
+	{
+		String LOG_METHOD_NAME = "boolean updateText(int)";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		boolean result = false;
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.UPDATE_TEXT_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			preparedStatement.setInt(2, 1); //set as annotated
+			int rowsChanged = preparedStatement.executeUpdate();
+			
+			if(rowsChanged==1){
+				result = true;
+			}
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return result;
+	}
+	
 	@Override
 	/**
 	 * This method is invoked by uploadVideoAction to store the video to database.
@@ -235,7 +407,7 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 		try {
 			connection = getConnection();
 			
-			String sql_call = DaoConstants.INSERT_AUDIO_PROCEDURE_CALL;
+			String sql_call = DaoConstants.INSERT_TEXT_PROCEDURE_CALL;
 			callableStatement = connection.prepareCall(sql_call);
 			fis = new FileInputStream(file);
 			callableStatement.setBinaryStream(1, (InputStream)fis, (int)(file.length()));
@@ -331,6 +503,294 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			connection = getConnection();
 			
 			String sql = DaoConstants.GET_IMAGE_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			rset = preparedStatement.executeQuery();
+			
+			while (rset.next ())
+		    {   
+				learningObjectDetailsBean = new LearningObjectDetailsBean();
+				learningObjectDetailsBean.setId(id);
+				learningObjectDetailsBean.setFileName(rset.getString(1));
+				learningObjectDetailsBean.setFileType(rset.getString(2));
+				Blob blob = rset.getBlob(3);
+				learningObjectDetailsBean.setContent(blob.getBytes(1,(int)blob.length()));
+			}    
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			rset.close();
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return learningObjectDetailsBean;
+	}
+	
+	@Override
+	public ArrayList<LearningObjectBean> getUnannotatedVideos()
+			throws Exception {
+		String LOG_METHOD_NAME = "ArrayList<LearningObjectBean> getUnannotatedVideos()";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		ResultSet rset = null;
+		
+		//return result
+		ArrayList<LearningObjectBean> listLearningObjects = new ArrayList<LearningObjectBean>();
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.GET_UNANNOTATED_VIDEOS_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, 0);
+			rset = preparedStatement.executeQuery();
+			
+			while (rset.next ())
+		    {   
+				LearningObjectBean learningObjectBean = new LearningObjectBean();
+				learningObjectBean.setId(rset.getInt(1));
+				learningObjectBean.setFileName(rset.getString(2));
+				listLearningObjects.add(learningObjectBean);
+		     }    
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			rset.close();
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return listLearningObjects;
+	}
+	
+	@Override
+	public LearningObjectDetailsBean getVideo(int id)
+			throws Exception {
+		String LOG_METHOD_NAME = "LearningObjectDetailsBean getVideo()";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		ResultSet rset = null;
+		
+		//return result
+		LearningObjectDetailsBean learningObjectDetailsBean = null;
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.GET_VIDEO_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			rset = preparedStatement.executeQuery();
+			
+			while (rset.next ())
+		    {   
+				learningObjectDetailsBean = new LearningObjectDetailsBean();
+				learningObjectDetailsBean.setId(id);
+				learningObjectDetailsBean.setFileName(rset.getString(1));
+				learningObjectDetailsBean.setFileType(rset.getString(2));
+				Blob blob = rset.getBlob(3);
+				learningObjectDetailsBean.setContent(blob.getBytes(1,(int)blob.length()));
+			}    
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			rset.close();
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return learningObjectDetailsBean;
+	}
+	
+	@Override
+	public ArrayList<LearningObjectBean> getUnannotatedAudios()
+			throws Exception {
+		String LOG_METHOD_NAME = "ArrayList<LearningObjectBean> getUnannotatedAudios()";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		ResultSet rset = null;
+		
+		//return result
+		ArrayList<LearningObjectBean> listLearningObjects = new ArrayList<LearningObjectBean>();
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.GET_UNANNOTATED_AUDIOS_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, 0);
+			rset = preparedStatement.executeQuery();
+			
+			while (rset.next ())
+		    {   
+				LearningObjectBean learningObjectBean = new LearningObjectBean();
+				learningObjectBean.setId(rset.getInt(1));
+				learningObjectBean.setFileName(rset.getString(2));
+				listLearningObjects.add(learningObjectBean);
+		     }    
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			rset.close();
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return listLearningObjects;
+	}
+	
+	@Override
+	public LearningObjectDetailsBean getAudio(int id)
+			throws Exception {
+		String LOG_METHOD_NAME = "LearningObjectDetailsBean getAudio()";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		ResultSet rset = null;
+		
+		//return result
+		LearningObjectDetailsBean learningObjectDetailsBean = null;
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.GET_AUDIO_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			rset = preparedStatement.executeQuery();
+			
+			while (rset.next ())
+		    {   
+				learningObjectDetailsBean = new LearningObjectDetailsBean();
+				learningObjectDetailsBean.setId(id);
+				learningObjectDetailsBean.setFileName(rset.getString(1));
+				learningObjectDetailsBean.setFileType(rset.getString(2));
+				Blob blob = rset.getBlob(3);
+				learningObjectDetailsBean.setContent(blob.getBytes(1,(int)blob.length()));
+			}    
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			rset.close();
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return learningObjectDetailsBean;
+	}
+	
+	@Override
+	public ArrayList<LearningObjectBean> getUnannotatedTexts()
+			throws Exception {
+		String LOG_METHOD_NAME = "ArrayList<LearningObjectBean> getUnannotatedTexts()";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		ResultSet rset = null;
+		
+		//return result
+		ArrayList<LearningObjectBean> listLearningObjects = new ArrayList<LearningObjectBean>();
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.GET_UNANNOTATED_TEXTS_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, 0);
+			rset = preparedStatement.executeQuery();
+			
+			while (rset.next ())
+		    {   
+				LearningObjectBean learningObjectBean = new LearningObjectBean();
+				learningObjectBean.setId(rset.getInt(1));
+				learningObjectBean.setFileName(rset.getString(2));
+				listLearningObjects.add(learningObjectBean);
+		     }    
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			rset.close();
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return listLearningObjects;
+	}
+	
+	@Override
+	public LearningObjectDetailsBean getText(int id)
+			throws Exception {
+		String LOG_METHOD_NAME = "LearningObjectDetailsBean getText()";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		ResultSet rset = null;
+		
+		//return result
+		LearningObjectDetailsBean learningObjectDetailsBean = null;
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.GET_TEXT_SQL;
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setInt(1, id);
 			rset = preparedStatement.executeQuery();

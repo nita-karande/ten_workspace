@@ -67,8 +67,7 @@
             <result name="input">/WEB-INF/jsp/annotate_image.jsp</result>
             <result name="showjsp">/WEB-INF/jsp/annotate_image.jsp</result>
      	 </action>
-     	 
-     	 
+     	      	 
      	 <!-- Action for handling upload & annotation process of video -->
      	 <action name="upload/uploadvideo" 
             class="com.ten.struts2.actions.UploadVideoAction" 
@@ -80,6 +79,22 @@
 	        <result name="success">/WEB-INF/jsp/upload_video.jsp</result>
             <result name="input">/WEB-INF/jsp/upload_video.jsp</result>
             <result name="showjsp">/WEB-INF/jsp/upload_video.jsp</result>
+     	 </action>
+     	 
+     	  <action name="annotate/annotatevideomain" 
+            class="com.ten.struts2.actions.AnnotateVideoMainAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/annotate_video_main.jsp</result>
+            <result name="input">/WEB-INF/jsp/annotate_video_main.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/annotate_video_main.jsp</result>
+     	 </action>
+     	 
+     	  <action name="annotate/annotatevideo" 
+            class="com.ten.struts2.actions.AnnotateVideoAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/annotate_video.jsp</result>
+            <result name="input">/WEB-INF/jsp/annotate_video.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/annotate_video.jsp</result>
      	 </action>
      	 
      	 <!-- Action for handling upload & annotation process of text -->
@@ -95,6 +110,22 @@
             <result name="showjsp">/WEB-INF/jsp/upload_text.jsp</result>
      	 </action>
      	 
+     	  <action name="annotate/annotatetextmain" 
+            class="com.ten.struts2.actions.AnnotateTextMainAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/annotate_text_main.jsp</result>
+            <result name="input">/WEB-INF/jsp/annotate_text_main.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/annotate_text_main.jsp</result>
+     	 </action>
+     	 
+     	  <action name="annotate/annotatetext" 
+            class="com.ten.struts2.actions.AnnotateTextAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/annotate_text.jsp</result>
+            <result name="input">/WEB-INF/jsp/annotate_text.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/annotate_text.jsp</result>
+     	 </action>
+     	 
      	 <!-- Action for handling upload & annotation process of audio -->
      	 <action name="upload/uploadaudio" 
            class="com.ten.struts2.actions.UploadAudioAction" 
@@ -106,6 +137,22 @@
       	   <result name="success">/WEB-INF/jsp/upload_audio.jsp</result>
            <result name="input">/WEB-INF/jsp/upload_audio.jsp</result>
            <result name="showjsp">/WEB-INF/jsp/upload_audio.jsp</result>
-     	 </action>		 
+     	 </action>	
+     	 
+     	 <action name="annotate/annotateaudiomain" 
+            class="com.ten.struts2.actions.AnnotateAudioMainAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/annotate_audio_main.jsp</result>
+            <result name="input">/WEB-INF/jsp/annotate_audio_main.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/annotate_audio_main.jsp</result>
+     	 </action>
+     	 
+     	 <action name="annotate/annotateaudio" 
+            class="com.ten.struts2.actions.AnnotateAudioAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/annotate_audio.jsp</result>
+            <result name="input">/WEB-INF/jsp/annotate_audio.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/annotate_audio.jsp</result>
+     	 </action>	 
 	</package> 
 </struts>

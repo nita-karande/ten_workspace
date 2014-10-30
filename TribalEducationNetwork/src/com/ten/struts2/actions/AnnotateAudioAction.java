@@ -16,12 +16,12 @@ import com.ten.triplestore.dao.interfaces.TriplestoreAccessDaoInterface;
 /**
  * 
  * @author Nita Karande
- * This action invoked by annotatate_images_main.jsp
- * It get image details from database as well as stores image annotations in triplestore
+ * This action invoked by annotatate_audios_main.jsp
+ * It get audio details from database as well as stores audio annotations in triplestore
  */
-public class AnnotateImageAction extends ActionSupport{
+public class AnnotateAudioAction extends ActionSupport{
 
-	static Logger log = Logger.getLogger(AnnotateImageAction.class);
+	static Logger log = Logger.getLogger(AnnotateAudioAction.class);
 	
 	private static final long serialVersionUID = 1L;
 	LearningObjectDetailsBean learningObjectDetailsBean;
@@ -64,9 +64,9 @@ public class AnnotateImageAction extends ActionSupport{
 	}
 
 	/**
-	 * This method is configured to be invoked in struts.xml, for retrieving the image to be annotated
-	 * It makes calls to mysql dao implementation to get image content from database
-	 * It also is invoked to store image annotations to triplestore
+	 * This method is configured to be invoked in struts.xml, for retrieving the audio to be annotated
+	 * It makes calls to mysql dao implementation to get audio content from database
+	 * It also is invoked to store audio annotations to triplestore
 	 */
 	public String execute() throws Exception {
 		//Get request method invoked
@@ -78,32 +78,32 @@ public class AnnotateImageAction extends ActionSupport{
 		if(ActionConstants.METHOD_POST.equalsIgnoreCase(method)){
 			if(this.actionType.equals(ActionConstants.ACTION_DISPLAY)){
 				try{
-					//get image from database
+					//get audio from database
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
-					learningObjectDetailsBean = dbAccessDaoInterface.getImage(this.learningObjectId);
+					learningObjectDetailsBean = dbAccessDaoInterface.getAudio(this.learningObjectId);
 					
 					result = ActionConstants.FORWARD_SUCCESS;
 				}catch(Exception ex){
 					log.error(ex);
 					reset();				
-					addActionError(ActionConstants.RETRIEVE_IMAGES_ERROR_MSG);
+					addActionError(ActionConstants.RETRIEVE_AUDIOS_ERROR_MSG);
 					result = ActionConstants.FORWARD_INPUT;
 				}
 			}else if (this.actionType.equals(ActionConstants.ACTION_ANNOTATE)){
 				try{
 					//save annotations to triple store
 					TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();
-					tdbAccessDaoInterface.insertImageAnnotations(this.tenLearningObjectAnnotationsBean, this.learningObjectId);
+					tdbAccessDaoInterface.insertAudioAnnotations(this.tenLearningObjectAnnotationsBean, this.learningObjectId);
 					
-					//set image status to being annotated
+					//set audio status to being annotated
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
-					dbAccessDaoInterface.updateImage(this.learningObjectId);
+					dbAccessDaoInterface.updateAudio(this.learningObjectId);
 					
 					result = ActionConstants.FORWARD_SUCCESS;
 				}catch(Exception ex){
 					log.error(ex);
 					reset();				
-					addActionError(ActionConstants.RETRIEVE_IMAGES_ERROR_MSG);
+					addActionError(ActionConstants.RETRIEVE_AUDIOS_ERROR_MSG);
 					result = ActionConstants.FORWARD_INPUT;
 				}
 			}

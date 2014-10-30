@@ -20,6 +20,7 @@
 		  		    <%@include file="include_upload_links.jsp"%>	  		    		 
 				 </div>
 			 </td></tr>		
+			 <tr></tr>
 			</table>
 		</c:if>
 		
@@ -31,7 +32,21 @@
 		  		 <div id="annotate_links_div">
 		  		    <%@include file="include_annotate_links.jsp"%>	  		    		 
 				 </div>
-			 </td></tr>		
+			 </td></tr>	
+			 <tr></tr>	
+			</table>
+		</c:if>		
+
+		<!--Course creation links creator role -->
+		 <c:if test="${sessionScope.user_details.userCreator == true}" >
+			 <table>
+			 <tr><td> COURSE CREATION LINK </td></tr>
+	  		 <tr><td>
+		  		 <div id="course_links_div">
+		  		    <%@include file="include_course_links.jsp"%>	  		    		 
+				 </div>
+			 </td></tr>	
+			 <tr></tr>	
 			</table>
 		</c:if>
 	</section>
