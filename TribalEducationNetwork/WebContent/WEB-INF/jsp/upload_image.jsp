@@ -42,9 +42,7 @@
 </head>
 <body>
 	<form action="${pageContext.request.contextPath}/upload/uploadimage.action" method="post" enctype="multipart/form-data">
-	<header>
-		<h1><img src="${pageContext.request.contextPath}/images/TEN_icon.png" alt="TEN Logo" width="60px" height="60px">  Tribal Education Network</h1>
-	</header>
+	<%@include file="include_header.jsp"%>
 	
 	<section>
 	<table>

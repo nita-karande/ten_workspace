@@ -8,7 +8,10 @@
 <body>
 	<form>
 	<header>
-		<p>Welcome to Tribal Education Network</p>
+		<table>
+			<tr><td width="80%"><b><img src="${pageContext.request.contextPath}/images/TEN_icon.png" alt="TEN Logo" width="60px" height="60px"> Welcome to Tribal Education Network</b></td> <td></td><td width="20%" align="right"><a href="${pageContext.request.contextPath}/logout">logout</a></td></tr>
+		</table>
+		<br>
 	</header>
 	<section>
 		 <!-- Upload links intaker role -->

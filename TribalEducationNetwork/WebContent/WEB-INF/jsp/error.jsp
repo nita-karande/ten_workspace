@@ -5,6 +5,8 @@
 	<title>Tribal Education Network Error Page</title>
 </head>
 <body>
+	<%@include file="include_header.jsp"%>
+	
 	Some Error Occured!!<br><br>
 	 
 	Error Name: <s:property value="exception"/><br><br>
