@@ -19,6 +19,8 @@ public interface ActionConstants {
 	
 	public static final String KEY_USER_DETAILS = "user_details";
 	
+	public static final String KEY_STUDENT_ANNOTATIONS = "student_annotations";
+	
 	public static final String FILE_UPLOAD_SUCCESS_MSG = "File uploaded successfully ";
 	
 	public static final String FILE_UPLOAD_ERROR_MSG = "File upload failed ";
@@ -30,6 +32,14 @@ public interface ActionConstants {
 	public static final String RETRIEVE_VIDEOS_ERROR_MSG = "Failed to retrieve videos ";
 	
 	public static final String RETRIEVE_TEXTS_ERROR_MSG = "Failed to retrieve texts ";
+	
+	public static final String CREATE_COURSE_SUCCESS_MSG = "Course created successfully ";
+	
+	public static final String CREATE_COURSE_ERROR_MSG = "Failed to create course ";	
+	
+	public static final String VIEW_COURSE_ERROR_MSG = "Failed to view courses ";
+	
+	public static final String SEARCH_LEARNING_OBJECTS_ERROR_MSG = "Learning objects cannot be searched ";
 	
 	public static final String ACTION_DISPLAY = "display";	
 	
@@ -44,6 +54,8 @@ public interface ActionConstants {
 	public static final String FORWARD_INPUT = "input";
 	
 	public static final String FORWARD_SUCCESS = "success";
+	
+	public static final String FORWARD_NEXT_ACTION = "nextaction";
 	
 	public static final String FORWARD_ERROR = "error";
 }

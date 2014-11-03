@@ -15,6 +15,8 @@ public interface DaoConstants {
 	
 	public static final String INSERT_TEXT_PROCEDURE_CALL = "call INSERT_TEXT(?,?,?,?,?)";
 	
+	public static final String INSERT_COURSE_PROCEDURE_CALL = "call INSERT_COURSE(?,?)";
+	
 	public static final String GET_UNANNOTATED_IMAGES_SQL = "select IMAGE_ID, FILE_NAME from IMAGES_TABLE where ANNOTATED=?";
 	
 	public static final String GET_IMAGE_SQL = "select FILE_NAME, FILE_TYPE, CONTENT from IMAGES_TABLE where IMAGE_ID=?";	
@@ -30,6 +32,8 @@ public interface DaoConstants {
 	public static final String GET_UNANNOTATED_TEXTS_SQL = "select TEXT_ID, FILE_NAME from TEXTS_TABLE where ANNOTATED=?";
 	
 	public static final String GET_TEXT_SQL = "select FILE_NAME, FILE_TYPE, CONTENT from TEXTS_TABLE where TEXT_ID=?";
+	
+	public static final String GET_COURSES_SQL = "select COURSE_ID, NAME from COURSES_TABLE";
 	
 	public static final String UPDATE_IMAGE_SQL = "update IMAGES_TABLE set ANNOTATED=? where IMAGE_ID=?";
 	

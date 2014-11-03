@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -17,6 +19,7 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
+import com.ten.beans.CourseBean;
 import com.ten.beans.LearningObjectBean;
 import com.ten.beans.LearningObjectDetailsBean;
 import com.ten.dao.interfaces.DbAccessDaoInterface;
@@ -816,5 +819,132 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
 		}		
 		return learningObjectDetailsBean;
+	}
+	
+	@Override
+	/**
+	 * This method is invoked by CreateCourseAction to store the newly created course to database.
+	 * Method returns an integer which is the primary key of the course stored in database.
+	 * This course is related to its annotations stored in triple store through the image id primary key.
+	 */
+	public int insertCourse(String courseName) throws Exception
+	{
+		String LOG_METHOD_NAME = "int insertCourse(String courseName)";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		CallableStatement callableStatement = null;
+		
+		// declare result variable		
+		int course_id = 0;		
+		try {
+			connection = getConnection();
+			
+			String sql_call = DaoConstants.INSERT_COURSE_PROCEDURE_CALL;
+			callableStatement = connection.prepareCall(sql_call);
+			callableStatement.setString(1, courseName);
+			callableStatement.registerOutParameter(2, java.sql.Types.INTEGER);
+			 
+			// execute store procedure
+			callableStatement.executeUpdate();
+			
+			course_id = callableStatement.getInt(2);
+			
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally{
+			// close all the connections.
+			connection.close();
+			callableStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return course_id;
+	}
+
+	@Override
+	public HashMap<String, LearningObjectDetailsBean> getLearningObjectDetails(
+			String type, Set<String> uriSet) throws Exception {
+		
+		String LOG_METHOD_NAME = "HashMap<String, LearningObjectDetailsBean> getLearningObjectDetails(String type, Set<String> uri)";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		HashMap<String, LearningObjectDetailsBean> returnMap = new HashMap<String, LearningObjectDetailsBean>();
+		LearningObjectDetailsBean learningObjectDetails = null;
+		int indexOf = 0, id = 0;
+		
+		try {
+			for(String uri:uriSet){
+				indexOf = uri.lastIndexOf("#");
+				id = Integer.parseInt(uri.substring(indexOf + 1));
+				
+				if("1".equals(type)){
+					learningObjectDetails = getImage(id);
+				}else if("2".equals(type)){		
+					learningObjectDetails = getAudio(id);
+				}else if("3".equals(type)){
+					learningObjectDetails = getVideo(id);
+				}else if("4".equals(type)){
+					learningObjectDetails = getText(id);
+				}
+				returnMap.put(uri, learningObjectDetails);	
+			}		
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally{
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}
+		return returnMap;
+	}
+
+	@Override
+	public ArrayList<CourseBean> getCourses() throws Exception {
+		String LOG_METHOD_NAME = "ArrayList<CourseBean> getCourses()";
+		log.debug(this.getClass() + DaoConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		// declare a connection by using Connection interface 
+		Connection connection = null;
+
+		// Declare prepare statement.
+		PreparedStatement preparedStatement = null;
+		
+		// result set
+		ResultSet rset = null;
+		
+		//return result
+		ArrayList<CourseBean> listCourseBean = new ArrayList<CourseBean>();
+		
+		try {
+			connection = getConnection();
+			
+			String sql = DaoConstants.GET_COURSES_SQL;
+			preparedStatement = connection.prepareStatement(sql);
+			rset = preparedStatement.executeQuery();
+			
+			while (rset.next ())
+		    {   
+				CourseBean courseBean = new CourseBean();
+				courseBean.setCourseId(rset.getInt(1));
+				courseBean.setCourseName(rset.getString(2));
+				listCourseBean.add(courseBean);
+		     }    
+		}catch (Exception ex) {
+			// catch if found any exception during rum time.
+			log.error(ex);
+			throw ex;
+		}finally {
+			// close all the connections.
+			rset.close();
+			connection.close();
+			preparedStatement.close();
+			log.debug(this.getClass() + DaoConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return listCourseBean;
 	}
 }

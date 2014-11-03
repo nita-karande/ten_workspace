@@ -30,6 +30,8 @@ public interface TripleStoreConstants {
 	public static final String URI_CHAPTER = "http://www.semanticweb.org/ten/ontologies/2014/8/Chapter#";
 	
 	public static final String URI_ATOM = "http://www.semanticweb.org/ten/ontologies/2014/8/Atom#";
+	
+	public static final String URI_STUDENT = "http://www.semanticweb.org/ten/ontologies/2014/8/Student#";
 	//Begin - Subject
 	
 	//BEGIN - predicates
@@ -89,6 +91,9 @@ public interface TripleStoreConstants {
 	public static final String URI_PREDICATE_TEN_LO_RATING = URI_TEN_ONTOLOGY + "rating";
 	//End - predicates
 	
+	//TEN course
+	public static final String URI_PREDICATE_TEN_KEYWORDS = URI_TEN_ONTOLOGY + "keywords";
+	
 	//BEGIN - Object	
 	public static final String URI_TEN_ONTOLOGY_IMAGE_OBJECT = URI_TEN_ONTOLOGY + "Image";
 	
@@ -97,29 +102,38 @@ public interface TripleStoreConstants {
 	public static final String URI_TEN_ONTOLOGY_AUDIO_OBJECT = URI_TEN_ONTOLOGY + "Audio";
 	
 	public static final String URI_TEN_ONTOLOGY_TEXT_OBJECT = URI_TEN_ONTOLOGY + "Text";	
+	
+	public static final String URI_TEN_ONTOLOGY_COURSE_OBJECT = URI_TEN_ONTOLOGY + "Course";
+	
 	//End - Object 	
 	
-	public static final String PREFIX_TEN_ONTOLOGY = "prefix TenOntology: <" + URI_TEN_ONTOLOGY + "> . ";
+	public static final String PREFIX_TEN_ONTOLOGY = "prefix TenOntology: <" + URI_TEN_ONTOLOGY + "> ";
 	
-	public static final String PREFIX_RDF = "prefix rdf: <" + URI_RDF + "> . ";
+	public static final String PREFIX_RDF = "prefix rdf: <" + URI_RDF + "> ";
 	
-	public static final String PREFIX_RDFS = "prefix rdfs: <" + URI_RDFS + "> . ";
+	public static final String PREFIX_RDFS = "prefix rdfs: <" + URI_RDFS + "> ";
 	
-	public static final String PREFIX_FOAF = "prefix foaf: <" + URI_FOAF + "> . ";
+	public static final String PREFIX_FOAF = "prefix foaf: <" + URI_FOAF + "> ";
 	
-	public static final String PREFIX_DUBLIN_CORE = "prefix dc: <" + URI_DUBLIN_CORE + "> . ";
+	public static final String PREFIX_DUBLIN_CORE = "prefix dc: <" + URI_DUBLIN_CORE + "> ";
 	
-	public static final String PREFIX_TEN_IMAGE = "prefix Image: <" + URI_IMAGE + "> . ";
+	public static final String PREFIX_TEN_IMAGE = "prefix Image: <" + URI_IMAGE + "> ";
 	
-	public static final String PREFIX_TEN_COURSE = "prefix Course: <" + URI_COURSE + "> . ";
+	public static final String PREFIX_TEN_AUDIO = "prefix Audio: <" + URI_AUDIO + "> ";
 	
-	public static final String PREFIX_TEN_ECONTENT = "prefix Econtent: <" + URI_ECONTENT + "> . ";
+	public static final String PREFIX_TEN_VIDEO = "prefix Video: <" + URI_VIDEO + "> ";
 	
-	public static final String PREFIX_TEN_CHAPTER = "prefix Chapter: <" + URI_CHAPTER + "> . ";
+	public static final String PREFIX_TEN_COURSE = "prefix Course: <" + URI_COURSE + "> ";
 	
-	public static final String PREFIX_TEN_ATOM = "prefix Atom: <" + URI_ATOM + "> . ";
+	public static final String PREFIX_TEN_ECONTENT = "prefix Econtent: <" + URI_ECONTENT + "> ";
 	
-	public static final String PREFIX_TEN_TEXT = "prefix Text: <" + URI_TEXT + "> . ";	
+	public static final String PREFIX_TEN_CHAPTER = "prefix Chapter: <" + URI_CHAPTER + "> ";
+	
+	public static final String PREFIX_TEN_ATOM = "prefix Atom: <" + URI_ATOM + "> ";
+	
+	public static final String PREFIX_TEN_TEXT = "prefix Text: <" + URI_TEXT + "> ";	
+	
+	public static final String PREFIX_TEN_STUDENT= "prefix Student: <" + URI_STUDENT + "> ";
 	
 	public static final String VIRTUOSO_GRAPH_URI = "http://localhost:8890/DAV/home/ten_user/graph";
 	
@@ -130,5 +144,24 @@ public interface TripleStoreConstants {
 	public static final String LOG_BEGIN_TRANSACTION = " Begin Transaction ";
 	
 	public static final String LOG_END_TRANSACTION = " End Transaction";
-
+	
+	public static final String SEARCH_IMAGE = "1";
+	
+	public static final String SEARCH_AUDIO = "2";
+	
+	public static final String SEARCH_VIDEO = "3";
+	
+	public static final String SEARCH_TEXT = "4";
+	
+	public static final String LEARNING_OBJECT_TYPE_IMAGE = "Image";
+	
+	public static final String LEARNING_OBJECT_TYPE_VIDEO = "Video";
+	
+	public static final String LEARNING_OBJECT_TYPE_AUDIO = "Audio";
+	
+	public static final String LEARNING_OBJECT_TYPE_TEXT =  "Text";	
+	
+	public static final String TYPE_COURSE = "Course";
+	
+	public static final String TYPE_STUDENT = "Student";
 }

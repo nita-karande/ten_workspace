@@ -49,6 +49,19 @@
 			 <tr></tr>	
 			</table>
 		</c:if>
+		
+		<!--Course view links student role -->
+		 <c:if test="${sessionScope.user_details.userStudent == true}" >
+			 <table>
+			 <tr><td> VIEW COURSES LINK </td></tr>
+	  		 <tr><td>
+		  		 <div id="course_links_div">
+		  		    <%@include file="include_view_links.jsp"%>	  		    		 
+				 </div>
+			 </td></tr>	
+			 <tr></tr>	
+			</table>
+		</c:if>
 	</section>
 	</form>
 </body>

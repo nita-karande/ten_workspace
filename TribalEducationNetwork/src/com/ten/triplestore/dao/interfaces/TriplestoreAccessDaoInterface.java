@@ -1,9 +1,14 @@
 package com.ten.triplestore.dao.interfaces;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.ten.beans.CourseAnnotationsBean;
 import com.ten.beans.DigitalRightsManagementBean;
+import com.ten.beans.StudentAnnotationsBean;
 import com.ten.beans.TenLearningObjectAnnotationsBean;
 
 public interface TriplestoreAccessDaoInterface {
-	public void queryLearningObject(String learningObjectType) throws Exception;	
+	public ArrayList<String> queryLearningObject(String learningObjectType, ArrayList<String> orSearchTerms,  ArrayList<String> andSearchTerms) throws Exception;	
 	
 	//Insert image digital rights management data in triple store
 	public boolean insertImageDigitalRightsManagementData(DigitalRightsManagementBean digitalRightsManagementBean, int imageId) throws Exception;
@@ -28,4 +33,16 @@ public interface TriplestoreAccessDaoInterface {
 	
 	//Insert text annotations data in triple store
 	public boolean insertTextAnnotations(TenLearningObjectAnnotationsBean TenLearningObjectAnnotationsBean, int textId) throws Exception;
+	
+	//Insert course annotations
+	public boolean insertCourseAnnotations(CourseAnnotationsBean courseAnnotationsBean, int courseId) throws Exception;
+	
+	//get course annotations
+	public CourseAnnotationsBean getCourseAnnotations(int courseId) throws Exception;
+	
+	//get student annotations
+	public StudentAnnotationsBean getStudentAnnotations(String user_name) throws Exception;
+		
+	//Search learning objects
+	public HashMap<String, TenLearningObjectAnnotationsBean> searchLearningObjects(String type, String orKeywords, String andKeywords) throws Exception;
 }

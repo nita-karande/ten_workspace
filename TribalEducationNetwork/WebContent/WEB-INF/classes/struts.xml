@@ -153,6 +153,40 @@
             <result name="success">/WEB-INF/jsp/annotate_audio.jsp</result>
             <result name="input">/WEB-INF/jsp/annotate_audio.jsp</result>
             <result name="showjsp">/WEB-INF/jsp/annotate_audio.jsp</result>
-     	 </action>	 
+     	 </action>
+     	 
+     	 <!-- Action for handling course related functionality -->
+     	 <action name="course/create" 
+            class="com.ten.struts2.actions.CreateCourseAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/add_learning_objects.jsp</result>
+            <!-- <result type="chain" name="success">/course/addlearningobjects</result>  -->       
+            <result name="input">/WEB-INF/jsp/create_course.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/create_course.jsp</result>
+     	 </action>
+     	 
+     	 <action name="course/searchlearningobjects" 
+            class="com.ten.struts2.actions.SearchLearningObjectsAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/add_learning_objects.jsp</result>
+            <result name="input">/WEB-INF/jsp/add_learning_objects.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/add_learning_objects.jsp</result>
+     	 </action>
+     	 
+     	 <action name="view/courses" 
+            class="com.ten.struts2.actions.ViewCoursesAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/view_courses_main.jsp</result>
+            <result name="input">/WEB-INF/jsp/view_courses_main.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/view_courses_main.jsp</result>
+     	 </action>
+     	 
+     	 <action name="view/coursedetails" 
+            class="com.ten.struts2.actions.ViewCourseDetailsAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/view_course_details.jsp</result>
+            <result name="input">/WEB-INF/jsp/view_course_details.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/view_course_details.jsp</result>
+     	 </action>
 	</package> 
 </struts>

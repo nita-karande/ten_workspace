@@ -8,7 +8,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.ten.beans.StudentAnnotationsBean;
 import com.ten.beans.UserDetailsBean;
+import com.ten.triplestore.dao.implementation.VirtuosoAccessDaoImpl;
+import com.ten.triplestore.dao.interfaces.TriplestoreAccessDaoInterface;
 import com.ten.utils.Utils;
 
 public class MainAction extends ActionSupport {
@@ -40,6 +43,13 @@ public class MainAction extends ActionSupport {
 	        	}
 	        	userDetailsBean.setRoles(roles);
 	        	session.setAttribute(ActionConstants.KEY_USER_DETAILS, userDetailsBean);
+	        	
+	        	//get student details annotations
+	        	if(request.isUserInRole(ActionConstants.ROLE_STUDENT)){
+	        		TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();
+					StudentAnnotationsBean studentAnnotationsBean = tdbAccessDaoInterface.getStudentAnnotations(user_name);
+					session.setAttribute(ActionConstants.KEY_STUDENT_ANNOTATIONS, studentAnnotationsBean);
+	        	}
         	}
         	
         	result = ActionConstants.FORWARD_SUCCESS;

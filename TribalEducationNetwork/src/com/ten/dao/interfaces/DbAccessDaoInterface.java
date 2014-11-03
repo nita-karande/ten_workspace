@@ -2,7 +2,10 @@ package com.ten.dao.interfaces;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
+import com.ten.beans.CourseBean;
 import com.ten.beans.LearningObjectBean;
 import com.ten.beans.LearningObjectDetailsBean;
 
@@ -54,4 +57,13 @@ public interface DbAccessDaoInterface {
 	
 	//Method to get text from database
 	public LearningObjectDetailsBean getText(int id) throws Exception;	
+		
+	//Method to get insert course in database
+	public int insertCourse(String courseName) throws Exception;
+	
+	//get learning object content
+	public HashMap<String, LearningObjectDetailsBean> getLearningObjectDetails(String type, Set<String> uri)throws Exception;
+	
+	//get courses
+	public ArrayList<CourseBean> getCourses()throws Exception;
 }
