@@ -1,5 +1,7 @@
 package com.ten.struts2.actions;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -28,6 +30,7 @@ public class AnnotateTextAction extends ActionSupport{
 	int learningObjectId;
 	String actionType;
 	TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean;
+    private Date date;
         
    	public LearningObjectDetailsBean getLearningObjectDetailsBean() {
 		return learningObjectDetailsBean;
@@ -61,6 +64,14 @@ public class AnnotateTextAction extends ActionSupport{
 	public void setTenLearningObjectAnnotationsBean(
 			TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean) {
 		this.tenLearningObjectAnnotationsBean = tenLearningObjectAnnotationsBean;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	/**
@@ -117,5 +128,6 @@ public class AnnotateTextAction extends ActionSupport{
 	public void reset(){
 		this.learningObjectDetailsBean = null;
 		this.tenLearningObjectAnnotationsBean = new TenLearningObjectAnnotationsBean();
+		this.date = new Date();
 	}
 }

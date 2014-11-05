@@ -1,6 +1,7 @@
 package com.ten.struts2.actions;
 
 import java.io.File;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,6 +30,7 @@ public class UploadImageAction extends ActionSupport{
     private String contentType;
     private String fileName;
     private DigitalRightsManagementBean digitalRightsManagementBean;
+    Date date;
         
     public void setUpload(File file) {
        this.file = file;
@@ -63,6 +65,14 @@ public class UploadImageAction extends ActionSupport{
 		this.digitalRightsManagementBean = digitalRightsManagementBean;
 	}
 	
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	/**
 	 * This method is configured to be invoked in struts.xml, for image file uploading and annotations.
 	 * It makes calls to mysql dao implementation to store the uploaded file to database
@@ -107,5 +117,6 @@ public class UploadImageAction extends ActionSupport{
 		this.fileName = "";
 		this.file= null;
 		digitalRightsManagementBean = new DigitalRightsManagementBean();
+		date = new Date();
 	}
 }

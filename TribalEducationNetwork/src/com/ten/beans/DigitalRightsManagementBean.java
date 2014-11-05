@@ -1,74 +1,21 @@
 package com.ten.beans;
 
+import java.util.Date;
+
 /**
  * @author Nita Karande
  * This is the bean used data transfer between jsp and action classes
  * This class will fields for dublin core annotations
  */
 public class DigitalRightsManagementBean {
-	//Descriptive tags
-	String title;
-	String subject;
-	String description;
-	String source;
-	String language;
-	String relation;
-	String coverage;
-	
 	//AdminstrativeTags
 	String creator;
 	String publisher;
 	String contributor;
-	String rights;
-	
-	//Structural Tags
+	String rights;	
+	String intaker;
 	String date;
-	String type;
-	String format;
-	String identifier;
 	
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getSubject() {
-		return subject;
-	}
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public String getSource() {
-		return source;
-	}
-	public void setSource(String source) {
-		this.source = source;
-	}
-	public String getLanguage() {
-		return language;
-	}
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-	public String getRelation() {
-		return relation;
-	}
-	public void setRelation(String relation) {
-		this.relation = relation;
-	}
-	public String getCoverage() {
-		return coverage;
-	}
-	public void setCoverage(String coverage) {
-		this.coverage = coverage;
-	}
 	public String getCreator() {
 		return creator;
 	}
@@ -93,49 +40,27 @@ public class DigitalRightsManagementBean {
 	public void setRights(String rights) {
 		this.rights = rights;
 	}
+	
+	public String getIntaker() {
+		return intaker;
+	}
+	public void setIntaker(String intaker) {
+		this.intaker = intaker;
+	}
 	public String getDate() {
 		return date;
 	}
 	public void setDate(String date) {
 		this.date = date;
 	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public String getFormat() {
-		return format;
-	}
-	public void setFormat(String format) {
-		this.format = format;
-	}
-	public String getIdentifier() {
-		return identifier;
-	}
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
-	
 	public DigitalRightsManagementBean(){
 		super();
-		title = "";
-		subject = "";
-		description = "";
-		source = "";
-		language = "";
-		relation = "";
-		coverage = "";
-		
+	
 		creator = "";
 		publisher = "";
 		contributor = "";
 		rights = "";
-		
+		intaker = "";
 		date = "";
-		type = "";
-		format = "";
-		identifier = "";
 	}
 }

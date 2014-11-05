@@ -37,6 +37,8 @@ public interface TripleStoreConstants {
 	//BEGIN - predicates
 	public static final String URI_PREDICATE_RDF_TYPE = URI_RDF + "type";
 	
+	public static final String URI_PREDICATE_TEN_ANNOTATOR = URI_TEN_ONTOLOGY + "annotator";
+	
 	//DC - Descriptive
 	public static final String URI_PREDICATE_DC_TITLE = URI_DUBLIN_CORE + "title";
 	
@@ -60,6 +62,10 @@ public interface TripleStoreConstants {
 	public static final String URI_PREDICATE_DC_CONTRIBUTOR = URI_DUBLIN_CORE + "contributor";
 	
 	public static final String URI_PREDICATE_DC_RIGHTS = URI_DUBLIN_CORE + "rights";
+	
+	public static final String URI_PREDICATE_TEN_INTAKER = URI_TEN_ONTOLOGY + "intaker";
+	
+	public static final String URI_PREDICATE_TEN_DATE_ANNOTATION = URI_TEN_ONTOLOGY + "annotationDate";
 	
 	//DC - Structural
 	public static final String URI_PREDICATE_DC_DATE = URI_DUBLIN_CORE + "date";

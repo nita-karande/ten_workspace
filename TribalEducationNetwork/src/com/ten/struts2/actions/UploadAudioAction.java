@@ -1,6 +1,7 @@
 package com.ten.struts2.actions;
 
 import java.io.File;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,6 +30,7 @@ public class UploadAudioAction extends ActionSupport{
     private String contentType;
     private String fileName;
     private DigitalRightsManagementBean digitalRightsManagementBean;
+    private Date date;
         
     public DigitalRightsManagementBean getDigitalRightsManagementBean() {
 		return digitalRightsManagementBean;
@@ -61,6 +63,14 @@ public class UploadAudioAction extends ActionSupport{
 
 	public String getUploadFileName() {
 		return fileName;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	/**
@@ -109,5 +119,6 @@ public class UploadAudioAction extends ActionSupport{
 		this.fileName = "";
 		this.file= null;
 		digitalRightsManagementBean = new DigitalRightsManagementBean();
+		this.date = new Date();
 	}
 }

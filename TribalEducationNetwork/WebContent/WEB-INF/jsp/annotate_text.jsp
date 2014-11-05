@@ -45,7 +45,7 @@
 	  		 	 <tr><td>Text cannot be found</td><td></td></tr>
   			 </c:when>
   			 <c:otherwise>  			 	
- 
+ 			 <c:set var="objectType" scope="request" value="Text"/>
 	 		  <tr>
 				<td>Text Preview</td>
 				<td></td>

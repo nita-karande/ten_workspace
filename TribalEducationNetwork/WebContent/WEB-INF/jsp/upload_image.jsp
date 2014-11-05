@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <%@ taglib uri="/struts-tags" prefix="s" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -64,6 +65,8 @@
 	<table>
 		 <tr><td><input type="file" id="upload" name="upload" size="50" onchange="onFileUpload()"/></td></tr>
 		 <tr><td><div id="uploadPreview_div" style="display:none;"></div></td></tr>
+	</table>
+	<table>
   		 <tr><td>
 	  		 <div id="annotations_div" style="display:none;">
 	  		    <%@include file="digital_rights_management.jsp"%>	  		    		 

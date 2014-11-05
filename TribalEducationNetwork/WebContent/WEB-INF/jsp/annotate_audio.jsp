@@ -45,7 +45,7 @@
 	  		 	 <tr><td>Audio cannot be found</td><td></td></tr>
   			 </c:when>
   			 <c:otherwise>  			 	
- 
+ 			<c:set var="objectType" scope="request" value="Audio"/>
 	 		  <tr>
 				<td>Audio Preview</td>
 				<td></td>

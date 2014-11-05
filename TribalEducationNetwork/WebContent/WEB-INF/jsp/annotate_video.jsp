@@ -45,6 +45,7 @@
 	  		 	 <tr><td>Video cannot be found</td><td></td></tr>
   			 </c:when>
   			 <c:otherwise> 
+  			 <c:set var="objectType" scope="request" value="Video"/>
 	 		  <tr>
 				<td>Video Preview</td>
 				<td></td>

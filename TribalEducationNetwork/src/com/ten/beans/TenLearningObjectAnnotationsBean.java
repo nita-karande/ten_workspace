@@ -1,11 +1,122 @@
 package com.ten.beans;
 
+import java.util.Date;
+
 public class TenLearningObjectAnnotationsBean extends TenCommonAnnoationsBean {
+	String annotator;
+	
+	//Descriptive tags
+	String title;
+	String subject;
+	String description;
+	String source;
+	String language;
+	String relation;
+	String coverage;	
 	String tribe;
-	String category;
-	String topicTheme;
-	String subTopicTheme;
-	String rating;	
+	String rating;
+	
+	//Structural Tags
+	String date;
+	String type;
+	String format;
+	String identifier;
+	
+	public String getAnnotator() {
+		return annotator;
+	}
+
+	public void setAnnotator(String annotator) {
+		this.annotator = annotator;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	public String getRelation() {
+		return relation;
+	}
+
+	public void setRelation(String relation) {
+		this.relation = relation;
+	}
+
+	public String getCoverage() {
+		return coverage;
+	}
+
+	public void setCoverage(String coverage) {
+		this.coverage = coverage;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
 	public String getTribe() {
 		return tribe;
@@ -15,30 +126,6 @@ public class TenLearningObjectAnnotationsBean extends TenCommonAnnoationsBean {
 		this.tribe = tribe;
 	}
 	
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public String getTopicTheme() {
-		return topicTheme;
-	}
-
-	public void setTopicTheme(String topicTheme) {
-		this.topicTheme = topicTheme;
-	}
-
-	public String getSubTopicTheme() {
-		return subTopicTheme;
-	}
-
-	public void setSubTopicTheme(String subTopicTheme) {
-		this.subTopicTheme = subTopicTheme;
-	}
-
 	public String getRating() {
 		return rating;
 	}
@@ -49,10 +136,21 @@ public class TenLearningObjectAnnotationsBean extends TenCommonAnnoationsBean {
 
 	public TenLearningObjectAnnotationsBean(){
 		super();
+		//descriptive
+		title = "";
+		subject = "";
+		description = "";
+		source = "";
+		language = "";
+		relation = "";
+		coverage = "";
 		tribe = "";
-		category = "";
-		topicTheme = "";
-		subTopicTheme = "";
-		rating = "";	
+		rating = "";
+		
+		//structural
+		date = (new Date()).toString();
+		type = "";
+		format = "";
+		identifier = "";
 	}
 }

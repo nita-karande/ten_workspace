@@ -2,6 +2,7 @@
 <%@ taglib uri="/struts-tags" prefix="s" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>  
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+ <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -45,7 +46,7 @@
 	  		 	 <tr><td>Image cannot be found</td><td></td></tr>
   			 </c:when>
   			 <c:otherwise>  			 	
- 
+ 			  <c:set var="objectType" scope="request" value="Image"/>
 	 		  <tr>
 				<td>Image Preview</td>
 				<td></td>
@@ -59,7 +60,8 @@
 		  		    <%@include file="ten_annotations.jsp"%>	  		    		 
 				 </div>
 			   </td>
- 			  </tr>		 		  			 	
+ 			  </tr>	
+ 			  <tr><td><input type="submit" value="Annotate Image"/></td></tr>	 		  			 	
   			 </c:otherwise>
   		</c:choose>		
 	</table>

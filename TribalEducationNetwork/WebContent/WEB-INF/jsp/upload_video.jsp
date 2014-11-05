@@ -26,6 +26,7 @@
 					
 			$("#uploadPreview_div").show();
 			$("#annotations_div").show();
+			
 			var oFReader = new FileReader();
 			oFReader.readAsDataURL(document.getElementById("upload").files[0]);			
 			oFReader.onloadend = function(_file) {				

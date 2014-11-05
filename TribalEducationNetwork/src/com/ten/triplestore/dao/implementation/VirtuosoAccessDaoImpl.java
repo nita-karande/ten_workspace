@@ -629,11 +629,8 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		ArrayList<Triple> tripleList = new ArrayList<>();
 
 		try{
-			tripleList.addAll(addDescriptiveAnnotationTriples(subject, digitalRightsManagementBean));
-			
+					
 			tripleList.addAll(addAdministrativeAnnotationTriples(subject, digitalRightsManagementBean));
-			
-			tripleList.addAll(addStructuralAnnotationTriples(subject, digitalRightsManagementBean));
 						
 		}catch(Exception ex)
 		{
@@ -649,9 +646,9 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 	/**
 	 * Add descriptive tags
 	 */
-	public ArrayList<Triple> addDescriptiveAnnotationTriples(Node subject ,DigitalRightsManagementBean digitalRightsManagementBean){
+	public ArrayList<Triple> addDescriptiveAnnotationTriples(Node subject ,TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean){
 		
-		String LOG_METHOD_NAME = "ArrayList<Triple> addDescriptiveAnnotationTriples(Node, DigitalRightsManagementBean)";
+		String LOG_METHOD_NAME = "ArrayList<Triple> addDescriptiveAnnotationTriples(Node, TenLearningObjectAnnotationsBean)";
 		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
 		
 		ArrayList<Triple> tripleList = new ArrayList<>();
@@ -659,53 +656,67 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		try{
 			//DESCRIPTIVE
 			//title
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getTitle())){
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getTitle())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_TITLE);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getTitle());
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getTitle());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//Subject
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getSubject())){
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getSubject())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_SUBJECT);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getSubject());
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getSubject());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//description
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getDescription())){
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getDescription())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_DESCRIPTION);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getDescription());
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getDescription());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//source
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getSource())){
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getSource())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_SOURCE);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getSource());
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getSource());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//language	
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getLanguage())){
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getLanguage())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_LANGUAGE);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getLanguage());
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getLanguage());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//relation	
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getRelation())){
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getRelation())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_RELATION);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getRelation());
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getRelation());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//coverage		
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCoverage())){
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getCoverage())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_COVERAGE);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getCoverage());
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getCoverage());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}
+			
+			//tribe
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getTribe())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_LO_TRIBE);
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getTribe());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}			
+			
+			//rating
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getRating())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_LO_RATING);
+				predicate_value = Node.createURI(tenLearningObjectAnnotationsBean.getRating());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}		
 		}catch(Exception ex)
 		{
 			log.error(ex);
@@ -720,7 +731,7 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 	/**
 	 * add structural annotation triples
 	 */
-	public ArrayList<Triple> addStructuralAnnotationTriples(Node subject ,DigitalRightsManagementBean digitalRightsManagementBean){
+	public ArrayList<Triple> addStructuralAnnotationTriples(Node subject ,TenLearningObjectAnnotationsBean tenLearningObjectAnnotationsBean){
 		
 		String LOG_METHOD_NAME = "ArrayList<Triple> addStructuralAnnotationTriples(Node, DigitalRightsManagementBean)";
 		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
@@ -729,31 +740,31 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		Node predicate = null, predicate_value=null;
 		try{
 			//STRUCTURAL	
-			//date		
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getDate())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_DATE);
-				predicate_value = Node.createURI(digitalRightsManagementBean.getDate());
+			//date of annotation
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getDate())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_DATE_ANNOTATION);
+				predicate_value = Node.createURI(tenLearningObjectAnnotationsBean.getDate());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//type	
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getType())){
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getType())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_TYPE);
-				predicate_value = Node.createURI(digitalRightsManagementBean.getType());
+				predicate_value = Node.createURI(tenLearningObjectAnnotationsBean.getType());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//format
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getFormat())){
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getFormat())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_FORMAT);
-				predicate_value = Node.createURI(digitalRightsManagementBean.getFormat());
+				predicate_value = Node.createURI(tenLearningObjectAnnotationsBean.getFormat());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//identifier	
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getIdentifier())){
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getIdentifier())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_IDENTIFIER);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getIdentifier());
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getIdentifier());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}	
 		}catch(Exception ex)
@@ -829,8 +840,7 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		
 		ArrayList<Triple> tripleList = new ArrayList<>();
 		Node predicate = null, predicate_value=null;
-		try{
-						
+		try{						
 			//ADMINISTRATIVE
 			//creator
 			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreator())){
@@ -858,7 +868,14 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_RIGHTS);
 				predicate_value = Node.createURI(digitalRightsManagementBean.getRights());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}			
+			}
+			
+			//date of learning object creation
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getDate())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_DATE);
+				predicate_value = Node.createURI(digitalRightsManagementBean.getDate());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}
 		}catch(Exception ex)
 		{
 			log.error(ex);
@@ -882,40 +899,18 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		ArrayList<Triple> tripleList = new ArrayList<>();
 		Node predicate = null, predicate_value=null;
 		try{
-			//tribe
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getTribe())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_LO_TRIBE);
-				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getTribe());
+			//annotator name
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getAnnotator())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_ANNOTATOR);
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getAnnotator());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
-			//category	
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getCategory())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_LO_CATEGORY);
-				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getCategory());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
+			tripleList.add(new Triple(subject, predicate, predicate_value));
 			
-			//topic theme
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getTopicTheme())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_LO_TOPIC_THEME);
-				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getTopicTheme());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
+			tripleList.addAll(addDescriptiveAnnotationTriples(subject, tenLearningObjectAnnotationsBean));
 			
-			//subtopic theme
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getSubTopicTheme())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_LO_SUBTPIC_THEME);
-				predicate_value = Node.createURI(tenLearningObjectAnnotationsBean.getSubTopicTheme());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
-			//rating
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getRating())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_LO_RATING);
-				predicate_value = Node.createURI(tenLearningObjectAnnotationsBean.getRating());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}			
+			tripleList.addAll(addStructuralAnnotationTriples(subject, tenLearningObjectAnnotationsBean));						
 		}catch(Exception ex)
 		{
 			log.error(ex);
