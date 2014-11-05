@@ -106,6 +106,7 @@ public interface TripleStoreConstants {
 	public static final String URI_TEN_ONTOLOGY_COURSE_OBJECT = URI_TEN_ONTOLOGY + "Course";
 	
 	//End - Object 	
+	public static final String DEFINE_INFERENCE = "DEFINE input:inference 'urn:owl:inference:rules:ten' ";
 	
 	public static final String PREFIX_TEN_ONTOLOGY = "prefix TenOntology: <" + URI_TEN_ONTOLOGY + "> ";
 	

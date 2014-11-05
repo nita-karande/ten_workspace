@@ -95,6 +95,9 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			
 			image_id = callableStatement.getInt(5);
 			
+			if(image_id == 0){
+				throw new Exception("Image cannot be uploaded");
+			}
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.
 			log.error(ex);
@@ -318,7 +321,11 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			// execute store procedure
 			callableStatement.executeUpdate();
 			
-			video_id = callableStatement.getInt(5);			
+			video_id = callableStatement.getInt(5);	
+			
+			if(video_id == 0){
+				throw new Exception("Video cannot be uploaded");
+			}
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.
 			log.error(ex);
@@ -370,7 +377,10 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			// execute store procedure
 			callableStatement.executeUpdate();
 			
-			audio_id = callableStatement.getInt(5);			
+			audio_id = callableStatement.getInt(5);		
+			if(audio_id == 0){
+				throw new Exception("Audio cannot be uploaded");
+			}
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.
 			log.error(ex);
@@ -422,7 +432,10 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			// execute store procedure
 			callableStatement.executeUpdate();
 			
-			text_id = callableStatement.getInt(5);			
+			text_id = callableStatement.getInt(5);	
+			if(text_id == 0){
+				throw new Exception("Text cannot be uploaded");
+			}
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.
 			log.error(ex);
@@ -852,6 +865,9 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			callableStatement.executeUpdate();
 			
 			course_id = callableStatement.getInt(2);
+			if(course_id == 0){
+				throw new Exception("Course cannot be saved");
+			}
 			
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.

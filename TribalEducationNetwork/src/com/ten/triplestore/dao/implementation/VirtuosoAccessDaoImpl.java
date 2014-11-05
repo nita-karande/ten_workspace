@@ -18,8 +18,6 @@ import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -351,6 +349,7 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		try{
 		
 			StringBuffer sparqlQueryString = new StringBuffer();
+			sparqlQueryString.append(TripleStoreConstants.DEFINE_INFERENCE);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_ONTOLOGY);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_IMAGE);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_AUDIO);
@@ -415,9 +414,9 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
 			
 			//STEP 2 - Create query
-			Query sparql = QueryFactory.create(sparqlQueryString.toString());
+			//Query sparql = QueryFactory.create(sparqlQueryString.toString());
 			
-			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql, graph);
+			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparqlQueryString.toString(), graph);
 	
 			//STEP 3 - Execute
 			ResultSet results = vqe.execSelect();
@@ -628,6 +627,34 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
 		
 		ArrayList<Triple> tripleList = new ArrayList<>();
+
+		try{
+			tripleList.addAll(addDescriptiveAnnotationTriples(subject, digitalRightsManagementBean));
+			
+			tripleList.addAll(addAdministrativeAnnotationTriples(subject, digitalRightsManagementBean));
+			
+			tripleList.addAll(addStructuralAnnotationTriples(subject, digitalRightsManagementBean));
+						
+		}catch(Exception ex)
+		{
+			log.error(ex);
+			throw ex;
+		}finally{
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}
+		
+		return tripleList;
+	}
+	
+	/**
+	 * Add descriptive tags
+	 */
+	public ArrayList<Triple> addDescriptiveAnnotationTriples(Node subject ,DigitalRightsManagementBean digitalRightsManagementBean){
+		
+		String LOG_METHOD_NAME = "ArrayList<Triple> addDescriptiveAnnotationTriples(Node, DigitalRightsManagementBean)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		ArrayList<Triple> tripleList = new ArrayList<>();
 		Node predicate = null, predicate_value=null;
 		try{
 			//DESCRIPTIVE
@@ -678,37 +705,29 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_COVERAGE);
 				predicate_value = Node.createLiteral(digitalRightsManagementBean.getCoverage());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
-			//ADMINISTRATIVE
-			//creator
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreator())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_CREATOR);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getCreator());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
-			//publisher	
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisher())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_PUBLISHER);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getPublisher());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
-			//contributor	
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributor())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_CONTRIBUTOR);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getContributor());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
-			//rights	
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getRights())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_RIGHTS);
-				predicate_value = Node.createURI(digitalRightsManagementBean.getRights());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
+			}			
+		}catch(Exception ex)
+		{
+			log.error(ex);
+			throw ex;
+		}finally{
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}
+		
+		return tripleList;
+	}
+	
+	/**
+	 * add structural annotation triples
+	 */
+	public ArrayList<Triple> addStructuralAnnotationTriples(Node subject ,DigitalRightsManagementBean digitalRightsManagementBean){
+		
+		String LOG_METHOD_NAME = "ArrayList<Triple> addStructuralAnnotationTriples(Node, DigitalRightsManagementBean)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		ArrayList<Triple> tripleList = new ArrayList<>();
+		Node predicate = null, predicate_value=null;
+		try{
 			//STRUCTURAL	
 			//date		
 			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getDate())){
@@ -736,7 +755,7 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_IDENTIFIER);
 				predicate_value = Node.createLiteral(digitalRightsManagementBean.getIdentifier());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}			
+			}	
 		}catch(Exception ex)
 		{
 			log.error(ex);
@@ -787,6 +806,57 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getHasPart())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_COMMON_HASPART);
 				predicate_value = Node.createURI(tenLearningObjectAnnotationsBean.getHasPart());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}			
+		}catch(Exception ex)
+		{
+			log.error(ex);
+			throw ex;
+		}finally{
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}
+		
+		return tripleList;
+	}
+	
+	/**
+	 * Add administrative annotation triples
+	 */
+	public ArrayList<Triple> addAdministrativeAnnotationTriples(Node subject ,DigitalRightsManagementBean digitalRightsManagementBean){
+		
+		String LOG_METHOD_NAME = " ArrayList<Triple> addAdministrativeAnnotationTriples(Node, DigitalRightsManagementBean)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		ArrayList<Triple> tripleList = new ArrayList<>();
+		Node predicate = null, predicate_value=null;
+		try{
+						
+			//ADMINISTRATIVE
+			//creator
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreator())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_CREATOR);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getCreator());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}
+			
+			//publisher	
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisher())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_PUBLISHER);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getPublisher());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}
+			
+			//contributor	
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributor())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_CONTRIBUTOR);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getContributor());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}
+			
+			//rights	
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getRights())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_RIGHTS);
+				predicate_value = Node.createURI(digitalRightsManagementBean.getRights());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}			
 		}catch(Exception ex)
@@ -1042,6 +1112,7 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		
 		try{		
 			StringBuffer sparqlQueryString = new StringBuffer();
+			sparqlQueryString.append(TripleStoreConstants.DEFINE_INFERENCE);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_ONTOLOGY);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_IMAGE);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_AUDIO);
@@ -1064,9 +1135,9 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
 			
 			//STEP 2 - Create query
-			Query sparql = QueryFactory.create(sparqlQueryString.toString());
+			//Query sparql = QueryFactory.create(sparqlQueryString.toString());
 			
-			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql, graph);
+			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparqlQueryString.toString(), graph);
 	
 			//STEP 3 - Execute
 			ResultSet results = vqe.execSelect();
@@ -1118,6 +1189,7 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		
 		try{		
 			StringBuffer sparqlQueryString = new StringBuffer();
+			sparqlQueryString.append(TripleStoreConstants.DEFINE_INFERENCE);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_ONTOLOGY);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_IMAGE);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_AUDIO);
@@ -1141,9 +1213,9 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
 			
 			//STEP 2 - Create query
-			Query sparql = QueryFactory.create(sparqlQueryString.toString());
+			//Query sparql = QueryFactory.create(sparqlQueryString.toString());
 			
-			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql, graph);
+			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparqlQueryString.toString(), graph);
 	
 			//STEP 3 - Execute
 			ResultSet results = vqe.execSelect();
