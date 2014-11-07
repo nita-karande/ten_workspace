@@ -89,6 +89,8 @@ public class AnnotateAudioAction extends ActionSupport{
 		if(ActionConstants.METHOD_POST.equalsIgnoreCase(method)){
 			if(this.actionType.equals(ActionConstants.ACTION_DISPLAY)){
 				try{
+					this.reset();
+					
 					//get audio from database
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
 					learningObjectDetailsBean = dbAccessDaoInterface.getAudio(this.learningObjectId);
@@ -108,13 +110,14 @@ public class AnnotateAudioAction extends ActionSupport{
 					
 					//set audio status to being annotated
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
-					dbAccessDaoInterface.updateAudio(this.learningObjectId);
-					
+					dbAccessDaoInterface.updateAudio(this.learningObjectId);					
+
+					addActionMessage(ActionConstants.ANNOTATION_SUCCESS_MSG);		
 					result = ActionConstants.FORWARD_SUCCESS;
 				}catch(Exception ex){
 					log.error(ex);
 					reset();				
-					addActionError(ActionConstants.RETRIEVE_AUDIOS_ERROR_MSG);
+					addActionError(ActionConstants.ANNOTATION_ERROR_MSG);
 					result = ActionConstants.FORWARD_INPUT;
 				}
 			}

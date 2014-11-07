@@ -88,6 +88,16 @@ public interface TripleStoreConstants {
 	//TEN learning object (LO)
 	public static final String URI_PREDICATE_TEN_LO_TRIBE = URI_TEN_ONTOLOGY + "tribe";
 	
+	public static final String URI_PREDICATE_TEN_STUDENT_TRIBE = URI_TEN_ONTOLOGY + "tribe";
+	
+	public static final String URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TYPE = URI_TEN_ONTOLOGY + "preferredLearningObjectType";	
+	
+	public static final String URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TEXT_TYPE = URI_TEN_ONTOLOGY + "preferredTextType";	
+	
+	public static final String URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_IMAGE_TYPE = URI_TEN_ONTOLOGY + "preferredImageType";		
+
+	public static final String URI_PREDICATE_TEN_STUDENT_PREFERRED_LANGUAGE = URI_TEN_ONTOLOGY + "preferredLanguage";	
+	
 	public static final String URI_PREDICATE_TEN_LO_CATEGORY = URI_TEN_ONTOLOGY + "category";
 	
 	public static final String URI_PREDICATE_TEN_LO_TOPIC_THEME = URI_TEN_ONTOLOGY + "topicTheme";
@@ -95,6 +105,10 @@ public interface TripleStoreConstants {
 	public static final String URI_PREDICATE_TEN_LO_SUBTPIC_THEME = URI_TEN_ONTOLOGY + "subTopicTheme";
 	
 	public static final String URI_PREDICATE_TEN_LO_RATING = URI_TEN_ONTOLOGY + "rating";
+	
+	public static final String URI_PREDICATE_TEN_TEXT_TYPE = URI_TEN_ONTOLOGY + "textType"; //definition, Explanation, description
+	
+	public static final String URI_PREDICATE_TEN_IMAGE_TYPE = URI_TEN_ONTOLOGY + "imageType"; //photo , illustration, graph
 	//End - predicates
 	
 	//TEN course
@@ -152,14 +166,6 @@ public interface TripleStoreConstants {
 	
 	public static final String LOG_END_TRANSACTION = " End Transaction";
 	
-	public static final String SEARCH_IMAGE = "1";
-	
-	public static final String SEARCH_AUDIO = "2";
-	
-	public static final String SEARCH_VIDEO = "3";
-	
-	public static final String SEARCH_TEXT = "4";
-	
 	public static final String LEARNING_OBJECT_TYPE_IMAGE = "Image";
 	
 	public static final String LEARNING_OBJECT_TYPE_VIDEO = "Video";
@@ -167,6 +173,18 @@ public interface TripleStoreConstants {
 	public static final String LEARNING_OBJECT_TYPE_AUDIO = "Audio";
 	
 	public static final String LEARNING_OBJECT_TYPE_TEXT =  "Text";	
+	
+	public static final String LEARNING_OBJECT_TEXT_TYPE_DEFINITION =  "Definition";	
+	
+	public static final String LEARNING_OBJECT_TEXT_TYPE_EXPLANATION =  "Explanation";
+	
+	public static final String LEARNING_OBJECT_TEXT_TYPE_DESCRIPTION =  "Description";
+	
+	public static final String LEARNING_OBJECT_IMAGE_TYPE_PHOTO =  "Photo";	
+	
+	public static final String LEARNING_OBJECT_IMAGE_TYPE_ILLUSTRATION =  "Illustration";
+	
+	public static final String LEARNING_OBJECT_IMAGE_TYPE_GRAPH =  "Graph";
 	
 	public static final String TYPE_COURSE = "Course";
 	

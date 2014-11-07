@@ -89,6 +89,8 @@ public class AnnotateTextAction extends ActionSupport{
 		if(ActionConstants.METHOD_POST.equalsIgnoreCase(method)){
 			if(this.actionType.equals(ActionConstants.ACTION_DISPLAY)){
 				try{
+					this.reset();
+					
 					//get text from database
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
 					learningObjectDetailsBean = dbAccessDaoInterface.getText(this.learningObjectId);
@@ -109,12 +111,13 @@ public class AnnotateTextAction extends ActionSupport{
 					//set text status to being annotated
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
 					dbAccessDaoInterface.updateText(this.learningObjectId);
-					
+
+					addActionMessage(ActionConstants.ANNOTATION_SUCCESS_MSG);					
 					result = ActionConstants.FORWARD_SUCCESS;
 				}catch(Exception ex){
 					log.error(ex);
 					reset();				
-					addActionError(ActionConstants.RETRIEVE_TEXTS_ERROR_MSG);
+					addActionError(ActionConstants.ANNOTATION_ERROR_MSG);
 					result = ActionConstants.FORWARD_INPUT;
 				}
 			}

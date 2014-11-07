@@ -45,4 +45,12 @@ public interface TriplestoreAccessDaoInterface {
 		
 	//Search learning objects
 	public HashMap<String, TenLearningObjectAnnotationsBean> searchLearningObjects(String type, String orKeywords, String andKeywords) throws Exception;
+	
+	//get recommended learning objects for students
+	public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(StudentAnnotationsBean studentAnnotationsBean, String keywords) throws Exception;
+	
+	//update student preferences
+	public void updateStudentAnnotations(String user_name, StudentAnnotationsBean studentAnnotationsBean) throws Exception;
+	
+	public  HashMap<String, ArrayList<String>> queryDefaultLearningObjects(String keywords, String andSearchTerms) throws Exception;
 }

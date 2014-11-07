@@ -89,6 +89,8 @@ public class AnnotateImageAction extends ActionSupport{
 		if(ActionConstants.METHOD_POST.equalsIgnoreCase(method)){
 			if(this.actionType.equals(ActionConstants.ACTION_DISPLAY)){
 				try{
+					reset();
+					
 					//get image from database
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
 					learningObjectDetailsBean = dbAccessDaoInterface.getImage(this.learningObjectId);
@@ -110,11 +112,12 @@ public class AnnotateImageAction extends ActionSupport{
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
 					dbAccessDaoInterface.updateImage(this.learningObjectId);
 					
+					addActionMessage(ActionConstants.ANNOTATION_SUCCESS_MSG);					
 					result = ActionConstants.FORWARD_SUCCESS;
 				}catch(Exception ex){
 					log.error(ex);
 					reset();				
-					addActionError(ActionConstants.RETRIEVE_IMAGES_ERROR_MSG);
+					addActionError(ActionConstants.ANNOTATION_ERROR_MSG);
 					result = ActionConstants.FORWARD_INPUT;
 				}
 			}

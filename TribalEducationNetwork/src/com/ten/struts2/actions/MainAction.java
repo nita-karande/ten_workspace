@@ -48,7 +48,7 @@ public class MainAction extends ActionSupport {
 	        	if(request.isUserInRole(ActionConstants.ROLE_STUDENT)){
 	        		TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();
 					StudentAnnotationsBean studentAnnotationsBean = tdbAccessDaoInterface.getStudentAnnotations(user_name);
-					session.setAttribute(ActionConstants.KEY_STUDENT_ANNOTATIONS, studentAnnotationsBean);
+					session.setAttribute(ActionConstants.KEY_STUDENT_DETAILS, studentAnnotationsBean);
 	        	}
         	}
         	

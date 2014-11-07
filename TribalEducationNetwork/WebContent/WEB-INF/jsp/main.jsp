@@ -43,8 +43,7 @@
 		<!--Course creation links creator role -->
 		 <c:if test="${sessionScope.user_details.userCreator == true}" >
 			 <table>
-			 <tr><td> COURSE CREATION LINK </td></tr>
-	  		 <tr><td>
+			  <tr><td>
 		  		 <div id="course_links_div">
 		  		    <%@include file="include_course_links.jsp"%>	  		    		 
 				 </div>
@@ -55,9 +54,10 @@
 		
 		<!--Course view links student role -->
 		 <c:if test="${sessionScope.user_details.userStudent == true}" >
-			 <table>
-			 <tr><td> VIEW COURSES LINK </td></tr>
-	  		 <tr><td>
+		 	 <table>
+		 	 <tr><td><a href="${pageContext.request.contextPath}/view/profiledetails">Update Profile</a></td></tr>
+		 	 <tr><td><br/></td></tr>
+			 <tr><td>
 		  		 <div id="course_links_div">
 		  		    <%@include file="include_view_links.jsp"%>	  		    		 
 				 </div>

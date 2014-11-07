@@ -41,11 +41,12 @@
 	<table>
 		 <tr><td>Annotate audio</td></tr>
   		  <c:choose>
-	  		  <c:when test="${requestScope.learningObjectDetailsBean == null}">
+	  		 <c:when test="${(actionType == 'display') && (requestScope.learningObjectDetailsBean == null)}">
 	  		 	 <tr><td>Audio cannot be found</td><td></td></tr>
   			 </c:when>
   			 <c:otherwise>  			 	
  			<c:set var="objectType" scope="request" value="Audio"/>
+ 			 <c:if test="${(requestScope.learningObjectDetailsBean != null)}">
 	 		  <tr>
 				<td>Audio Preview</td>
 				<td></td>
@@ -57,6 +58,7 @@
 			  		</audio>
 			  	</td>
  		 	  </tr>
+ 		 	  </c:if>
  			  <tr>
 				<td colspan="2">
 		  		 <div id="annotations_div">

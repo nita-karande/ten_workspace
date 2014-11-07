@@ -42,25 +42,27 @@
 	<table>
 		 <tr><td>Annotate image</td></tr>
   		  <c:choose>
-	  		  <c:when test="${requestScope.learningObjectDetailsBean == null}">
+	  		  <c:when test="${(actionType == 'display') && (requestScope.learningObjectDetailsBean == null)}">
 	  		 	 <tr><td>Image cannot be found</td><td></td></tr>
   			 </c:when>
   			 <c:otherwise>  			 	
  			  <c:set var="objectType" scope="request" value="Image"/>
-	 		  <tr>
-				<td>Image Preview</td>
-				<td></td>
-			  </tr>
-			  <tr>
-				<td><img src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" width="100%" height="100%"/></td>
- 		 	  </tr>
+	 		  <c:if test="${(requestScope.learningObjectDetailsBean != null)}">
+		 		  <tr>
+					<td>Image Preview</td>
+					<td></td>
+				  </tr>
+				  <tr>
+					<td><img src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" width="100%" height="100%"/></td>
+	 		 	  </tr>
+	 		  </c:if>
  			  <tr>
 				<td colspan="2">
 		  		 <div id="annotations_div">
 		  		    <%@include file="ten_annotations.jsp"%>	  		    		 
 				 </div>
 			   </td>
- 			  </tr>	
+ 			  </tr>	 			 
  			  <tr><td><input type="submit" value="Annotate Image"/></td></tr>	 		  			 	
   			 </c:otherwise>
   		</c:choose>		

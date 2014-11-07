@@ -22,6 +22,10 @@ public class TenLearningObjectAnnotationsBean extends TenCommonAnnoationsBean {
 	String format;
 	String identifier;
 	
+	//for recommendation
+	String textType;
+	String imageType;
+	
 	public String getAnnotator() {
 		return annotator;
 	}
@@ -134,6 +138,22 @@ public class TenLearningObjectAnnotationsBean extends TenCommonAnnoationsBean {
 		this.rating = rating;
 	}
 
+	public String getTextType() {
+		return textType;
+	}
+
+	public void setTextType(String textType) {
+		this.textType = textType;
+	}
+
+	public String getImageType() {
+		return imageType;
+	}
+
+	public void setImageType(String imageType) {
+		this.imageType = imageType;
+	}
+
 	public TenLearningObjectAnnotationsBean(){
 		super();
 		//descriptive
@@ -152,5 +172,8 @@ public class TenLearningObjectAnnotationsBean extends TenCommonAnnoationsBean {
 		type = "";
 		format = "";
 		identifier = "";
+		
+		textType = "";
+		imageType = "";
 	}
 }

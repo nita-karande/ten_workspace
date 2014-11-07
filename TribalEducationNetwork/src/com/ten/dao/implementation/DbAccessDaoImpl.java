@@ -19,10 +19,12 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.graph.Triple;
 import com.ten.beans.CourseBean;
 import com.ten.beans.LearningObjectBean;
 import com.ten.beans.LearningObjectDetailsBean;
 import com.ten.dao.interfaces.DbAccessDaoInterface;
+import com.ten.triplestore.dao.implementation.TripleStoreConstants;
 
 /**
  * @author Nita Karande
@@ -135,12 +137,12 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			
 			String sql = DaoConstants.UPDATE_IMAGE_SQL;
 			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setInt(1, id);
-			preparedStatement.setInt(2, 1); //set as annotated
+			preparedStatement.setInt(1, 1);
+			preparedStatement.setInt(2, id); //set as annotated
 			int rowsChanged = preparedStatement.executeUpdate();
 			
-			if(rowsChanged==1){
-				result = true;
+			if(rowsChanged == 0){
+				throw new Exception("Image cannot be updated");
 			}
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.
@@ -178,12 +180,12 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			
 			String sql = DaoConstants.UPDATE_VIDEO_SQL;
 			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setInt(1, id);
-			preparedStatement.setInt(2, 1); //set as annotated
+			preparedStatement.setInt(1, 1); //set as annotated
+			preparedStatement.setInt(2, id); 
 			int rowsChanged = preparedStatement.executeUpdate();
 			
-			if(rowsChanged==1){
-				result = true;
+			if(rowsChanged == 0){
+				throw new Exception("Video cannot be updated");
 			}
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.
@@ -221,12 +223,12 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			
 			String sql = DaoConstants.UPDATE_AUDIO_SQL;
 			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setInt(1, id);
-			preparedStatement.setInt(2, 1); //set as annotated
+			preparedStatement.setInt(1, 1); //set as annotated
+			preparedStatement.setInt(2, id);
 			int rowsChanged = preparedStatement.executeUpdate();
 			
-			if(rowsChanged==1){
-				result = true;
+			if(rowsChanged == 0){
+				throw new Exception("Audio cannot be updated");
 			}
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.
@@ -264,12 +266,12 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 			
 			String sql = DaoConstants.UPDATE_TEXT_SQL;
 			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setInt(1, id);
-			preparedStatement.setInt(2, 1); //set as annotated
+			preparedStatement.setInt(1, 1); //set as annotated
+			preparedStatement.setInt(2, id);
 			int rowsChanged = preparedStatement.executeUpdate();
 			
-			if(rowsChanged==1){
-				result = true;
+			if(rowsChanged == 0){
+				throw new Exception("Text cannot be updated");
 			}
 		}catch (Exception ex) {
 			// catch if found any exception during rum time.
@@ -898,13 +900,13 @@ public class DbAccessDaoImpl implements DbAccessDaoInterface{
 				indexOf = uri.lastIndexOf("#");
 				id = Integer.parseInt(uri.substring(indexOf + 1));
 				
-				if("1".equals(type)){
+				if(TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE.equals(type)){
 					learningObjectDetails = getImage(id);
-				}else if("2".equals(type)){		
+				}else if(TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO.equals(type)){		
 					learningObjectDetails = getAudio(id);
-				}else if("3".equals(type)){
+				}else if(TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO.equals(type)){
 					learningObjectDetails = getVideo(id);
-				}else if("4".equals(type)){
+				}else if(TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT.equals(type)){
 					learningObjectDetails = getText(id);
 				}
 				returnMap.put(uri, learningObjectDetails);	

@@ -38,16 +38,17 @@
 	
 	<table>
 		 <tr><td width='50%'>Course Name </td><td width='50%'><input type="text" id="courseName" name="courseName" value="${courseName}" readonly/></td></tr>
+		 <tr><td width='50%'>Description </td><td width='50%'><input type="text" id="description" name="description" value="${description}" readonly/></td></tr>
 		 <tr><td width='50%'>Keywords </td><td width='50%'><input type="text" id="keywords" name="keywords" value="${keywords}" readonly/></td></tr>
   		 <tr><td></td></tr>
   		 <tr><td></td></tr>
   		 <tr><td>Type of Learning Object </td>
 			 <td>
 				<select name="typeOfLearningObject">
-				<option value="1" <c:if test="${typeOfLearningObject == '1'}">selected</c:if>>Images</option>
-				<option value="2" <c:if test="${typeOfLearningObject == '2'}">selected</c:if>>Audio</option>
-				<option value="3" <c:if test="${typeOfLearningObject == '3'}">selected</c:if>>Videos</option>
-				<option value="4" <c:if test="${typeOfLearningObject == '4'}">selected</c:if>>Texts</option>
+				<option value="Image" <c:if test="${typeOfLearningObject == 'Image'}">selected</c:if>>Image</option>
+				<option value="Audio" <c:if test="${typeOfLearningObject == 'Audio'}">selected</c:if>>Audio</option>
+				<option value="Video" <c:if test="${typeOfLearningObject == 'Video'}">selected</c:if>>Video</option>
+				<option value="Text" <c:if test="${typeOfLearningObject == 'Text'}">selected</c:if>>Text</option>
 		       </select>
 		     </td>
 	       </tr>
@@ -63,13 +64,13 @@
 				<c:forEach var="learningObject" items="${requestScope.mapLearningObjects}">
 						<c:set var="learningObjectDetailsBean" value="${learningObject.value}" />
 						<!-- Display image -->
-						<c:if test="${typeOfLearningObject == '1'}">						
+						<c:if test="${typeOfLearningObject == 'Image'}">						
 							<tr><td>Image Name:</td><td><c:out value="${learningObjectDetailsBean.fileName}" /></td></tr>
 							<tr><td><img src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" width="100%" height="100%"/></td></tr>
 						</c:if>
 						
 						<!-- Display Audio -->
-						<c:if test="${typeOfLearningObject == '2'}">						
+						<c:if test="${typeOfLearningObject == 'Audio'}">						
 							<tr><td>Audio Name:</td><td><c:out value="${learningObjectDetailsBean.fileName}" /></td></tr>
 							<tr><td><audio controls>
 			  						<source src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></source>
@@ -78,7 +79,7 @@
 						</c:if>
 						
 						<!-- Display Video -->
-						<c:if test="${typeOfLearningObject == '3'}">						
+						<c:if test="${typeOfLearningObject == 'Video'}">						
 							<tr><td>Video Name:</td><td><c:out value="${learningObjectDetailsBean.fileName}" /></td></tr>
 							<tr><td><video width="100%" height="80%" controls>
 						  			 <source src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></source>
@@ -87,7 +88,7 @@
 						</c:if>
 						
 						<!-- Display Text -->
-						<c:if test="${typeOfLearningObject == '4'}">						
+						<c:if test="${typeOfLearningObject == 'Text'}">						
 							<tr><td>Document Name:</td><td><c:out value="${learningObjectDetailsBean.fileName}" /></td></tr>
 							<tr><td><object width="100%" height="80%" >
 							  		 <embed src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></embed>

@@ -2,6 +2,7 @@ package com.ten.triplestore.dao.implementation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.naming.Context;
@@ -15,9 +16,13 @@ import virtuoso.jdbc3.VirtuosoDataSource;
 import virtuoso.jena.driver.VirtGraph;
 import virtuoso.jena.driver.VirtuosoQueryExecution;
 import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
+import virtuoso.jena.driver.VirtuosoUpdateFactory;
+import virtuoso.jena.driver.VirtuosoUpdateRequest;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -166,11 +171,8 @@ public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
 		VirtGraph graph = null;
 		try{
-			Context initContext = new InitialContext();
-			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			VirtuosoDataSource ds = (VirtuosoConnectionPoolDataSource )envContext.lookup(TripleStoreConstants.VIRTUOSO_JNDI_LOOKUP_NAME);
-			
-			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, ds);
+					
+			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI,m_ds);
 			
 			//Begin transaction
 			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
@@ -349,7 +351,6 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		try{
 		
 			StringBuffer sparqlQueryString = new StringBuffer();
-			sparqlQueryString.append(TripleStoreConstants.DEFINE_INFERENCE);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_ONTOLOGY);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_IMAGE);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_AUDIO);
@@ -358,7 +359,7 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_RDF);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_DUBLIN_CORE);
 			
-			sparqlQueryString.append(" SELECT ?learning_object ?predicate ?object ");
+			sparqlQueryString.append(" SELECT DISTINCT ?learning_object ");
 			sparqlQueryString.append(" WHERE { ");
 			sparqlQueryString.append(" ?learning_object a TenOntology:");
 			sparqlQueryString.append(learningObjectType);	
@@ -414,9 +415,9 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
 			
 			//STEP 2 - Create query
-			//Query sparql = QueryFactory.create(sparqlQueryString.toString());
+			Query sparql = QueryFactory.create(sparqlQueryString.toString());
 			
-			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparqlQueryString.toString(), graph);
+			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql, graph);
 	
 			//STEP 3 - Execute
 			ResultSet results = vqe.execSelect();
@@ -434,6 +435,302 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		}
 		return returnValue;
 	}
+	
+/*public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(StudentAnnotationsBean studentAnnotationsBean, String keywords) throws Exception{
+		
+		String LOG_METHOD_NAME = "void queryLearningObject(StudentAnnotationsBean studentAnnotationsBean, ArrayList<String> orSearchTerms)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		ArrayList<String> imagesList = new ArrayList<String>();
+		ArrayList<String> audioList = new ArrayList<String>();
+		ArrayList<String> videoList = new ArrayList<String>();
+		ArrayList<String> textList = new ArrayList<String>();
+		HashMap<String, ArrayList<String>> returnMap = new HashMap<String, ArrayList<String>>();
+		try{
+		
+			StringBuffer sparqlQueryString = new StringBuffer();
+			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_ONTOLOGY);
+			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_IMAGE);
+			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_AUDIO);
+			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_VIDEO);
+			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_TEXT);
+			sparqlQueryString.append(TripleStoreConstants.PREFIX_RDF);
+			sparqlQueryString.append(TripleStoreConstants.PREFIX_DUBLIN_CORE);
+			
+			sparqlQueryString.append(" SELECT DISTINCT ?learning_object ?learningObjectType ");
+			sparqlQueryString.append(" WHERE { ");
+			sparqlQueryString.append(" ?learning_object a ?learningObjectType");
+			sparqlQueryString.append(" ;?predicate ?object");	
+			
+			//exclude type predicate
+			sparqlQueryString.append(" . FILTER (");
+	        sparqlQueryString.append(" (?predicate != rdf:type)");
+	        
+			//add filter for orSearchTerms
+	        if(!Utils.isEmptyOrNull(keywords)){
+	        	ArrayList<String> orSearchTerms = new ArrayList<String>();
+				StringTokenizer st = new StringTokenizer(keywords);
+				while (st.hasMoreTokens()) {
+					orSearchTerms.add(st.nextToken().trim());
+				}
+				
+	        	int i = 0;
+	        	if((orSearchTerms != null) && (orSearchTerms.size()>0)){
+		        	i=0;
+		        	sparqlQueryString.append(" && ");
+			        for(String searchTerm:orSearchTerms){
+			        	sparqlQueryString.append("(regex(?object, \"");
+			        	sparqlQueryString.append(searchTerm);
+			        	sparqlQueryString.append("\", \"i\"))");
+			        	//if this is not the last element add ||
+			        	if(i != (orSearchTerms.size()-1)){
+			        		sparqlQueryString.append(" || ");
+			        	}
+			        	i++;
+			        }	
+	        	}
+	        }
+	        sparqlQueryString.append(" )");
+	        
+	        //add learning object type preference
+			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredLearningObjectType())){
+				sparqlQueryString.append("FILTER ( ?learningObjectType = TenOntology:" +  studentAnnotationsBean.getPreferredLearningObjectType() + " )");
+			}else{
+				sparqlQueryString.append("FILTER ((?learningObjectType = TenOntology:" +  TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE + " )");
+				sparqlQueryString.append("|| (?learningObjectType = TenOntology:" +  TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT + " )");
+				sparqlQueryString.append("|| (?learningObjectType = TenOntology:" +  TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO + " )");
+				sparqlQueryString.append("|| (?learningObjectType = TenOntology:" +  TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO + " )");
+				sparqlQueryString.append(" )");
+			}
+			
+			//Add tribe
+			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getTribe())){
+				sparqlQueryString.append(" OPTIONAL { ?learning_object <" + TripleStoreConstants.URI_PREDICATE_TEN_LO_TRIBE + "> ?tribe . ");
+				sparqlQueryString.append(" FILTER (regex(?tribe, \"" + studentAnnotationsBean.getTribe() + "\", \"i\" ))}" );
+			}
+			
+			//Add language preference
+			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredLanguage())){
+				sparqlQueryString.append(" OPTIONAL { ?learning_object <" + TripleStoreConstants.URI_PREDICATE_DC_LANGUAGE + "> ?language . ");
+				sparqlQueryString.append(" FILTER (regex(?language, \"" + studentAnnotationsBean.getPreferredLanguage() + "\", \"i\" ))}" );
+			}
+			
+			//Add preferred text type
+			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredTextContent())){
+				sparqlQueryString.append(" OPTIONAL { ?learning_object <" + TripleStoreConstants.URI_PREDICATE_TEN_TEXT_TYPE + "> ?textType . ");
+				sparqlQueryString.append(" FILTER (regex(?textType, \"" + studentAnnotationsBean.getPreferredTextContent() + "\", \"i\" ))}" );
+			}
+			
+			//Add preferred image type
+			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredImageContent())){
+				sparqlQueryString.append(" OPTIONAL { ?learning_object <" + TripleStoreConstants.URI_PREDICATE_TEN_IMAGE_TYPE + "> ?imageType . ");
+				sparqlQueryString.append(" FILTER (regex(?imageType, \"" + studentAnnotationsBean.getPreferredImageContent() + "\", \"i\" )) }" );
+			}
+			
+			sparqlQueryString.append(" }");
+			
+			log.debug("SEARCH QUERY:  " + sparqlQueryString.toString());
+			
+			//STEP 1 - Connect to virtuoso database
+			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
+			
+			Query sparql = QueryFactory.create(sparqlQueryString.toString());
+			
+			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql.toString(), graph);
+	
+			//STEP 3 - Execute
+			ResultSet results = vqe.execSelect();
+			while (results.hasNext()) {
+				QuerySolution result = results.nextSolution();
+			    RDFNode rdfNodeSubject = result.get("learning_object");
+			    RDFNode rdfNodeObject = result.get("learningObjectType");
+			    if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE).equals(rdfNodeObject.toString())){
+			    	imagesList.add(rdfNodeSubject.toString());
+			    }else if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO).equals(rdfNodeObject.toString())){
+			    	audioList.add(rdfNodeSubject.toString());
+			    }else if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO).equals(rdfNodeObject.toString())){
+			    	videoList.add(rdfNodeSubject.toString());
+			    }else if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT).equals(rdfNodeObject.toString())){
+			    	videoList.add(rdfNodeSubject.toString());
+			    }
+			 }
+			
+			returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE, imagesList);
+			returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO, audioList);
+			returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO, videoList);
+			returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT, textList);
+			
+		}catch (Exception ex) {
+			log.error(ex);
+			throw ex;
+		}finally{			
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}
+		return returnMap;
+	}*/
+
+public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(StudentAnnotationsBean studentAnnotationsBean, String keywords) throws Exception{
+	
+	String LOG_METHOD_NAME = "void queryLearningObject(StudentAnnotationsBean studentAnnotationsBean, ArrayList<String> orSearchTerms)";
+	log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+	ArrayList<String> imagesList = new ArrayList<String>();
+	ArrayList<String> audioList = new ArrayList<String>();
+	ArrayList<String> videoList = new ArrayList<String>();
+	ArrayList<String> textList = new ArrayList<String>();
+	HashMap<String, ArrayList<String>> returnMap = new HashMap<String, ArrayList<String>>();
+	try{
+		
+		StringBuffer sparqlQueryString = new StringBuffer();
+		sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_ONTOLOGY);
+		sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_IMAGE);
+		sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_AUDIO);
+		sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_VIDEO);
+		sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_TEXT);
+		sparqlQueryString.append(TripleStoreConstants.PREFIX_RDF);
+		sparqlQueryString.append(TripleStoreConstants.PREFIX_DUBLIN_CORE);		
+		sparqlQueryString.append(" SELECT DISTINCT ?learning_object ?learningObjectType ");
+		sparqlQueryString.append(" WHERE { ");
+			
+		//base query with basic keywords conditions
+		StringBuffer baseQuery =  new StringBuffer();		
+		baseQuery.append(" ?learning_object a ?learningObjectType");
+		baseQuery.append(" ;?predicate ?object");	
+		
+		//exclude type predicate
+		baseQuery.append(" . FILTER (");
+		baseQuery.append(" (?predicate != rdf:type)");  
+		
+		//add filter for keywords
+        if(!Utils.isEmptyOrNull(keywords)){
+        	ArrayList<String> orSearchTerms = new ArrayList<String>();
+			StringTokenizer st = new StringTokenizer(keywords);
+			while (st.hasMoreTokens()) {
+				orSearchTerms.add(st.nextToken().trim());
+			}
+			
+        	int i = 0;
+        	if((orSearchTerms != null) && (orSearchTerms.size()>0)){
+	        	i=0;
+	        	baseQuery.append(" && ");
+		        for(String searchTerm:orSearchTerms){
+		        	baseQuery.append("(regex(?object, \"");
+		        	baseQuery.append(searchTerm);
+		        	baseQuery.append("\", \"i\"))");
+		        	//if this is not the last element add ||
+		        	if(i != (orSearchTerms.size()-1)){
+		        		baseQuery.append(" || ");
+		        	}
+		        	i++;
+		        }	
+        	}
+        }
+        baseQuery.append(" )");
+        
+        //add learning object type preference
+		if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredLearningObjectType())){
+			baseQuery.append("FILTER ( ?learningObjectType = TenOntology:" +  studentAnnotationsBean.getPreferredLearningObjectType() + " )");
+		}else{
+			baseQuery.append("FILTER ((?learningObjectType = TenOntology:" +  TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE + " )");
+			baseQuery.append("|| (?learningObjectType = TenOntology:" +  TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT + " )");
+			baseQuery.append("|| (?learningObjectType = TenOntology:" +  TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO + " )");
+			baseQuery.append("|| (?learningObjectType = TenOntology:" +  TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO + " )");
+			baseQuery.append(" )");
+		}
+			
+		boolean upperCondition = false;
+		//Add tribe
+		if(!Utils.isEmptyOrNull(studentAnnotationsBean.getTribe())){
+			if(upperCondition){
+				sparqlQueryString.append( " UNION " );
+			}
+			sparqlQueryString.append(" { ");
+			sparqlQueryString.append(baseQuery.toString());			
+			sparqlQueryString.append(" ?learning_object <" + TripleStoreConstants.URI_PREDICATE_TEN_LO_TRIBE + "> ?tribe . ");
+			sparqlQueryString.append(" FILTER (regex(?tribe, \"" + studentAnnotationsBean.getTribe() + "\", \"i\" ))" );
+			sparqlQueryString.append(" } ");
+			upperCondition = true;
+		}
+		
+		//Add language preference
+		if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredLanguage())){
+			if(upperCondition){
+				sparqlQueryString.append( " UNION " );
+			}
+			sparqlQueryString.append(" { ");
+			sparqlQueryString.append(baseQuery.toString());
+			sparqlQueryString.append(" ?learning_object <" + TripleStoreConstants.URI_PREDICATE_DC_LANGUAGE + "> ?language . ");
+			sparqlQueryString.append(" FILTER (regex(?language, \"" + studentAnnotationsBean.getPreferredLanguage() + "\", \"i\" ))" );
+			sparqlQueryString.append(" } ");
+			upperCondition = true;
+		}
+		
+		//Add preferred text type
+		if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredTextContent())){
+			if(upperCondition){
+				sparqlQueryString.append( " UNION " );
+			}
+			sparqlQueryString.append(" { ");
+			sparqlQueryString.append(baseQuery.toString());
+			sparqlQueryString.append(" ?learning_object <" + TripleStoreConstants.URI_PREDICATE_TEN_TEXT_TYPE + "> ?textType . ");
+			sparqlQueryString.append(" FILTER (regex(?textType, \"" + studentAnnotationsBean.getPreferredTextContent() + "\", \"i\" ))" );
+			sparqlQueryString.append(" } ");
+			upperCondition = true;
+		}
+		
+		//Add preferred image type
+		if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredImageContent())){
+			if(upperCondition){
+				sparqlQueryString.append( " UNION " );
+			}
+			sparqlQueryString.append(" { ");
+			sparqlQueryString.append(baseQuery.toString());
+			sparqlQueryString.append(" { ?learning_object <" + TripleStoreConstants.URI_PREDICATE_TEN_IMAGE_TYPE + "> ?imageType . ");
+			sparqlQueryString.append(" FILTER (regex(?imageType, \"" + studentAnnotationsBean.getPreferredImageContent() + "\", \"i\" )) " );
+			sparqlQueryString.append(" } ");
+			upperCondition = true;
+		}
+		
+		sparqlQueryString.append(" }");
+		
+		log.debug("SEARCH QUERY:  " + sparqlQueryString.toString());
+		
+		if(upperCondition == true){
+			//STEP 1 - Connect to virtuoso database
+			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
+			
+			Query sparql = QueryFactory.create(sparqlQueryString.toString());
+			
+			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql.toString(), graph);
+	
+			//STEP 3 - Execute
+			ResultSet results = vqe.execSelect();
+			while (results.hasNext()) {
+				QuerySolution result = results.nextSolution();
+			    RDFNode rdfNodeSubject = result.get("learning_object");
+			    RDFNode rdfNodeObject = result.get("learningObjectType");
+			    if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE).equals(rdfNodeObject.toString())){
+			    	imagesList.add(rdfNodeSubject.toString());
+			    }else if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO).equals(rdfNodeObject.toString())){
+			    	audioList.add(rdfNodeSubject.toString());
+			    }else if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO).equals(rdfNodeObject.toString())){
+			    	videoList.add(rdfNodeSubject.toString());
+			    }else if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT).equals(rdfNodeObject.toString())){
+			    	videoList.add(rdfNodeSubject.toString());
+			    }
+			 }
+		}		
+		returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE, imagesList);
+		returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO, audioList);
+		returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO, videoList);
+		returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT, textList);
+		
+	}catch (Exception ex) {
+		log.error(ex);
+		throw ex;
+	}finally{			
+		log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+	}
+	return returnMap;
+}
 
 	@Override
 	public boolean insertImageDigitalRightsManagementData(
@@ -714,9 +1011,23 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			//rating
 			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getRating())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_LO_RATING);
-				predicate_value = Node.createURI(tenLearningObjectAnnotationsBean.getRating());
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getRating());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}		
+			}
+			
+			//image type
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getImageType())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_IMAGE_TYPE);
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getImageType());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}
+			
+			//text type
+			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getTextType())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_TEXT_TYPE);
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getTextType());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}
 		}catch(Exception ex)
 		{
 			log.error(ex);
@@ -743,21 +1054,14 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			//date of annotation
 			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getDate())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_DATE_ANNOTATION);
-				predicate_value = Node.createURI(tenLearningObjectAnnotationsBean.getDate());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
-			//type	
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getType())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_TYPE);
-				predicate_value = Node.createURI(tenLearningObjectAnnotationsBean.getType());
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getDate());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//format
 			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getFormat())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_FORMAT);
-				predicate_value = Node.createURI(tenLearningObjectAnnotationsBean.getFormat());
+				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getFormat());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
@@ -866,14 +1170,21 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			//rights	
 			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getRights())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_RIGHTS);
-				predicate_value = Node.createURI(digitalRightsManagementBean.getRights());
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getRights());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//date of learning object creation
 			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getDate())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_DATE);
-				predicate_value = Node.createURI(digitalRightsManagementBean.getDate());
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getDate());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}
+			
+			//intaker
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getIntaker())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_INTAKER);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getIntaker());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 		}catch(Exception ex)
@@ -905,7 +1216,6 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getAnnotator());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
-			
 			tripleList.add(new Triple(subject, predicate, predicate_value));
 			
 			tripleList.addAll(addDescriptiveAnnotationTriples(subject, tenLearningObjectAnnotationsBean));
@@ -1016,16 +1326,16 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			}
 			
 			//description 
-			if(!Utils.isEmptyOrNull(courseAnnotationBean.getHasPart())){
+			if(!Utils.isEmptyOrNull(courseAnnotationBean.getDescription())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_DESCRIPTION);
-				predicate_value = Node.createURI(courseAnnotationBean.getHasPart());
+				predicate_value = Node.createLiteral(courseAnnotationBean.getDescription());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
 			//keywords
 			if(!Utils.isEmptyOrNull(courseAnnotationBean.getKeywords())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_KEYWORDS);
-				predicate_value = Node.createURI(courseAnnotationBean.getKeywords());
+				predicate_value = Node.createLiteral(courseAnnotationBean.getKeywords());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 		}catch(Exception ex)
@@ -1070,18 +1380,8 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			}
 			
 			ArrayList<String> uris = new ArrayList<String>();		
-			if (TripleStoreConstants.SEARCH_IMAGE.equals(type)){
-				uris = queryLearningObject(TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE, orSearchTerms, andSearchTermsList);				
-			}else if (TripleStoreConstants.SEARCH_AUDIO.equals(type)){
-				uris = queryLearningObject(TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO, orSearchTerms, andSearchTermsList);	
-			}else if (TripleStoreConstants.SEARCH_VIDEO.equals(type)){
-				uris = queryLearningObject(TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO, orSearchTerms, andSearchTermsList);	
-			}else if (TripleStoreConstants.SEARCH_TEXT.equals(type)){
-				uris = queryLearningObject(TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT, orSearchTerms, andSearchTermsList);	
-			}else{
-				//throw new Exception("Invalid search type"); or search all
-			}	
-			
+			uris = queryLearningObject(type, orSearchTerms, andSearchTermsList);				
+						
 			for(String uri: uris){
 				tenLearningObjectAnnotationsBean = new TenLearningObjectAnnotationsBean();
 				returnMap.put(uri, tenLearningObjectAnnotationsBean);
@@ -1099,6 +1399,65 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 	}
 
 	@Override
+	public  HashMap<String, ArrayList<String>> queryDefaultLearningObjects(String keywords, String andSearchTerms) throws Exception {
+		HashMap<String, ArrayList<String>> returnMap = new HashMap<String, ArrayList<String>>();
+		
+		String LOG_METHOD_NAME = "HashMap<String, TenLearningObjectAnnotationsBean> searchLearningObjects(String type, String keywords)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		VirtGraph graph = null;
+		try{
+			Context initContext = new InitialContext();
+			Context envContext  = (Context)initContext.lookup("java:/comp/env");
+			VirtuosoDataSource ds = (VirtuosoConnectionPoolDataSource )envContext.lookup(TripleStoreConstants.VIRTUOSO_JNDI_LOOKUP_NAME);
+			
+			graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, ds);
+			
+			//separate the search terms
+			ArrayList<String> orSearchTerms = new ArrayList<String>();
+			StringTokenizer st = new StringTokenizer(keywords);
+			while (st.hasMoreTokens()) {
+				orSearchTerms.add(st.nextToken().trim());
+			}
+			
+			ArrayList<String> andSearchTermsList = new ArrayList<String>();
+			StringTokenizer andSt = new StringTokenizer(andSearchTerms);
+			while (andSt.hasMoreTokens()) {
+				andSearchTermsList.add(andSt.nextToken().trim());
+			}
+			
+			//query images
+			ArrayList<String> imagesList = new ArrayList<String>();		
+			imagesList = queryLearningObject(TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE, orSearchTerms, andSearchTermsList);				
+			returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE, imagesList);
+			
+			//query audios
+			ArrayList<String> audioList = new ArrayList<String>();		
+			audioList = queryLearningObject(TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO, orSearchTerms, andSearchTermsList);				
+			returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO, audioList);
+			
+			//query videos
+			ArrayList<String> videoList = new ArrayList<String>();		
+			videoList = queryLearningObject(TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO, orSearchTerms, andSearchTermsList);				
+			returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO, videoList);
+			
+			//query text
+			ArrayList<String> textList = new ArrayList<String>();		
+			textList = queryLearningObject(TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT, orSearchTerms, andSearchTermsList);				
+			returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT, textList);
+			
+		}catch (Exception ex) {
+			if(graph!=null){
+				graph.getTransactionHandler().abort();
+			}
+			log.error(ex);
+			throw ex;
+		}finally{			
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}		
+		return returnMap;
+	}
+	@Override
 	public CourseAnnotationsBean getCourseAnnotations(int courseId)
 			throws Exception {
 		String LOG_METHOD_NAME = "CourseAnnotationsBean getCourseAnnotations(int courseId)";
@@ -1107,7 +1466,6 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		
 		try{		
 			StringBuffer sparqlQueryString = new StringBuffer();
-			sparqlQueryString.append(TripleStoreConstants.DEFINE_INFERENCE);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_ONTOLOGY);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_IMAGE);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_AUDIO);
@@ -1130,9 +1488,9 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
 			
 			//STEP 2 - Create query
-			//Query sparql = QueryFactory.create(sparqlQueryString.toString());
+			Query sparql = QueryFactory.create(sparqlQueryString.toString());
 			
-			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparqlQueryString.toString(), graph);
+			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql.toString(), graph);
 	
 			//STEP 3 - Execute
 			ResultSet results = vqe.execSelect();
@@ -1184,7 +1542,6 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		
 		try{		
 			StringBuffer sparqlQueryString = new StringBuffer();
-			sparqlQueryString.append(TripleStoreConstants.DEFINE_INFERENCE);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_ONTOLOGY);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_IMAGE);
 			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_AUDIO);
@@ -1208,9 +1565,9 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
 			
 			//STEP 2 - Create query
-			//Query sparql = QueryFactory.create(sparqlQueryString.toString());
+			Query sparql = QueryFactory.create(sparqlQueryString.toString());
 			
-			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparqlQueryString.toString(), graph);
+			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql, graph);
 	
 			//STEP 3 - Execute
 			ResultSet results = vqe.execSelect();
@@ -1221,9 +1578,29 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			    
 			    log.debug(graph + " { " + predicateNode + " ; " + objectNode + "  }");
 			    
-			    if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_TEN_LO_TRIBE)){
-			    	//tribe
+			    //tribe
+			    if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_TRIBE)){
 			    	studentAnnotationsBean.setTribe(objectNode.toString());
+			    }
+			    
+			    //learning object type preference
+			    if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TYPE)){
+			    	studentAnnotationsBean.setPreferredLearningObjectType(objectNode.toString());
+			    }
+			    
+			    //learning object text preference
+			    if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TEXT_TYPE)){
+			    	studentAnnotationsBean.setPreferredTextContent(objectNode.toString());
+			    }
+			    
+			    //learning object image preference
+			    if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_IMAGE_TYPE)){
+			    	studentAnnotationsBean.setPreferredImageContent(objectNode.toString());
+			    }
+			    
+			   //preferred language
+			    if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LANGUAGE)){
+			    	studentAnnotationsBean.setPreferredLanguage(objectNode.toString());
 			    }
 			}
 		}catch (Exception ex) {
@@ -1233,5 +1610,103 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
 		}
 		return studentAnnotationsBean;
+	}
+
+	@Override
+	public void updateStudentAnnotations(String user_name,
+			StudentAnnotationsBean studentAnnotationsBean) throws Exception {
+		String LOG_METHOD_NAME = "void updateStudentAnnotations(String, StudentAnnotationsBean)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+	
+		try{
+			//STEP 1 - Connect to virtuoso database
+			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
+			
+			//Begin transaction
+			log.debug(TripleStoreConstants.LOG_BEGIN_TRANSACTION);
+			graph.getTransactionHandler().begin();
+			
+			StringBuffer sparqlDeleteString = new StringBuffer("");
+			//delete tribe information
+			sparqlDeleteString.append("DELETE FROM GRAPH <http://localhost:8890/DAV/home/ten_user/graph> { " + "<" + TripleStoreConstants.URI_STUDENT + user_name + "> " + "<" + TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_TRIBE + ">" + " ?tribe . " + "}");
+			sparqlDeleteString.append(" WHERE {<" + TripleStoreConstants.URI_STUDENT + user_name + "> " + "<" + TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_TRIBE + ">" + " ?tribe . " + "}");
+			
+			//delete language			
+			sparqlDeleteString.append("DELETE FROM GRAPH <http://localhost:8890/DAV/home/ten_user/graph> { " + "<" + TripleStoreConstants.URI_STUDENT + user_name + "> " + "<" + TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LANGUAGE + ">" + " ?language . " + "}");
+			sparqlDeleteString.append(" WHERE {<" + TripleStoreConstants.URI_STUDENT + user_name + "> " + "<" + TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LANGUAGE + ">" + " ?language . " + "}");
+			
+			//delete learning object type
+			sparqlDeleteString.append("DELETE FROM GRAPH <http://localhost:8890/DAV/home/ten_user/graph> { " + "<" + TripleStoreConstants.URI_STUDENT + user_name + "> " + "<" + TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TYPE + ">" + " ?lotype . " + "}");
+			sparqlDeleteString.append(" WHERE {<" + TripleStoreConstants.URI_STUDENT + user_name + "> " + "<" + TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TYPE + ">" + " ?lotype . " + "}");
+			
+			//delete text content type
+			sparqlDeleteString.append("DELETE FROM GRAPH <http://localhost:8890/DAV/home/ten_user/graph> { " + "<" + TripleStoreConstants.URI_STUDENT + user_name + "> " + "<" + TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TEXT_TYPE + ">" + " ?textType . " + "}");
+			sparqlDeleteString.append(" WHERE {<" + TripleStoreConstants.URI_STUDENT + user_name + "> " + "<" + TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TEXT_TYPE + ">" + " ?textType . " + "}");
+			
+			//delete image content type
+			sparqlDeleteString.append("DELETE FROM GRAPH <http://localhost:8890/DAV/home/ten_user/graph> { " + "<" + TripleStoreConstants.URI_STUDENT + user_name + "> " + "<" + TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_IMAGE_TYPE + ">" + " ?imageType . " + "}");
+			sparqlDeleteString.append(" WHERE {<" + TripleStoreConstants.URI_STUDENT + user_name + "> " + "<" + TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_IMAGE_TYPE + ">" + " ?imageType . " + "}");
+			VirtuosoUpdateRequest vur = VirtuosoUpdateFactory.create(sparqlDeleteString.toString(), graph);
+            vur.exec();           
+			
+        	List<Triple> addTripleList = new ArrayList<Triple>();
+ 			Node predicate_value = null;			
+			//tribe
+			Node student = Node.createURI(TripleStoreConstants.URI_STUDENT + user_name);
+			Node predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_TRIBE);
+			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getTribe())){
+				predicate_value = Node.createLiteral(studentAnnotationsBean.getTribe());	
+				addTripleList.add(new Triple(student, predicate, predicate_value));
+			}
+						
+			//language
+			student = Node.createURI(TripleStoreConstants.URI_STUDENT + user_name);
+			predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LANGUAGE);
+			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredLanguage())){
+				predicate_value = Node.createLiteral(studentAnnotationsBean.getPreferredLanguage());	
+				addTripleList.add(new Triple(student, predicate, predicate_value));
+			}
+			
+			//preferred learning object type
+			student = Node.createURI(TripleStoreConstants.URI_STUDENT + user_name);
+			predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TYPE);
+			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredLearningObjectType())){
+				predicate_value = Node.createLiteral(studentAnnotationsBean.getPreferredLearningObjectType());	
+				addTripleList.add(new Triple(student, predicate, predicate_value));
+			}
+			
+			//preferred text content type
+			student = Node.createURI(TripleStoreConstants.URI_STUDENT + user_name);
+			predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TEXT_TYPE);
+			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredTextContent())){
+				predicate_value = Node.createLiteral(studentAnnotationsBean.getPreferredTextContent());	
+				addTripleList.add(new Triple(student, predicate, predicate_value));
+			}
+			
+			//preferred image content type
+			student = Node.createURI(TripleStoreConstants.URI_STUDENT + user_name);
+			predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_IMAGE_TYPE);
+			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredImageContent())){
+				predicate_value = Node.createLiteral(studentAnnotationsBean.getPreferredImageContent());	
+				addTripleList.add(new Triple(student, predicate, predicate_value));
+			}
+							
+			//insert triples
+			for(int i=0; i<addTripleList.size(); i++){
+				graph.add(addTripleList.get(i));
+			}
+			
+			//End transaction
+			graph.getTransactionHandler().commit();
+			
+			log.debug(TripleStoreConstants.LOG_END_TRANSACTION);
+			
+		}catch (Exception ex) {
+			log.error(ex);
+			throw ex;
+		}finally{			
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}
+		return;		
 	}
 }

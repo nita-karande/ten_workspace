@@ -41,11 +41,12 @@
 	<table>
 		 <tr><td>Annotate Video</td></tr>
   		  <c:choose>
-	  		  <c:when test="${requestScope.learningObjectDetailsBean == null}">
+	  		 <c:when test="${(actionType == 'display') && (requestScope.learningObjectDetailsBean == null)}">
 	  		 	 <tr><td>Video cannot be found</td><td></td></tr>
   			 </c:when>
   			 <c:otherwise> 
   			 <c:set var="objectType" scope="request" value="Video"/>
+  			 <c:if test="${(requestScope.learningObjectDetailsBean != null)}">
 	 		  <tr>
 				<td>Video Preview</td>
 				<td></td>
@@ -57,6 +58,7 @@
 			  		</video>
 			  	</td>				
  		 	  </tr>
+ 		 	  </c:if>
  			  <tr>
 				<td colspan="2">
 		  		 <div id="annotations_div">

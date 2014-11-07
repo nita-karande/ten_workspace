@@ -41,11 +41,12 @@
 	<table>
 		 <tr><td>Annotate Text</td></tr>
   		  <c:choose>
-	  		  <c:when test="${requestScope.learningObjectDetailsBean == null}">
+	  		  <c:when test="${(actionType == 'display') && (requestScope.learningObjectDetailsBean == null)}">
 	  		 	 <tr><td>Text cannot be found</td><td></td></tr>
   			 </c:when>
   			 <c:otherwise>  			 	
  			 <c:set var="objectType" scope="request" value="Text"/>
+ 			  <c:if test="${(requestScope.learningObjectDetailsBean != null)}">
 	 		  <tr>
 				<td>Text Preview</td>
 				<td></td>
@@ -57,13 +58,14 @@
 			  	</object>
 			  	</td>
  		 	  </tr>
+ 		 	  </c:if>
  			  <tr>
 				<td colspan="2">
 		  		 <div id="annotations_div">
 		  		    <%@include file="ten_annotations.jsp"%>	  		    		 
 				 </div>
 			   </td>
- 			  </tr>		 		  			 	
+ 			  </tr> 			  	 		  			 	
   			 </c:otherwise>
   		</c:choose>		
 	</table>

@@ -19,9 +19,15 @@ public interface ActionConstants {
 	
 	public static final String KEY_USER_DETAILS = "user_details";
 	
-	public static final String KEY_STUDENT_ANNOTATIONS = "student_annotations";
+	public static final String KEY_STUDENT_DETAILS = "student_details";
 	
 	public static final String FILE_UPLOAD_SUCCESS_MSG = "File uploaded successfully ";
+	
+	public static final String PROFILE_UPDATE_SUCCESS_MSG = "Profile updated successfully ";
+	
+	public static final String PROFILE_UPDATE_ERROR_MSG = "Profile could not be updated ";
+	
+	public static final String PROFILE_RETRIEVE_ERROR_MSG = "Profile could not be loaded ";
 	
 	public static final String FILE_UPLOAD_ERROR_MSG = "File upload failed ";
 	
@@ -32,6 +38,10 @@ public interface ActionConstants {
 	public static final String RETRIEVE_VIDEOS_ERROR_MSG = "Failed to retrieve videos ";
 	
 	public static final String RETRIEVE_TEXTS_ERROR_MSG = "Failed to retrieve texts ";
+	
+	public static final String ANNOTATION_SUCCESS_MSG = "Annotation was successfull ";
+	
+	public static final String ANNOTATION_ERROR_MSG = "Annotation failed ";
 	
 	public static final String CREATE_COURSE_SUCCESS_MSG = "Course created successfully ";
 	

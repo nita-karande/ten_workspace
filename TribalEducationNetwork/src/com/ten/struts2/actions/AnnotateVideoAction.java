@@ -89,6 +89,8 @@ public class AnnotateVideoAction extends ActionSupport{
 		if(ActionConstants.METHOD_POST.equalsIgnoreCase(method)){
 			if(this.actionType.equals(ActionConstants.ACTION_DISPLAY)){
 				try{
+					this.reset();
+					
 					//get video from database
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
 					learningObjectDetailsBean = dbAccessDaoInterface.getVideo(this.learningObjectId);
@@ -109,12 +111,13 @@ public class AnnotateVideoAction extends ActionSupport{
 					//set video status to being annotated
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
 					dbAccessDaoInterface.updateVideo(this.learningObjectId);
-					
+
+					addActionMessage(ActionConstants.ANNOTATION_SUCCESS_MSG);
 					result = ActionConstants.FORWARD_SUCCESS;
 				}catch(Exception ex){
 					log.error(ex);
 					reset();				
-					addActionError(ActionConstants.RETRIEVE_VIDEOS_ERROR_MSG);
+					addActionError(ActionConstants.ANNOTATION_ERROR_MSG);
 					result = ActionConstants.FORWARD_INPUT;
 				}
 			}

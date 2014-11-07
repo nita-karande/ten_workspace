@@ -189,9 +189,17 @@
      	 <action name="view/coursedetails" 
             class="com.ten.struts2.actions.ViewCourseDetailsAction" 
             method="execute">
-            <result name="success">/WEB-INF/jsp/view_course_details.jsp</result>
-            <result name="input">/WEB-INF/jsp/view_course_details.jsp</result>
-            <result name="showjsp">/WEB-INF/jsp/view_course_details.jsp</result>
+            <result name="success">/WEB-INF/jsp/course_details.jsp</result>
+            <result name="input">/WEB-INF/jsp/course_details.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/course_details.jsp</result>
+     	 </action>
+     	 
+     	  <action name="view/profiledetails" 
+            class="com.ten.struts2.actions.ProfileDetailsAction" 
+            method="execute">
+            <result name="success">/WEB-INF/jsp/profile_details.jsp</result>
+            <result name="input">/WEB-INF/jsp/profile_details.jsp</result>
+            <result name="showjsp">/WEB-INF/jsp/profile_details.jsp</result>
      	 </action>
 	</package> 
 </struts>

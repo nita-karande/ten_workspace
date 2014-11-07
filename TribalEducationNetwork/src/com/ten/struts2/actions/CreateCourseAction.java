@@ -25,7 +25,7 @@ public class CreateCourseAction extends ActionSupport{
 	private static final long serialVersionUID = 1L;
 	CourseAnnotationsBean courseAnnotationsBean;
     String courseName;
-    
+
 	public CourseAnnotationsBean getCourseAnnotationsBean() {
 		return courseAnnotationsBean;
 	}
@@ -62,6 +62,7 @@ public class CreateCourseAction extends ActionSupport{
 				
 				request.setAttribute("courseId", courseId);
 				request.setAttribute("keywords", this.courseAnnotationsBean.getKeywords());
+				request.setAttribute("description", this.courseAnnotationsBean.getDescription());
 				
 				//Insert annotations in Triplestore
 				TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();

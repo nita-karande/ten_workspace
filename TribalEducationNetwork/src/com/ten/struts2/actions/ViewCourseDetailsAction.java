@@ -1,6 +1,8 @@
 package com.ten.struts2.actions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,7 +13,6 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.ten.beans.CourseAnnotationsBean;
 import com.ten.beans.LearningObjectDetailsBean;
 import com.ten.beans.StudentAnnotationsBean;
-import com.ten.beans.TenLearningObjectAnnotationsBean;
 import com.ten.dao.implementation.DbAccessDaoImpl;
 import com.ten.dao.interfaces.DbAccessDaoInterface;
 import com.ten.triplestore.dao.implementation.VirtuosoAccessDaoImpl;
@@ -33,8 +34,36 @@ public class ViewCourseDetailsAction extends ActionSupport{
 	private String courseId;
 	private String actionName;
 	private CourseAnnotationsBean courseAnnotationsBean;
-	private HashMap<String, LearningObjectDetailsBean> mapLearningObjects;	
+	private HashMap<String, HashMap<String, LearningObjectDetailsBean>> mapLearningObjects;	
+	private HashMap<String, HashMap<String, LearningObjectDetailsBean>> mapDefaultLearningObjects;	
+	int recommendedLearningObjects;
+	int defaultLearningObjects;
 	
+	public HashMap<String, HashMap<String, LearningObjectDetailsBean>> getMapDefaultLearningObjects() {
+		return mapDefaultLearningObjects;
+	}
+
+	public int getRecommendedLearningObjects() {
+		return recommendedLearningObjects;
+	}
+
+	public void setRecommendedLearningObjects(int recommendedLearningObjects) {
+		this.recommendedLearningObjects = recommendedLearningObjects;
+	}
+
+	public int getDefaultLearningObjects() {
+		return defaultLearningObjects;
+	}
+
+	public void setDefaultLearningObjects(int defaultLearningObjects) {
+		this.defaultLearningObjects = defaultLearningObjects;
+	}
+
+	public void setMapDefaultLearningObjects(
+			HashMap<String, HashMap<String, LearningObjectDetailsBean>> mapDefaultLearningObjects) {
+		this.mapDefaultLearningObjects = mapDefaultLearningObjects;
+	}
+
 	public String getTypeOfLearningObject() {
 		return typeOfLearningObject;
 	}
@@ -43,17 +72,17 @@ public class ViewCourseDetailsAction extends ActionSupport{
 		this.typeOfLearningObject = typeOfLearningObject;
 	}
 
-	public HashMap<String, LearningObjectDetailsBean> getMapLearningObjects() {
+	public String getCourseName() {
+		return courseName;
+	}
+
+	public HashMap<String, HashMap<String, LearningObjectDetailsBean>> getMapLearningObjects() {
 		return mapLearningObjects;
 	}
 
 	public void setMapLearningObjects(
-			HashMap<String, LearningObjectDetailsBean> mapLearningObjects) {
+			HashMap<String, HashMap<String, LearningObjectDetailsBean>> mapLearningObjects) {
 		this.mapLearningObjects = mapLearningObjects;
-	}
-
-	public String getCourseName() {
-		return courseName;
 	}
 
 	public void setCourseName(String courseName) {
@@ -103,17 +132,58 @@ public class ViewCourseDetailsAction extends ActionSupport{
 				//get course annotations from triple store						
 				this.courseAnnotationsBean = tdbAccessDaoInterface.getCourseAnnotations(Integer.parseInt(this.courseId));
 					
-				if("search".equals(this.actionName)){
+				if("view".equals(this.actionName)){
 									
 					//get student annotation details from session
-					StudentAnnotationsBean studentAnnotationsBean = (StudentAnnotationsBean)request.getSession().getAttribute(ActionConstants.KEY_STUDENT_ANNOTATIONS);
+					StudentAnnotationsBean studentAnnotationsBean = (StudentAnnotationsBean)request.getSession().getAttribute(ActionConstants.KEY_STUDENT_DETAILS);
 					
-					//get learning objects from triple stores
-					HashMap<String,TenLearningObjectAnnotationsBean> mapLearningObjects = tdbAccessDaoInterface.searchLearningObjects(this.typeOfLearningObject, this.courseAnnotationsBean.getKeywords(), studentAnnotationsBean.getTribe());
+					//get recommended learning objects from triple stores
+					HashMap<String,ArrayList<String>> mapLearningObjectsTemp = tdbAccessDaoInterface.queryRecommendedLearningObjects(studentAnnotationsBean, this.courseAnnotationsBean.getKeywords());
 					
-					//get learning object contents
+					//get recommended learning object contents
 					DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
-					this.mapLearningObjects = dbAccessDaoInterface.getLearningObjectDetails(this.typeOfLearningObject, mapLearningObjects.keySet());
+					this.mapLearningObjects = new HashMap<String, HashMap<String, LearningObjectDetailsBean>>();
+					for(String learningObjectType:mapLearningObjectsTemp.keySet())
+					{
+						//for each learning object type
+						HashMap<String, LearningObjectDetailsBean> map = new HashMap<String, LearningObjectDetailsBean>();
+						ArrayList<String> learningObjectsUriList = mapLearningObjectsTemp.get(learningObjectType);
+						if((learningObjectsUriList!=null) && (learningObjectsUriList.size()>0))
+						{
+							recommendedLearningObjects += learningObjectsUriList.size();
+							//get details for each object
+							map = dbAccessDaoInterface.getLearningObjectDetails(learningObjectType, new HashSet<String>(learningObjectsUriList));
+						}
+						this.mapLearningObjects.put(learningObjectType, map);
+					}
+					
+					//get default learning objects from triple stores
+					mapLearningObjectsTemp = tdbAccessDaoInterface.queryDefaultLearningObjects(this.courseAnnotationsBean.getKeywords(), "");
+					
+					//get default learning object contents
+					this.mapDefaultLearningObjects = new HashMap<String, HashMap<String, LearningObjectDetailsBean>>();
+					for(String learningObjectType:mapLearningObjectsTemp.keySet())
+					{
+						//for each learning object type
+						HashMap<String, LearningObjectDetailsBean> map = new HashMap<String, LearningObjectDetailsBean>();
+						ArrayList<String> learningObjectsUriList = mapLearningObjectsTemp.get(learningObjectType);						
+						if((learningObjectsUriList!=null) && (learningObjectsUriList.size()>0)){
+							//if there are objects matching criteria
+							HashSet<String> learningObjectsUriSet =  new HashSet<String>(learningObjectsUriList);
+							
+							//remove those already recommended
+							learningObjectsUriSet.removeAll(mapLearningObjects.get(learningObjectType).keySet());
+							ArrayList<String> learningObjectsUriNotInRecommended = new ArrayList<String>(learningObjectsUriSet);
+							
+							//get details for remaining
+							if((learningObjectsUriNotInRecommended!=null) && (learningObjectsUriNotInRecommended.size()>0))
+							{
+								defaultLearningObjects += learningObjectsUriNotInRecommended.size();
+								map = dbAccessDaoInterface.getLearningObjectDetails(learningObjectType, new HashSet<String>(learningObjectsUriNotInRecommended));
+							}
+						}
+						this.mapDefaultLearningObjects.put(learningObjectType, map);
+					}					
 				}
 								
 	            result = ActionConstants.FORWARD_SUCCESS;
@@ -133,6 +203,9 @@ public class ViewCourseDetailsAction extends ActionSupport{
 	public void reset(){
 		this.typeOfLearningObject = "";
 		this.mapLearningObjects = null;
+		this.mapDefaultLearningObjects = null;
 		this.courseAnnotationsBean = null;
+		this.defaultLearningObjects = 0;
+		this.recommendedLearningObjects = 0;
 	}
 }
