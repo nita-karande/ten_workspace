@@ -30,6 +30,7 @@ public class SearchLearningObjectsAction extends ActionSupport{
 	private String courseName;
 	private String courseId;
 	private String keywords;
+	private String description;
 	HashMap<String, LearningObjectDetailsBean> mapLearningObjects;
 	
 	public String getKeywords() {
@@ -71,6 +72,14 @@ public class SearchLearningObjectsAction extends ActionSupport{
 
 	public void setCourseId(String courseId) {
 		this.courseId = courseId;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**

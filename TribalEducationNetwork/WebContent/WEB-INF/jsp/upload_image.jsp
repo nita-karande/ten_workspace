@@ -39,6 +39,10 @@
 		    	$("#uploadPreview_div").append(obj);
 		  };
 		}
+		
+		function validateForm(){
+			document.getElementsByTagName("form").submit(); 
+		}
 	</script>
 </head>
 <body>
@@ -72,7 +76,7 @@
 	  		    <%@include file="digital_rights_management.jsp"%>	  		    		 
 			 </div>
 		 </td></tr>		 
-		 <tr><td><input type="submit" value="Upload Image" /></td></tr>
+		 <tr><td><input type="submit" value="Upload Image" onclick="validateForm();"/></td></tr>
 	</table>
 	</section>
 			

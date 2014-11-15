@@ -35,11 +35,70 @@ public interface TripleStoreConstants {
 	//Begin - Subject
 	
 	//BEGIN - predicates
+	//Digital rights
 	public static final String URI_PREDICATE_RDF_TYPE = URI_RDF + "type";
 	
-	public static final String URI_PREDICATE_TEN_ANNOTATOR = URI_TEN_ONTOLOGY + "annotator";
+	public static final String URI_PREDICATE_TEN_PHYSICAL_DESCRIPTION = URI_TEN_ONTOLOGY + "physicalDescription";
 	
-	//DC - Descriptive
+	public static final String URI_PREDICATE_TEN_LOAN_PERIOD = URI_TEN_ONTOLOGY + "loanPeriod";	
+	
+	public static final String URI_PREDICATE_TEN_SOURCE_IDENTIFIER = URI_TEN_ONTOLOGY + "sourceIdentifier";
+		
+	public static final String URI_PREDICATE_TEN_SOURCE_IDENTIFIER_DESCRIPTION = URI_TEN_ONTOLOGY + "sourceIdentifierDescription";
+	
+	public static final String URI_PREDICATE_TEN_HANDLING_INSTRUCTIONS = URI_TEN_ONTOLOGY + "handlingInstructions";
+	
+	public static final String URI_PREDICATE_DC_RIGHTS = URI_DUBLIN_CORE + "rights";	
+
+	public static final String URI_PREDICATE_TEN_INTAKER = URI_TEN_ONTOLOGY + "intaker";	
+	
+	public static final String URI_PREDICATE_TEN_DATE_UPLOAD = URI_TEN_ONTOLOGY + "uploadDate";
+	
+	public static final String URI_PREDICATE_TEN_STORY_PROVIDED = URI_TEN_ONTOLOGY + "storyProvided";
+
+	public static final String URI_PREDICATE_TEN_COPY_RIGHT_HOLDER = URI_TEN_ONTOLOGY + "copyrightHolder";	
+	
+	public static final String URI_PREDICATE_TEN_CREATOR = URI_TEN_ONTOLOGY + "creator";
+	
+	public static final String URI_PREDICATE_TEN_PUBLISHER = URI_TEN_ONTOLOGY + "publisher";
+	
+	public static final String URI_PREDICATE_TEN_CONTRIBUTOR = URI_TEN_ONTOLOGY + "contributor";
+	
+	public static final String ATTRIBUTE_ID = "id";
+	
+	public static final String ATTRIBUTE_APPROVED = "approved";
+		
+	public static final String ATTRIBUTE_CELL_PHONE = "cellNumber";	
+	
+	public static final String ATTRIBUTE_FAX = "fax";
+	
+	public static final String ATTRIBUTE_OFFICE_PHONE = "officeNumber";
+	
+	public static final String ATTRIBUTE_STREET_ADDRESS = "streetAddress";
+	
+	public static final String ATTRIBUTE_OTHER_ADDRESS = "otherAddress";	
+	
+	public static final String ATTRIBUTE_STATE = "state";
+	
+	public static final String ATTRIBUTE_CITY = "city";
+	
+	public static final String ATTRIBUTE_ZIP_CODE = "zipcode";
+	
+	public static final String URI_PREDICATE_TEN_COPY_RIGHT_HOLDER_NOT_AVAILABLE = URI_TEN_ONTOLOGY + "copyrightHolderNotAvailable";	
+	
+	public static final String URI_PREDICATE_TEN_COPY_RIGHT_HOLDER_FINDER_INFO = URI_TEN_ONTOLOGY + "copyrightHolderFinderInfo";	
+
+	public static final String URI_PREDICATE_DC_RELATION = URI_DUBLIN_CORE + "relation";
+	
+	public static final String URI_PREDICATE_DC_COVERAGE = URI_DUBLIN_CORE + "coverage";
+		
+	public static final String URI_PREDICATE_TEN_ANNOTATOR = URI_TEN_ONTOLOGY + "annotator";
+		
+	public static final String URI_PREDICATE_TEN_DATE_ANNOTATION = URI_TEN_ONTOLOGY + "annotationDate";
+	
+	//annotations
+	public static final String URI_PREDICATE_DC_DATE = URI_DUBLIN_CORE + "date";
+	
 	public static final String URI_PREDICATE_DC_TITLE = URI_DUBLIN_CORE + "title";
 	
 	public static final String URI_PREDICATE_DC_SUBJECT = URI_DUBLIN_CORE + "subject";
@@ -49,26 +108,6 @@ public interface TripleStoreConstants {
 	public static final String URI_PREDICATE_DC_SOURCE = URI_DUBLIN_CORE + "source";	
 	
 	public static final String URI_PREDICATE_DC_LANGUAGE = URI_DUBLIN_CORE + "language";
-	
-	public static final String URI_PREDICATE_DC_RELATION = URI_DUBLIN_CORE + "relation";
-	
-	public static final String URI_PREDICATE_DC_COVERAGE = URI_DUBLIN_CORE + "coverage";
-	
-	//DC - Administrative
-	public static final String URI_PREDICATE_DC_CREATOR = URI_DUBLIN_CORE + "creator";
-	
-	public static final String URI_PREDICATE_DC_PUBLISHER = URI_DUBLIN_CORE + "publisher";
-	
-	public static final String URI_PREDICATE_DC_CONTRIBUTOR = URI_DUBLIN_CORE + "contributor";
-	
-	public static final String URI_PREDICATE_DC_RIGHTS = URI_DUBLIN_CORE + "rights";
-	
-	public static final String URI_PREDICATE_TEN_INTAKER = URI_TEN_ONTOLOGY + "intaker";
-	
-	public static final String URI_PREDICATE_TEN_DATE_ANNOTATION = URI_TEN_ONTOLOGY + "annotationDate";
-	
-	//DC - Structural
-	public static final String URI_PREDICATE_DC_DATE = URI_DUBLIN_CORE + "date";
 	
 	public static final String URI_PREDICATE_DC_TYPE = URI_DUBLIN_CORE + "type";
 	
@@ -85,18 +124,8 @@ public interface TripleStoreConstants {
 	
 	public static final String URI_PREDICATE_TEN_COMMON_HASPART = URI_TEN_ONTOLOGY + "hasPart";
 	
-	//TEN learning object (LO)
-	public static final String URI_PREDICATE_TEN_LO_TRIBE = URI_TEN_ONTOLOGY + "tribe";
-	
-	public static final String URI_PREDICATE_TEN_STUDENT_TRIBE = URI_TEN_ONTOLOGY + "tribe";
-	
-	public static final String URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TYPE = URI_TEN_ONTOLOGY + "preferredLearningObjectType";	
-	
-	public static final String URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TEXT_TYPE = URI_TEN_ONTOLOGY + "preferredTextType";	
-	
-	public static final String URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_IMAGE_TYPE = URI_TEN_ONTOLOGY + "preferredImageType";		
-
-	public static final String URI_PREDICATE_TEN_STUDENT_PREFERRED_LANGUAGE = URI_TEN_ONTOLOGY + "preferredLanguage";	
+	//TEN learning object (LO) annotations
+	public static final String URI_PREDICATE_TEN_LO_TRIBE = URI_TEN_ONTOLOGY + "tribe";	
 	
 	public static final String URI_PREDICATE_TEN_LO_CATEGORY = URI_TEN_ONTOLOGY + "category";
 	
@@ -109,6 +138,18 @@ public interface TripleStoreConstants {
 	public static final String URI_PREDICATE_TEN_TEXT_TYPE = URI_TEN_ONTOLOGY + "textType"; //definition, Explanation, description
 	
 	public static final String URI_PREDICATE_TEN_IMAGE_TYPE = URI_TEN_ONTOLOGY + "imageType"; //photo , illustration, graph
+	
+	//Student annotations	
+	public static final String URI_PREDICATE_TEN_STUDENT_TRIBE = URI_TEN_ONTOLOGY + "tribe";
+	
+	public static final String URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TYPE = URI_TEN_ONTOLOGY + "preferredLearningObjectType";	
+	
+	public static final String URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_TEXT_TYPE = URI_TEN_ONTOLOGY + "preferredTextType";	
+	
+	public static final String URI_PREDICATE_TEN_STUDENT_PREFERRED_LO_IMAGE_TYPE = URI_TEN_ONTOLOGY + "preferredImageType";		
+
+	public static final String URI_PREDICATE_TEN_STUDENT_PREFERRED_LANGUAGE = URI_TEN_ONTOLOGY + "preferredLanguage";	
+
 	//End - predicates
 	
 	//TEN course

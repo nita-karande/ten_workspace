@@ -1,7 +1,6 @@
 package com.ten.triplestore.dao.interfaces;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import com.ten.beans.CourseAnnotationsBean;
 import com.ten.beans.DigitalRightsManagementBean;
 import com.ten.beans.StudentAnnotationsBean;

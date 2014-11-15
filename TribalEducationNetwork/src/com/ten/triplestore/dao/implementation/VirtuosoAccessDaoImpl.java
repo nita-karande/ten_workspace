@@ -925,9 +925,16 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 		
 		ArrayList<Triple> tripleList = new ArrayList<>();
 
-		try{
-					
+		try{					
 			tripleList.addAll(addAdministrativeAnnotationTriples(subject, digitalRightsManagementBean));
+			
+			tripleList.addAll(addCopyRightHolderAnnotationTriples(subject, digitalRightsManagementBean));
+			
+			tripleList.addAll(addCreatorAnnotationTriples(subject, digitalRightsManagementBean));
+			
+			tripleList.addAll(addPublisherAnnotationTriples(subject, digitalRightsManagementBean));
+			
+			tripleList.addAll(addContributorAnnotationTriples(subject, digitalRightsManagementBean));
 						
 		}catch(Exception ex)
 		{
@@ -1145,25 +1152,38 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 		ArrayList<Triple> tripleList = new ArrayList<>();
 		Node predicate = null, predicate_value=null;
 		try{						
-			//ADMINISTRATIVE
-			//creator
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreator())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_CREATOR);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getCreator());
+			//physicalDescription	
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPhysicalDescription())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_PHYSICAL_DESCRIPTION);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getPhysicalDescription());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
-			//publisher	
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisher())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_PUBLISHER);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getPublisher());
+			//loan period	
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getLoanPeriod())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_LOAN_PERIOD);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getLoanPeriod());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
-			//contributor	
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributor())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_CONTRIBUTOR);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getContributor());
+			//identifier
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getIdentifier())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_SOURCE_IDENTIFIER);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getIdentifier());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}
+			
+			//identifier description
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getIdentifierDescription())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_SOURCE_IDENTIFIER_DESCRIPTION);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getIdentifierDescription());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}
+			
+			//handling instructions
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getHandlingInstructions())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_HANDLING_INSTRUCTIONS);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getHandlingInstructions());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
@@ -1174,19 +1194,479 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
-			//date of learning object creation
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getDate())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_DATE);
-				predicate_value = Node.createLiteral(digitalRightsManagementBean.getDate());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
 			//intaker
 			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getIntaker())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_INTAKER);
 				predicate_value = Node.createLiteral(digitalRightsManagementBean.getIntaker());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
+			
+			//date of learning object creation
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getDateOfUpload())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_DATE_UPLOAD);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getDateOfUpload());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}			
+			
+			//Story provided
+			boolean approved = (!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProvided()) 
+					&& "true".equals(digitalRightsManagementBean.getStoryProvided()))?true:false;
+			predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_STORY_PROVIDED);
+			predicate_value = Node.createLiteral(String.valueOf(approved));
+			tripleList.add(new Triple(subject, predicate, predicate_value));
+					
+		}catch(Exception ex)
+		{
+			log.error(ex);
+			throw ex;
+		}finally{
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}
+		
+		return tripleList;
+	}
+	
+	/**
+	 * Add copy right holder annotation triples
+	 */
+	public ArrayList<Triple> addCopyRightHolderAnnotationTriples(Node subject ,DigitalRightsManagementBean digitalRightsManagementBean){
+		
+		String LOG_METHOD_NAME = " ArrayList<Triple> addCopyRightHolderTriples(Node, DigitalRightsManagementBean)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		ArrayList<Triple> tripleList = new ArrayList<>();
+		Node predicate = null, predicate_value=null;
+		try{						
+			//copy right holder
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderNotAvailable()) && ("true".equals(digitalRightsManagementBean.getCopyRightHolderNotAvailable()))){
+				//copy right holder not available
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_COPY_RIGHT_HOLDER_NOT_AVAILABLE);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getCopyRightHolderNotAvailable());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+				
+				//copy right holder finder info
+				if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderFinderInfo())){
+					predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_COPY_RIGHT_HOLDER_FINDER_INFO);
+					predicate_value = Node.createLiteral(digitalRightsManagementBean.getCopyRightHolderFinderInfo());
+					tripleList.add(new Triple(subject, predicate, predicate_value));
+				}
+			}else{
+				//copy right holder not available
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_COPY_RIGHT_HOLDER_NOT_AVAILABLE);
+				predicate_value = Node.createLiteral("false");
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+				
+				//copy right holder information
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_COPY_RIGHT_HOLDER);
+				StringBuffer copyRightHolderAttributes = new StringBuffer();
+				
+				//id
+				if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderId())){
+					copyRightHolderAttributes.append(TripleStoreConstants.ATTRIBUTE_ID);
+					copyRightHolderAttributes.append("=");
+					copyRightHolderAttributes.append(digitalRightsManagementBean.getCopyRightHolderId());
+					copyRightHolderAttributes.append(";");
+				}
+				
+				//copy right holder approved
+				boolean approved = (!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderApproved()) 
+									&& "true".equals(digitalRightsManagementBean.getCopyRightHolderApproved()))?true:false;
+				copyRightHolderAttributes.append(TripleStoreConstants.ATTRIBUTE_APPROVED);
+				copyRightHolderAttributes.append("=");
+				copyRightHolderAttributes.append(approved);
+				copyRightHolderAttributes.append(";");
+				
+				
+				//cell phone
+				if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderCellPhone())){
+					copyRightHolderAttributes.append(TripleStoreConstants.ATTRIBUTE_CELL_PHONE);
+					copyRightHolderAttributes.append("=");
+					copyRightHolderAttributes.append(digitalRightsManagementBean.getCopyRightHolderCellPhone());
+					copyRightHolderAttributes.append(";");
+				}
+				
+				//office phone
+				if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderOfficePhone())){
+					copyRightHolderAttributes.append(TripleStoreConstants.ATTRIBUTE_OFFICE_PHONE);
+					copyRightHolderAttributes.append("=");
+					copyRightHolderAttributes.append(digitalRightsManagementBean.getCopyRightHolderOfficePhone());
+					copyRightHolderAttributes.append(";");
+				}
+				
+				//FAX
+				if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderFax())){
+					copyRightHolderAttributes.append(TripleStoreConstants.ATTRIBUTE_FAX);
+					copyRightHolderAttributes.append("=");
+					copyRightHolderAttributes.append(digitalRightsManagementBean.getCopyRightHolderFax());
+					copyRightHolderAttributes.append(";");
+				}
+				
+				//street address
+				if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderStreetAddress())){
+					copyRightHolderAttributes.append(TripleStoreConstants.ATTRIBUTE_STREET_ADDRESS);
+					copyRightHolderAttributes.append("=");
+					copyRightHolderAttributes.append(digitalRightsManagementBean.getCopyRightHolderStreetAddress());
+					copyRightHolderAttributes.append(";");
+				}
+				
+				//other address
+				if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderOtherAddress())){
+					copyRightHolderAttributes.append(TripleStoreConstants.ATTRIBUTE_OTHER_ADDRESS);
+					copyRightHolderAttributes.append("=");
+					copyRightHolderAttributes.append(digitalRightsManagementBean.getCopyRightHolderOtherAddress());
+					copyRightHolderAttributes.append(";");
+				}
+				
+				//city
+				if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderCity())){
+					copyRightHolderAttributes.append(TripleStoreConstants.ATTRIBUTE_CITY);
+					copyRightHolderAttributes.append("=");
+					copyRightHolderAttributes.append(digitalRightsManagementBean.getCopyRightHolderCity());
+					copyRightHolderAttributes.append(";");
+				}
+				
+				//state
+				if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderState())){
+					copyRightHolderAttributes.append(TripleStoreConstants.ATTRIBUTE_STATE);
+					copyRightHolderAttributes.append("=");
+					copyRightHolderAttributes.append(digitalRightsManagementBean.getCopyRightHolderState());
+					copyRightHolderAttributes.append(";");
+				}
+				
+				//state
+				if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderZipCode())){
+					copyRightHolderAttributes.append(TripleStoreConstants.ATTRIBUTE_ZIP_CODE);
+					copyRightHolderAttributes.append("=");
+					copyRightHolderAttributes.append(digitalRightsManagementBean.getCopyRightHolderZipCode());
+					copyRightHolderAttributes.append(";");
+				}
+				
+				predicate_value = Node.createLiteral(copyRightHolderAttributes.toString());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}
+		}catch(Exception ex)
+		{
+			log.error(ex);
+			throw ex;
+		}finally{
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}
+		
+		return tripleList;
+	}
+	
+	/**
+	 * Add publisher annotation triples
+	 */
+	public ArrayList<Triple> addPublisherAnnotationTriples(Node subject ,DigitalRightsManagementBean digitalRightsManagementBean){
+		
+		String LOG_METHOD_NAME = " ArrayList<Triple> addPublisherAnnotationTriples(Node, DigitalRightsManagementBean)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		ArrayList<Triple> tripleList = new ArrayList<>();
+		Node predicate = null, predicate_value=null;
+		try{						
+			//copy right holder information
+			predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_PUBLISHER);
+			StringBuffer publisherAttributes = new StringBuffer();
+			
+			//id
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisher())){
+				publisherAttributes.append(TripleStoreConstants.ATTRIBUTE_ID);
+				publisherAttributes.append("=");
+				publisherAttributes.append(digitalRightsManagementBean.getPublisher());
+				publisherAttributes.append(";");
+			}
+			
+			boolean approved = (!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisherApproved()) 
+					&& "true".equals(digitalRightsManagementBean.getPublisherApproved()))?true:false;
+			publisherAttributes.append(TripleStoreConstants.ATTRIBUTE_APPROVED);
+			publisherAttributes.append("=");
+			publisherAttributes.append(approved);
+			publisherAttributes.append(";");
+						
+			//cell phone
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisherCellPhone())){
+				publisherAttributes.append(TripleStoreConstants.ATTRIBUTE_CELL_PHONE);
+				publisherAttributes.append("=");
+				publisherAttributes.append(digitalRightsManagementBean.getPublisherCellPhone());
+				publisherAttributes.append(";");
+			}
+			
+			//office phone
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisherOfficePhone())){
+				publisherAttributes.append(TripleStoreConstants.ATTRIBUTE_OFFICE_PHONE);
+				publisherAttributes.append("=");
+				publisherAttributes.append(digitalRightsManagementBean.getPublisherOfficePhone());
+				publisherAttributes.append(";");
+			}
+			
+			//FAX
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisherFax())){
+				publisherAttributes.append(TripleStoreConstants.ATTRIBUTE_FAX);
+				publisherAttributes.append("=");
+				publisherAttributes.append(digitalRightsManagementBean.getPublisherFax());
+				publisherAttributes.append(";");
+			}
+			
+			//street address
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisherStreetAddress())){
+				publisherAttributes.append(TripleStoreConstants.ATTRIBUTE_STREET_ADDRESS);
+				publisherAttributes.append("=");
+				publisherAttributes.append(digitalRightsManagementBean.getPublisherStreetAddress());
+				publisherAttributes.append(";");
+			}
+			
+			//other address
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisherOtherAddress())){
+				publisherAttributes.append(TripleStoreConstants.ATTRIBUTE_OTHER_ADDRESS);
+				publisherAttributes.append("=");
+				publisherAttributes.append(digitalRightsManagementBean.getPublisherOtherAddress());
+				publisherAttributes.append(";");
+			}
+			
+			//city
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisherCity())){
+				publisherAttributes.append(TripleStoreConstants.ATTRIBUTE_CITY);
+				publisherAttributes.append("=");
+				publisherAttributes.append(digitalRightsManagementBean.getPublisherCity());
+				publisherAttributes.append(";");
+			}
+			
+			//state
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisherState())){
+				publisherAttributes.append(TripleStoreConstants.ATTRIBUTE_STATE);
+				publisherAttributes.append("=");
+				publisherAttributes.append(digitalRightsManagementBean.getPublisherState());
+				publisherAttributes.append(";");
+			}
+			
+			//state
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisherZipCode())){
+				publisherAttributes.append(TripleStoreConstants.ATTRIBUTE_ZIP_CODE);
+				publisherAttributes.append("=");
+				publisherAttributes.append(digitalRightsManagementBean.getPublisherZipCode());
+				publisherAttributes.append(";");
+			}
+			
+			predicate_value = Node.createLiteral(publisherAttributes.toString());
+			tripleList.add(new Triple(subject, predicate, predicate_value));
+		}catch(Exception ex)
+		{
+			log.error(ex);
+			throw ex;
+		}finally{
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}
+		
+		return tripleList;
+	}
+	
+	/**
+	 * Add creator annotation triples
+	 */
+	public ArrayList<Triple> addCreatorAnnotationTriples(Node subject ,DigitalRightsManagementBean digitalRightsManagementBean){
+		
+		String LOG_METHOD_NAME = " ArrayList<Triple> addCreatorAnnotationTriples(Node, DigitalRightsManagementBean)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		ArrayList<Triple> tripleList = new ArrayList<>();
+		Node predicate = null, predicate_value=null;
+		try{						
+			//copy right holder information
+			predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_CREATOR);
+			StringBuffer creatorAttributes = new StringBuffer();
+			
+			//id
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreator())){
+				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_ID);
+				creatorAttributes.append("=");
+				creatorAttributes.append(digitalRightsManagementBean.getCreator());
+				creatorAttributes.append(";");
+			}
+			
+			boolean approved = (!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorApproved()) 
+					&& "true".equals(digitalRightsManagementBean.getCreatorApproved()))?true:false;
+			creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_APPROVED);
+			creatorAttributes.append("=");
+			creatorAttributes.append(approved);
+			creatorAttributes.append(";");
+			
+			
+			//cell phone
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorCellPhone())){
+				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_CELL_PHONE);
+				creatorAttributes.append("=");
+				creatorAttributes.append(digitalRightsManagementBean.getCreatorCellPhone());
+				creatorAttributes.append(";");
+			}
+			
+			//office phone
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorOfficePhone())){
+				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_OFFICE_PHONE);
+				creatorAttributes.append("=");
+				creatorAttributes.append(digitalRightsManagementBean.getCreatorOfficePhone());
+				creatorAttributes.append(";");
+			}
+			
+			//FAX
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorFax())){
+				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_FAX);
+				creatorAttributes.append("=");
+				creatorAttributes.append(digitalRightsManagementBean.getCreatorFax());
+				creatorAttributes.append(";");
+			}
+			
+			//street address
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorStreetAddress())){
+				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_STREET_ADDRESS);
+				creatorAttributes.append("=");
+				creatorAttributes.append(digitalRightsManagementBean.getCreatorStreetAddress());
+				creatorAttributes.append(";");
+			}
+			
+			//other address
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorOtherAddress())){
+				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_OTHER_ADDRESS);
+				creatorAttributes.append("=");
+				creatorAttributes.append(digitalRightsManagementBean.getCreatorOtherAddress());
+				creatorAttributes.append(";");
+			}
+			
+			//city
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorCity())){
+				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_CITY);
+				creatorAttributes.append("=");
+				creatorAttributes.append(digitalRightsManagementBean.getCreatorCity());
+				creatorAttributes.append(";");
+			}
+			
+			//state
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorState())){
+				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_STATE);
+				creatorAttributes.append("=");
+				creatorAttributes.append(digitalRightsManagementBean.getCreatorState());
+				creatorAttributes.append(";");
+			}
+			
+			//state
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorZipCode())){
+				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_ZIP_CODE);
+				creatorAttributes.append("=");
+				creatorAttributes.append(digitalRightsManagementBean.getCreatorZipCode());
+				creatorAttributes.append(";");
+			}
+			
+			predicate_value = Node.createLiteral(creatorAttributes.toString());
+			tripleList.add(new Triple(subject, predicate, predicate_value));
+		}catch(Exception ex)
+		{
+			log.error(ex);
+			throw ex;
+		}finally{
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}
+		
+		return tripleList;
+	}
+	
+	
+	/**
+	 * Add contributor annotation triples
+	 */
+	public ArrayList<Triple> addContributorAnnotationTriples(Node subject ,DigitalRightsManagementBean digitalRightsManagementBean){
+		
+		String LOG_METHOD_NAME = " ArrayList<Triple> addContributorAnnotationTriples(Node, DigitalRightsManagementBean)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		ArrayList<Triple> tripleList = new ArrayList<>();
+		Node predicate = null, predicate_value=null;
+		try{						
+			//copy right holder information
+			predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_CONTRIBUTOR);
+			StringBuffer contributorAttributes = new StringBuffer();
+			
+			//id
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributor())){
+				contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_ID);
+				contributorAttributes.append("=");
+				contributorAttributes.append(digitalRightsManagementBean.getContributor());
+				contributorAttributes.append(";");
+			}
+			
+			boolean approved = (!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributorApproved()) 
+					&& "true".equals(digitalRightsManagementBean.getContributorApproved()))?true:false;
+			contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_APPROVED);
+			contributorAttributes.append("=");
+			contributorAttributes.append(approved);
+			contributorAttributes.append(";");
+						
+			//cell phone
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributorCellPhone())){
+				contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_CELL_PHONE);
+				contributorAttributes.append("=");
+				contributorAttributes.append(digitalRightsManagementBean.getContributorCellPhone());
+				contributorAttributes.append(";");
+			}
+			
+			//office phone
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributorOfficePhone())){
+				contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_OFFICE_PHONE);
+				contributorAttributes.append("=");
+				contributorAttributes.append(digitalRightsManagementBean.getContributorOfficePhone());
+				contributorAttributes.append(";");
+			}
+			
+			//FAX
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributorFax())){
+				contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_FAX);
+				contributorAttributes.append("=");
+				contributorAttributes.append(digitalRightsManagementBean.getContributorFax());
+				contributorAttributes.append(";");
+			}
+			
+			//street address
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributorStreetAddress())){
+				contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_STREET_ADDRESS);
+				contributorAttributes.append("=");
+				contributorAttributes.append(digitalRightsManagementBean.getContributorStreetAddress());
+				contributorAttributes.append(";");
+			}
+			
+			//other address
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributorOtherAddress())){
+				contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_OTHER_ADDRESS);
+				contributorAttributes.append("=");
+				contributorAttributes.append(digitalRightsManagementBean.getContributorOtherAddress());
+				contributorAttributes.append(";");
+			}
+			
+			//city
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributorCity())){
+				contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_CITY);
+				contributorAttributes.append("=");
+				contributorAttributes.append(digitalRightsManagementBean.getContributorCity());
+				contributorAttributes.append(";");
+			}
+			
+			//state
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributorState())){
+				contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_STATE);
+				contributorAttributes.append("=");
+				contributorAttributes.append(digitalRightsManagementBean.getContributorState());
+				contributorAttributes.append(";");
+			}
+			
+			//state
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributorZipCode())){
+				contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_ZIP_CODE);
+				contributorAttributes.append("=");
+				contributorAttributes.append(digitalRightsManagementBean.getContributorZipCode());
+				contributorAttributes.append(";");
+			}
+			
+			predicate_value = Node.createLiteral(contributorAttributes.toString());
+			tripleList.add(new Triple(subject, predicate, predicate_value));
 		}catch(Exception ex)
 		{
 			log.error(ex);
@@ -1320,7 +1800,7 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 			
 			//creator
 			if(!Utils.isEmptyOrNull(courseAnnotationBean.getCreator())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_CREATOR);
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_CREATOR);
 				predicate_value = Node.createLiteral(courseAnnotationBean.getCreator());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
@@ -1513,7 +1993,7 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 			    }else if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_TEN_COMMON_HASPART)){
 			    	//hasPart
 			    	courseAnnotationsBean.setHasPart(objectNode.toString());
-			    }else if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_DC_CREATOR)){
+			    }else if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_TEN_CREATOR)){
 			    	//creator
 			    	courseAnnotationsBean.setCreator(objectNode.toString());
 			    }else if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_DC_DESCRIPTION)){

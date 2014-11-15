@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <%@ taglib uri="/struts-tags" prefix="s" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -45,6 +46,10 @@
 				$(obj).append(embed);
 			};
 		}
+		
+		function validateForm(){
+			document.getElementsByTagName("form").submit(); 
+		}
 	</script>
 </head>
 <body>
@@ -77,7 +82,7 @@
 	  		  </div>
 		 </td></tr>
 		 
-		 <tr><td><input type="submit" value="Upload Text" /></td></tr>
+		 <tr><td><input type="submit" value="Upload Text" onclick="validateForm();"/></td></tr>
 	</table>
 	</section>
 	</form>

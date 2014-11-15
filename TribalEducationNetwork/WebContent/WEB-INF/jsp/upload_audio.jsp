@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <%@ taglib uri="/struts-tags" prefix="s" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -46,6 +47,10 @@
 				$(obj).append(source);
 			};
 		}
+		
+		function validateForm(){
+			document.getElementsByTagName("form").submit(); 
+		}
 	</script>
 </head>
 <body>
@@ -77,7 +82,7 @@
 	  		    <%@include file="digital_rights_management.jsp"%>	  		    		 
 			 </div>
 		 </td></tr>
-		 <tr><td><input type="submit" value="Upload Audio" /></td></tr>
+		 <tr><td><input type="submit" value="Upload Audio" onclick="validateForm();"/></td></tr>
 	</table>
 	</section>
 			
