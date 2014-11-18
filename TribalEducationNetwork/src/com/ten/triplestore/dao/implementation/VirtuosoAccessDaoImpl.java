@@ -1268,6 +1268,14 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 					copyRightHolderAttributes.append(";");
 				}
 				
+				//email
+				if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderEmail())){
+					copyRightHolderAttributes.append(TripleStoreConstants.ATTRIBUTE_EMAIL);
+					copyRightHolderAttributes.append("=");
+					copyRightHolderAttributes.append(digitalRightsManagementBean.getCopyRightHolderEmail());
+					copyRightHolderAttributes.append(";");
+				}
+				
 				//copy right holder approved
 				boolean approved = (!Utils.isEmptyOrNull(digitalRightsManagementBean.getCopyRightHolderApproved()) 
 									&& "true".equals(digitalRightsManagementBean.getCopyRightHolderApproved()))?true:false;
@@ -1378,6 +1386,15 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 				publisherAttributes.append(";");
 			}
 			
+			//email
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisherEmail())){
+				publisherAttributes.append(TripleStoreConstants.ATTRIBUTE_EMAIL);
+				publisherAttributes.append("=");
+				publisherAttributes.append(digitalRightsManagementBean.getPublisherEmail());
+				publisherAttributes.append(";");
+			}
+			
+			//approved
 			boolean approved = (!Utils.isEmptyOrNull(digitalRightsManagementBean.getPublisherApproved()) 
 					&& "true".equals(digitalRightsManagementBean.getPublisherApproved()))?true:false;
 			publisherAttributes.append(TripleStoreConstants.ATTRIBUTE_APPROVED);
@@ -1485,6 +1502,15 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 				creatorAttributes.append(";");
 			}
 			
+			//email
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorEmail())){
+				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_EMAIL);
+				creatorAttributes.append("=");
+				creatorAttributes.append(digitalRightsManagementBean.getCreatorEmail());
+				creatorAttributes.append(";");
+			}
+			
+			//approved
 			boolean approved = (!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorApproved()) 
 					&& "true".equals(digitalRightsManagementBean.getCreatorApproved()))?true:false;
 			creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_APPROVED);
@@ -1594,6 +1620,15 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 				contributorAttributes.append(";");
 			}
 			
+			//email
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributorEmail())){
+				contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_EMAIL);
+				contributorAttributes.append("=");
+				contributorAttributes.append(digitalRightsManagementBean.getContributorEmail());
+				contributorAttributes.append(";");
+			}
+						
+			//approved			
 			boolean approved = (!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributorApproved()) 
 					&& "true".equals(digitalRightsManagementBean.getContributorApproved()))?true:false;
 			contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_APPROVED);

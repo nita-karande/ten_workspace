@@ -66,6 +66,8 @@ public interface TripleStoreConstants {
 	
 	public static final String ATTRIBUTE_ID = "id";
 	
+	public static final String ATTRIBUTE_EMAIL = "email";
+	
 	public static final String ATTRIBUTE_APPROVED = "approved";
 		
 	public static final String ATTRIBUTE_CELL_PHONE = "cellNumber";	

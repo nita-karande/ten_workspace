@@ -22,6 +22,7 @@ public class DigitalRightsManagementBean {
 	String copyRightHolderNotAvailable;
 	String copyRightHolderFinderInfo;
 	String copyRightHolderApproved;	
+	String copyRightHolderEmail;
 	String copyRightHolderCellPhone;
 	String copyRightHolderOfficePhone;
 	String copyRightHolderFax;
@@ -34,6 +35,7 @@ public class DigitalRightsManagementBean {
 	//creator related fields
 	String creator;
 	String creatorApproved;
+	String creatorEmail;
 	String creatorCellPhone;
 	String creatorOfficePhone;
 	String creatorFax;
@@ -46,6 +48,7 @@ public class DigitalRightsManagementBean {
 	//publisher related fields
 	String publisher;
 	String publisherApproved;
+	String publisherEmail;
 	String publisherCellPhone;
 	String publisherOfficePhone;
 	String publisherFax;
@@ -58,6 +61,7 @@ public class DigitalRightsManagementBean {
 	//contributor related fields
 	String contributor;
 	String contributorApproved;
+	String contributorEmail;
 	String contributorCellPhone;
 	String contributorOfficePhone;
 	String contributorFax;
@@ -101,6 +105,38 @@ public class DigitalRightsManagementBean {
 
 	public String getHandlingInstructions() {
 		return handlingInstructions;
+	}
+
+	public String getCopyRightHolderEmail() {
+		return copyRightHolderEmail;
+	}
+
+	public void setCopyRightHolderEmail(String copyRightHolderEmail) {
+		this.copyRightHolderEmail = copyRightHolderEmail;
+	}
+
+	public String getCreatorEmail() {
+		return creatorEmail;
+	}
+
+	public void setCreatorEmail(String creatorEmail) {
+		this.creatorEmail = creatorEmail;
+	}
+
+	public String getPublisherEmail() {
+		return publisherEmail;
+	}
+
+	public void setPublisherEmail(String publisherEmail) {
+		this.publisherEmail = publisherEmail;
+	}
+
+	public String getContributorEmail() {
+		return contributorEmail;
+	}
+
+	public void setContributorEmail(String contributorEmail) {
+		this.contributorEmail = contributorEmail;
 	}
 
 	public void setHandlingInstructions(String handlingInstructions) {
