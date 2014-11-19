@@ -2,6 +2,7 @@
 <%@ taglib uri="/struts-tags" prefix="s" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>  
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -53,9 +54,9 @@
 			  </tr>
 			  <tr>
 			  	<td>
-				<object width="100%" height="80%" >
-			  		 <embed src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></embed>
-			  	</object>
+					<object width="100%" height="100%" >
+				  		 <embed src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></embed>
+				  	</object>
 			  	</td>
  		 	  </tr>
  		 	  </c:if>
@@ -65,7 +66,7 @@
 		  		    <%@include file="ten_annotations.jsp"%>	  		    		 
 				 </div>
 			   </td>
- 			  </tr> 			  	 		  			 	
+ 			  </tr>	  	 		  			 	
   			 </c:otherwise>
   		</c:choose>		
 	</table>
