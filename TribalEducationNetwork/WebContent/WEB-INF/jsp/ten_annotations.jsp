@@ -2,7 +2,7 @@
 <table style="width:100%">
 	<tr><td width='50%'>Date of annotation</td><td width='50%'><input type="text" name="tenLearningObjectAnnotationsBean.date" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${date}" />'/></td><td><div title="${'Date of annotation in YYYY-MM-DD format'}" >  ?</div></td></tr>
 	<tr><td>Format</td><td> <input type="text" id="format" name="tenLearningObjectAnnotationsBean.format" value="${learningObjectDetailsBean.fileType}"/></td><td><div title="${'The physical or digital manifestation of the resource'}" >  ?</div></td></tr>
-	<tr><td>Identifier </td><td><input type="text" name="tenLearningObjectAnnotationsBean.identifier" /></td><td><div title="${'An unambiguous reference to the resource within a given context eg. the Digital Object Identifier (DOI)'}" >  ?</div></td></tr>
+	<!-- <tr><td>Identifier </td><td><input type="text" name="tenLearningObjectAnnotationsBean.identifier" /></td><td><div title="${'An unambiguous reference to the resource within a given context eg. the Digital Object Identifier (DOI)'}" >  ?</div></td></tr> -->
 	<tr><td width='50%'>Annotator </td><td width='50%'><input type="text" name="tenLearningObjectAnnotationsBean.annotator" readonly value="${sessionScope.user_details.user_name}"/></td><td><div title="${'Entity responsible for annotating the content'}" >  ?</div></td></tr>
 	<c:if test="${objectType == 'Image'}">
 	 <tr><td>Type</td>
