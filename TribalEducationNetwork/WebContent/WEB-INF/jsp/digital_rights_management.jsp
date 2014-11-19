@@ -75,7 +75,7 @@
 	<tr><td><br></td></tr>	
 	<tr>
 		<td><b>Creator Information</b></td>
-		<td class="copyRightHolderData">Same as <input type="checkbox" name="creatorSameAs" value="copyrightHolder" onclick="copyValues(this,'copyRightHolder','creator');"/> Copyright Holder</td>
+		<td class="copyRightHolderData">Copy values from <input type="checkbox" name="creatorSameAs" value="copyrightHolder" onclick="copyValues(this,'copyRightHolder','creator');"/> Copyright Holder</td>
 	</tr>
 	<tr>
 		<td>Creator Name</td><td><div title="${'An entity primarily responsible for creating the content of the resource'}" ><input type="text" id="creatorId" name="digitalRightsManagementBean.creator" />  ?</div></td>
@@ -115,7 +115,7 @@
 	<tr><td><br></td></tr>	
 	<tr>
 		<td><b>Publisher Information</b></td>
-		<td>Same as <input type="checkbox" name="publisherSameAs" value="creator" onclick="copyValues(this,'creator','publisher');"/> Creator</td>
+		<td>Copy values from <input type="checkbox" name="publisherSameAs" value="creator" onclick="copyValues(this,'creator','publisher');"/> Creator</td>
 	</tr>
 	<tr>
 		<td>Publisher Name</td>
@@ -157,7 +157,7 @@
 	<tr><td><br></td></tr>	
 	<tr>
 		<td><b>Contributor Information</b></td>
-		<td>Same as <input type="checkbox" name="contributorSameAs" value="publisher" onclick="copyValues(this,'publisher','contributor');"/> Publisher</td>
+		<td>Copy values from <input type="checkbox" name="contributorSameAs" value="publisher" onclick="copyValues(this,'publisher','contributor');"/> Publisher</td>
 	</tr>	
 	<tr>
 		<td>Contributor Name</td>
