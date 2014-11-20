@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 
@@ -31,6 +32,9 @@ public class UploadImageAction extends ActionSupport{
     private String fileName;
     private DigitalRightsManagementBean digitalRightsManagementBean;
     Date date;
+    private String creatorSameAs;
+    private String contributorSameAs;
+    private String publisherSameAs;
         
     public void setUpload(File file) {
        this.file = file;
@@ -71,6 +75,30 @@ public class UploadImageAction extends ActionSupport{
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public String getCreatorSameAs() {
+		return creatorSameAs;
+	}
+
+	public void setCreatorSameAs(String creatorSameAs) {
+		this.creatorSameAs = creatorSameAs;
+	}
+
+	public String getContributorSameAs() {
+		return contributorSameAs;
+	}
+
+	public void setContributorSameAs(String contributorSameAs) {
+		this.contributorSameAs = contributorSameAs;
+	}
+
+	public String getPublisherSameAs() {
+		return publisherSameAs;
+	}
+
+	public void setPublisherSameAs(String publisherSameAs) {
+		this.publisherSameAs = publisherSameAs;
 	}
 
 	/**

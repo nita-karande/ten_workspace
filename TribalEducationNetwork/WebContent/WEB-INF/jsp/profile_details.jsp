@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 	
 	<!-- Stylesheets -->
-	<link rel="stylesheet" type="text/css" href="css/page_layout.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/page_layout.css">
 	
 	<title>Tribal Education Network Student profile page</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -17,8 +17,9 @@
 </head>
 <body>
 	<form action="${pageContext.request.contextPath}/view/profiledetails.action" method="post" enctype="multipart/form-data">
-	<%@include file="include_header.jsp"%>
-	
+	<header>
+		<%@include file="include_header.jsp"%>
+	</header>
 	<section>
 	<table>
 		<tr><td>
@@ -47,7 +48,7 @@
 					<option value="Fr" <c:if test="${studentAnnotationsBean.preferredLanguage == 'Fr'}">selected</c:if>>Fr</option>
 				</select>
 		     </td></tr>
- 		 <tr><td>Preferred Learning Object Type </td>
+ 		 <tr><td>Preferred Learning Object Type</td>
 			 <td>
 				<select name="studentAnnotationsBean.preferredLearningObjectType">
 					<option value="" <c:if test="${studentAnnotationsBean.preferredLearningObjectType == ''}">selected</c:if>></option>

@@ -31,6 +31,9 @@ public class UploadAudioAction extends ActionSupport{
     private String fileName;
     private DigitalRightsManagementBean digitalRightsManagementBean;
     private Date date;
+    private String creatorSameAs;
+    private String contributorSameAs;
+    private String publisherSameAs;
         
     public DigitalRightsManagementBean getDigitalRightsManagementBean() {
 		return digitalRightsManagementBean;
@@ -71,6 +74,30 @@ public class UploadAudioAction extends ActionSupport{
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public String getCreatorSameAs() {
+		return creatorSameAs;
+	}
+
+	public void setCreatorSameAs(String creatorSameAs) {
+		this.creatorSameAs = creatorSameAs;
+	}
+
+	public String getContributorSameAs() {
+		return contributorSameAs;
+	}
+
+	public void setContributorSameAs(String contributorSameAs) {
+		this.contributorSameAs = contributorSameAs;
+	}
+
+	public String getPublisherSameAs() {
+		return publisherSameAs;
+	}
+
+	public void setPublisherSameAs(String publisherSameAs) {
+		this.publisherSameAs = publisherSameAs;
 	}
 
 	/**

@@ -7,9 +7,6 @@
 <head>
 	<meta charset="UTF-8">
 	
-	<!-- Stylesheets -->
-	<link rel="stylesheet" type="text/css" href="css/page_layout.css">
-	
 	<title>Tribal Education Network Annotate Image main page</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>
@@ -18,7 +15,7 @@
 		}
 	</script>
 </head>
-<body>
+<body style="background-image: url('${pageContext.request.contextPath}/images/background_annotator.jpg');background-attachment: fixed; background-position: right; background-repeat:no-repeat">
 	<form name="annotateImageForm" id="annotateImageMainForm" action="${pageContext.request.contextPath}/annotate/annotateimage.action" method="post" enctype="multipart/form-data">
 	<%@include file="include_header.jsp"%>
 	
@@ -39,7 +36,7 @@
 		</td></tr>
 	</table>
 	
-	<table>
+	<table style="width:700px">
 		 <tr><td>Annotate image</td></tr>
   		  <c:choose>
 	  		  <c:when test="${(actionType == 'display') && (requestScope.learningObjectDetailsBean == null)}">
@@ -50,14 +47,13 @@
 	 		  <c:if test="${(requestScope.learningObjectDetailsBean != null)}">
 		 		  <tr>
 					<td>Image Preview</td>
-					<td></td>
-				  </tr>
+				 </tr>
 				  <tr>
-					<td><img src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" width="100%" height="100%"/></td>
+					<td><img src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" /></td>
 	 		 	  </tr>
 	 		  </c:if>
  			  <tr>
-				<td colspan="2">
+				<td>
 		  		 <div id="annotations_div">
 		  		    <%@include file="ten_annotations.jsp"%>	  		    		 
 				 </div>

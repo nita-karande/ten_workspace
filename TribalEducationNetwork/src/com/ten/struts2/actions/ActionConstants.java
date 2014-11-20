@@ -5,6 +5,14 @@ package com.ten.struts2.actions;
  * This class contains constants used in action classes
  */
 public interface ActionConstants {
+	public static final String PATH_IMAGES = "C:/TEN/UploadedImages/";
+	
+	public static final String PATH_AUDIO = "C:/TEN/UploadedAudios/";
+	
+	public static final String PATH_VIDEOS = "C:/TEN/UploadedVideos/";
+	
+	public static final String PATH_TEXT = "C:/TEN/UploadedText/";
+	
 	public static final String ROLE_INTAKER = "intaker";
 	
 	public static final String ROLE_ANNOTATOR = "annotator";

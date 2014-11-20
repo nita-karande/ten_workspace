@@ -2,15 +2,43 @@
 	function onCopyRightHolderChange(cb){
 		if (cb.checked){
 			cb.value = "true";
-			document.getElementById("copyRightHolderId").value = "";
 			$("#copyRightHolderFinderInfo_div").show();
 			$(".copyRightHolderData").hide();
+			resetValues('copyRightHolder');
+			document.getElementById("copyRightHolderApproved").value = "";
+			
 		}else{
 			cb.value = "false";
 			$("#copyRightHolderFinderInfo_div").hide();
-			$("#copyRightHolderFinderInfo").value = "";
+			document.getElementById("copyRightHolderFinderInfo").value = "";
 			$(".copyRightHolderData").show();
 		}
+	}
+	
+	function onStoryProvidedChange(cb){
+		if (cb.checked){
+			cb.value = "true";
+			$(".storyClass").show();
+		}else{
+			cb.value = "false";
+			document.getElementById("storyId").value = "";
+			document.getElementById("storyContext").value = "";
+			resetValues('storyProvider');
+			$(".storyClass").hide();
+		}
+	}
+	
+	function resetValues(field){
+		document.getElementById(field + 'Id').value = "";
+		document.getElementById(field + 'Email').value = "";
+		document.getElementById(field + 'CellPhone').value = "";
+		document.getElementById(field + 'OfficePhone').value = "";
+		document.getElementById(field + 'Fax').value = "";
+		document.getElementById(field + 'StreetAddress').value = "";
+		document.getElementById(field + 'OtherAddress').value = "";
+		document.getElementById(field + 'City').value = "";
+		document.getElementById(field + 'State').value = "";
+		document.getElementById(field + 'ZipCode').value = "";
 	}
 	
 	function copyValues(cb,from, to){
@@ -30,16 +58,16 @@
 </script>
 <table style="width:100%"> 
 	<tr>
-		<td><b>Copyright Holder Information</b></td>
+		<td style="width:40%"><b>Copyright Holder Information</b></td>
 		<td><input type="checkbox" name="digitalRightsManagementBean.copyRightHolderNotAvailable" onchange="onCopyRightHolderChange(this)"/>
 		 Copyright holder contact information not available</td>
 	</tr>
 	<tr class="copyRightHolderData">
 		<td>Copyright Holder Name</td>
-		<td><div title="${'An entity which is the owner of the resource'}"><input type="text" id="copyRightHolderId" name="digitalRightsManagementBean.copyRightHolderId" />  ?</div></td>
+		<td><div title="${'An entity which is the copyright holder of the resource e.g. author of the article, creator of artifact, photographer of a picture or artist of a structure'}"><input type="text" id="copyRightHolderId" name="digitalRightsManagementBean.copyRightHolderId" />  ?</div></td>
 	</tr>
 	<tr id="copyRightHolderFinderInfo_div" style="display:none;">
-		<td>Finding information</td><td><div title="${'Information that can help in finding the copyright holder'}" ><input type="text" name="digitalRightsManagementBean.copyRightHolderFinderInfo" id ="copyRightHolderFinderInfo" />  ?</div></td>
+		<td>Potential copy right holder information</td><td><div title="${'Information that can help in finding the potential copyright holder'}" ><input type="text" name="digitalRightsManagementBean.copyRightHolderFinderInfo" id ="copyRightHolderFinderInfo" />  ?</div></td>
 	</tr>
 	<tr class="copyRightHolderData">
 		<td>Email </td><td><input type="text" id="copyRightHolderEmail" name="digitalRightsManagementBean.copyRightHolderEmail" /></td>
@@ -69,57 +97,18 @@
 		<td>Zip Code</td><td><input type="text" id="copyRightHolderZipCode" name="digitalRightsManagementBean.copyRightHolderZipCode" /></td>
 	</tr>
 	<tr class="copyRightHolderData">
-		<td>Copyright Holder approved</td>
+		<td>Copyright Holder approved for use</td>
 		<td><input type="checkbox" name="digitalRightsManagementBean.copyRightHolderApproved" value="true"/></td>
-	</tr>
-	<tr><td><br></td></tr>	
-	<tr>
-		<td><b>Creator Information</b></td>
-		<td class="copyRightHolderData">Copy values from <input type="checkbox" name="creatorSameAs" value="copyrightHolder" onclick="copyValues(this,'copyRightHolder','creator');"/> Copyright Holder</td>
-	</tr>
-	<tr>
-		<td>Creator Name</td><td><div title="${'An entity primarily responsible for creating the content of the resource'}" ><input type="text" id="creatorId" name="digitalRightsManagementBean.creator" />  ?</div></td>
-	</tr>
-	<tr >
-		<td>Email </td><td><input type="text" id="creatorEmail" name="digitalRightsManagementBean.creatorEmail" /></td>
-	</tr>
-	<tr>
-		<td>Cell Phone</td><td><input type="text" id="creatorCellPhone" name="digitalRightsManagementBean.creatorCellPhone" /></td>
-	</tr>
-	<tr>
-		<td>Office Phone</td><td><input type="text" id="creatorOfficePhone" name="digitalRightsManagementBean.creatorOfficePhone" /></td>
-	</tr>
-	<tr>
-		<td>Fax</td><td><input type="text" id="creatorFax" name="digitalRightsManagementBean.creatorFax" /></td>
-	</tr>
-	<tr>
-		<td>Street Address</td><td><input type="text" id="creatorStreetAddress" name="digitalRightsManagementBean.creatorStreetAddress" /></td>
-	</tr>
-	<tr>
-		<td>Apt/Suite/Other</td><td><input type="text" id="creatorOtherAddress" name="digitalRightsManagementBean.creatorOtherAddress" /></td>
-	</tr>
-	<tr>
-		<td>City</td><td><input type="text" id="creatorCity" name="digitalRightsManagementBean.creatorCity" /></td>
-	</tr>
-	<tr>
-		<td>State</td><td><input type="text" id="creatorState" name="digitalRightsManagementBean.creatorState" /></td>
-	</tr>
-	<tr>
-		<td>Zip Code</td><td><input type="text" id="creatorZipCode" name="digitalRightsManagementBean.creatorZipCode" /></td>
 	</tr>	
-	<tr>
-		<td>Creator approved</td>
-		<td><input type="checkbox" name="digitalRightsManagementBean.creatorApproved" value="true"/></td>
-	</tr>
-	
+		
 	<tr><td><br></td></tr>	
 	<tr>
 		<td><b>Publisher Information</b></td>
-		<td>Copy values from <input type="checkbox" name="publisherSameAs" value="creator" onclick="copyValues(this,'creator','publisher');"/> Creator</td>
+		<td>Copy values from <input type="checkbox" name="publisherSameAs" value="copyRightHolder" onclick="copyValues(this,'copyRightHolder','publisher');"/> Copy Right Holder</td>
 	</tr>
 	<tr>
 		<td>Publisher Name</td>
-		<td><div title="${'The entity holding publishing rights and responsible for making the resource available'}" ><input type="text" id="publisherId" name="digitalRightsManagementBean.publisher" />  ?</div></td>
+		<td><div title="${'The entity holding publishing rights e.g. publisher of book to which the given artifact belongs '}" ><input type="text" id="publisherId" name="digitalRightsManagementBean.publisher" />  ?</div></td>
 	</tr>
 	<tr>
 		<td>Email </td><td><input type="text" id="publisherEmail" name="digitalRightsManagementBean.publisherEmail" /></td>
@@ -152,16 +141,16 @@
 		<td>Publisher approved</td>
 		<td><input type="checkbox" name="digitalRightsManagementBean.publisherApproved" value="true"/></td>
 	</tr>	
-	
-		
+
 	<tr><td><br></td></tr>	
 	<tr>
 		<td><b>Contributor Information</b></td>
-		<td>Copy values from <input type="checkbox" name="contributorSameAs" value="publisher" onclick="copyValues(this,'publisher','contributor');"/> Publisher</td>
+		<td>Copy values from <input type="radio" name="contributorSameAs" value="copyRightHolder" onclick="copyValues(this,'copyRightHolder','contributor');"/> Copy Right Holder
+		<input type="radio" name="contributorSameAs" value="publisher" onclick="copyValues(this,'publisher','contributor');"/> Publisher</td>
 	</tr>	
 	<tr>
 		<td>Contributor Name</td>
-		<td><div title="${'An entity responsible for providing the resource'}" ><input type="text" id="contributorId" name="digitalRightsManagementBean.contributor" />  ?</div></td>
+		<td><div title="${'An entity responsible for providing the resource or making aware obout the artifact or handing artifact'}" ><input type="text" id="contributorId" name="digitalRightsManagementBean.contributor" />  ?</div></td>
 	</tr>
 	<tr>
 		<td>Email </td><td><input type="text" id="contributorEmail" name="digitalRightsManagementBean.contributorEmail" /></td>
@@ -191,10 +180,9 @@
 		<td>Zip Code</td><td><input type="text" id="contributorZipCode" name="digitalRightsManagementBean.contributorZipCode" /></td>
 	</tr>
 	<tr>
-		<td>Contributor approved</td>
-		<td><input type="checkbox" name="digitalRightsManagementBean.contributorApproved" value="true"/></td>
-	</tr>	
-	
+		<td>Tribal Affiliation</td><td><input type="text" id="contributorTribalAffiliation" name="digitalRightsManagementBean.contributorTribalAffiliation" /></td>
+	</tr>
+			
 	<tr><td><br></td></tr>	
 	<tr><td>Physical Description</td><td><div title="${'The description of the artifact'}" ><input type="text" id="physicalDescriptionId" name="digitalRightsManagementBean.physicalDescription" />  ?</div></td></tr>
 	
@@ -221,7 +209,47 @@
 	
 	<tr><td><br></td></tr>
 	<tr>
-		<td colspan="5"><input type="checkbox" name="digitalRightsManagementBean.storyProvided" value="true"/>
-		 Story provided with the artifact </td>
+		<td>Story provided with the artifact</td><td> <input type="checkbox" name="digitalRightsManagementBean.storyProvided" value="true" onchange="onStoryProvidedChange(this)"/></td>
+	</tr>
+	<tr class="storyClass" style="display:none;"><td>Story </td><td><div title="${'Story provided by tribe with the artifact'}"><textarea id="storyId" name="digitalRightsManagementBean.story" rows="4"></textarea>  ?</div></td>
+	</tr>
+	<tr class="storyClass" style="display:none;"><td>Story context </td><td><div title="${'Story provided by tribe in which formate e.g. as a recording, on paper, audio'}"><input type="text" id="storyContext" name="digitalRightsManagementBean.storyContext" />  ?</div></td>
+	</tr>
+	
+	<tr><td><br></td></tr>
+	<tr class="storyClass"  style="display:none;">
+		<td><b>Story Provider Information</b></td>
+		<td>Copy values from <input type="checkbox" name="storyProviderSameAs" value="contributor" onclick="copyValues(this,'contributor','storyProvider');"/> Contributor</td>
+	</tr>
+	<tr class="storyClass"  style="display:none;">
+		<td>Story Provider Name</td>
+		<td><div title="${'An entity which provided the story with the resource'}"><input type="text" id="storyProviderId" name="digitalRightsManagementBean.storyProvider" />  ?</div></td>
+	</tr>
+	<tr class="storyClass"  style="display:none;">
+		<td>Email </td><td><input type="text" id="storyProviderEmail" name="digitalRightsManagementBean.storyProviderEmail" /></td>
+	</tr>
+	<tr class="storyClass"  style="display:none;">
+		<td>Cell Phone </td><td><input type="text" id="storyProviderCellPhone" name="digitalRightsManagementBean.storyProviderCellPhone" /></td>
+	</tr>
+	<tr class="storyClass"  style="display:none;">
+		<td>Office Phone </td><td><input type="text" id="storyProviderOfficePhone" name="digitalRightsManagementBean.storyProviderOfficePhone" /></td>
+	</tr>
+	<tr class="storyClass"  style="display:none;">
+		<td>Fax </td><td><input type="text" id="storyProviderFax" name="digitalRightsManagementBean.storyProviderFax" /></td>
+	</tr>
+	<tr class="storyClass"  style="display:none;">
+		<td>Street Address</td><td><input type="text" id="storyProviderStreetAddress" name="digitalRightsManagementBean.storyProviderStreetAddress" /></td>
+	</tr>
+	<tr class="storyClass"  style="display:none;">
+		<td>Apt/Suite/Other</td><td><input type="text" id="storyProviderOtherAddress" name="digitalRightsManagementBean.storyProviderOtherAddress" /></td>
+	</tr>
+	<tr class="storyClass"  style="display:none;">
+		<td>City</td><td><input type="text" id="storyProviderCity" name="digitalRightsManagementBean.storyProviderCity" /></td>
+	</tr>
+	<tr class="storyClass"  style="display:none;">
+		<td>State</td><td><input type="text" id="storyProviderState" name="digitalRightsManagementBean.storyProviderState" /></td>
+	</tr>
+	<tr class="storyClass"  style="display:none;">
+		<td>Zip Code</td><td><input type="text" id="storyProviderZipCode" name="digitalRightsManagementBean.storyProviderZipCode" /></td>
 	</tr>
 </table>

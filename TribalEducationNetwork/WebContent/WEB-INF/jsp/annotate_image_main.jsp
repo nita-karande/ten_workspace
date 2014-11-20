@@ -5,9 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	
-	<!-- Stylesheets -->
-	<link rel="stylesheet" type="text/css" href="css/page_layout.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/page_layout.css">
 	
 	<title>Tribal Education Network Annotate Image main page</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -18,7 +16,7 @@
 		}
 	</script>
 </head>
-<body>
+<body style="background-image: url('${pageContext.request.contextPath}/images/background_annotator.jpg');background-attachment: fixed; background-position: right; background-repeat:no-repeat">
 	<form name="annotateImageMainForm" id="annotateImageMainForm" action="${pageContext.request.contextPath}/annotate/annotateimage.action" method="post" enctype="multipart/form-data">
 	<%@include file="include_header.jsp"%>
 	
@@ -52,9 +50,9 @@
   			 		 </tr>
   			 	</c:forEach>
   			 </c:otherwise>
-  		</c:choose>
-		
+  		</c:choose>  				
 	</table>
+	
 	</section>
 	<input type="hidden" id="learningObjectId" name="learningObjectId" value=""/>
 	<input type="hidden" id="actionType" name="actionType" value="display"/>	

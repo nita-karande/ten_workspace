@@ -28,6 +28,7 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.ten.beans.CourseAnnotationsBean;
 import com.ten.beans.DigitalRightsManagementBean;
+import com.ten.beans.LearningObjectBean;
 import com.ten.beans.StudentAnnotationsBean;
 import com.ten.beans.TenLearningObjectAnnotationsBean;
 import com.ten.triplestore.dao.interfaces.TriplestoreAccessDaoInterface;
@@ -298,7 +299,7 @@ public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 	        //exclude type predicate
 	        sparqlQueryString.append(" && (?predicate != rdf:type)");
 	        
-	        //add filter for ann search terms
+	        //add filter for and search terms
 	        if((andSearchTerms != null) && (andSearchTerms.size()>0)){
 	        	i=0;
 	        	sparqlQueryString.append(" && ");
@@ -306,7 +307,7 @@ public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 		        	sparqlQueryString.append("(regex(?object, \"");
 		        	sparqlQueryString.append(searchTerm);
 		        	sparqlQueryString.append("\", \"i\"))");
-		        	//if this is not the last element add ||
+		        	//if this is not the last element add &&
 		        	if(i != (andSearchTerms.size()-1)){
 		        		sparqlQueryString.append(" && ");
 		        	}
@@ -930,11 +931,9 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 			
 			tripleList.addAll(addCopyRightHolderAnnotationTriples(subject, digitalRightsManagementBean));
 			
-			tripleList.addAll(addCreatorAnnotationTriples(subject, digitalRightsManagementBean));
-			
 			tripleList.addAll(addPublisherAnnotationTriples(subject, digitalRightsManagementBean));
 			
-			tripleList.addAll(addContributorAnnotationTriples(subject, digitalRightsManagementBean));
+			tripleList.addAll(addContributorAnnotationTriples(subject, digitalRightsManagementBean));			
 						
 		}catch(Exception ex)
 		{
@@ -1209,11 +1208,29 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 			}			
 			
 			//Story provided
-			boolean approved = (!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProvided()) 
+			boolean storyProvided = (!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProvided()) 
 					&& "true".equals(digitalRightsManagementBean.getStoryProvided()))?true:false;
 			predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_STORY_PROVIDED);
-			predicate_value = Node.createLiteral(String.valueOf(approved));
+			predicate_value = Node.createLiteral(String.valueOf(storyProvided));
 			tripleList.add(new Triple(subject, predicate, predicate_value));
+			
+			//story
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getStory())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_STORY);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getStory());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}	
+			
+			//story context
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryContext())){
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_STORY_CONTEXT);
+				predicate_value = Node.createLiteral(digitalRightsManagementBean.getStoryContext());
+				tripleList.add(new Triple(subject, predicate, predicate_value));
+			}	
+			
+			if(storyProvided){
+				tripleList.addAll(addStoryProviderAnnotationTriples(subject, digitalRightsManagementBean));
+			}
 					
 		}catch(Exception ex)
 		{
@@ -1374,7 +1391,7 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 		ArrayList<Triple> tripleList = new ArrayList<>();
 		Node predicate = null, predicate_value=null;
 		try{						
-			//copy right holder information
+			//PUBLISHER information
 			predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_PUBLISHER);
 			StringBuffer publisherAttributes = new StringBuffer();
 			
@@ -1467,6 +1484,114 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 			}
 			
 			predicate_value = Node.createLiteral(publisherAttributes.toString());
+			tripleList.add(new Triple(subject, predicate, predicate_value));
+		}catch(Exception ex)
+		{
+			log.error(ex);
+			throw ex;
+		}finally{
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}
+		
+		return tripleList;
+	}
+	
+	/**
+	 * Add story provider annotation triples
+	 */
+	public ArrayList<Triple> addStoryProviderAnnotationTriples(Node subject ,DigitalRightsManagementBean digitalRightsManagementBean){
+		
+		String LOG_METHOD_NAME = " ArrayList<Triple> addStoryProviderAnnotationTriples(Node, DigitalRightsManagementBean)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		
+		ArrayList<Triple> tripleList = new ArrayList<>();
+		Node predicate = null, predicate_value=null;
+		try{						
+			//copy right holder information
+			predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_STORY_PROVIDER);
+			StringBuffer storyProviderAttributes = new StringBuffer();
+			
+			//id
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProvider())){
+				storyProviderAttributes.append(TripleStoreConstants.ATTRIBUTE_ID);
+				storyProviderAttributes.append("=");
+				storyProviderAttributes.append(digitalRightsManagementBean.getStoryProvider());
+				storyProviderAttributes.append(";");
+			}
+			
+			//email
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProviderEmail())){
+				storyProviderAttributes.append(TripleStoreConstants.ATTRIBUTE_EMAIL);
+				storyProviderAttributes.append("=");
+				storyProviderAttributes.append(digitalRightsManagementBean.getStoryProviderEmail());
+				storyProviderAttributes.append(";");
+			}
+			
+			//cell phone
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProviderCellPhone())){
+				storyProviderAttributes.append(TripleStoreConstants.ATTRIBUTE_CELL_PHONE);
+				storyProviderAttributes.append("=");
+				storyProviderAttributes.append(digitalRightsManagementBean.getStoryProviderCellPhone());
+				storyProviderAttributes.append(";");
+			}
+			
+			//office phone
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProviderOfficePhone())){
+				storyProviderAttributes.append(TripleStoreConstants.ATTRIBUTE_OFFICE_PHONE);
+				storyProviderAttributes.append("=");
+				storyProviderAttributes.append(digitalRightsManagementBean.getStoryProviderOfficePhone());
+				storyProviderAttributes.append(";");
+			}
+			
+			//FAX
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProviderFax())){
+				storyProviderAttributes.append(TripleStoreConstants.ATTRIBUTE_FAX);
+				storyProviderAttributes.append("=");
+				storyProviderAttributes.append(digitalRightsManagementBean.getStoryProviderFax());
+				storyProviderAttributes.append(";");
+			}
+			
+			//street address
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProviderStreetAddress())){
+				storyProviderAttributes.append(TripleStoreConstants.ATTRIBUTE_STREET_ADDRESS);
+				storyProviderAttributes.append("=");
+				storyProviderAttributes.append(digitalRightsManagementBean.getStoryProviderStreetAddress());
+				storyProviderAttributes.append(";");
+			}
+			
+			//other address
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProviderOtherAddress())){
+				storyProviderAttributes.append(TripleStoreConstants.ATTRIBUTE_OTHER_ADDRESS);
+				storyProviderAttributes.append("=");
+				storyProviderAttributes.append(digitalRightsManagementBean.getStoryProviderOtherAddress());
+				storyProviderAttributes.append(";");
+			}
+			
+			//city
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProviderCity())){
+				storyProviderAttributes.append(TripleStoreConstants.ATTRIBUTE_CITY);
+				storyProviderAttributes.append("=");
+				storyProviderAttributes.append(digitalRightsManagementBean.getStoryProviderCity());
+				storyProviderAttributes.append(";");
+			}
+			
+			//state
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProviderState())){
+				storyProviderAttributes.append(TripleStoreConstants.ATTRIBUTE_STATE);
+				storyProviderAttributes.append("=");
+				storyProviderAttributes.append(digitalRightsManagementBean.getStoryProviderState());
+				storyProviderAttributes.append(";");
+			}
+			
+			//state
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getStoryProviderZipCode())){
+				storyProviderAttributes.append(TripleStoreConstants.ATTRIBUTE_ZIP_CODE);
+				storyProviderAttributes.append("=");
+				storyProviderAttributes.append(digitalRightsManagementBean.getStoryProviderZipCode());
+				storyProviderAttributes.append(";");
+			}
+			
+			predicate_value = Node.createLiteral(storyProviderAttributes.toString());
 			tripleList.add(new Triple(subject, predicate, predicate_value));
 		}catch(Exception ex)
 		{
@@ -1697,6 +1822,14 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 				contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_ZIP_CODE);
 				contributorAttributes.append("=");
 				contributorAttributes.append(digitalRightsManagementBean.getContributorZipCode());
+				contributorAttributes.append(";");
+			}
+			
+			//tribal affiliation
+			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getContributorTribalAffiliation())){
+				contributorAttributes.append(TripleStoreConstants.ATTRIBUTE_TRIBAL_AFFILIATION);
+				contributorAttributes.append("=");
+				contributorAttributes.append(digitalRightsManagementBean.getContributorTribalAffiliation());
 				contributorAttributes.append(";");
 			}
 			
@@ -2223,5 +2356,67 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
 		}
 		return;		
+	}
+
+	@Override
+	public ArrayList<LearningObjectBean> removeItemsWithoutStory(
+			ArrayList<LearningObjectBean> learningObjects, String learningObjectType) throws Exception {
+		String LOG_METHOD_NAME = "ArrayList<LearningObjectBean> removeItemsWithoutStory(ArrayList<LearningObjectBean>)";
+		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
+		ArrayList<LearningObjectBean> returnList = new ArrayList<>();
+		
+		try{		
+			//STEP 1 - Connect to virtuoso database
+			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
+			
+			for (int i=0; i<learningObjects.size(); i++){
+				
+				LearningObjectBean learningObject = learningObjects.get(i);
+				StringBuffer sparqlQueryString = new StringBuffer();
+				sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_ONTOLOGY);
+				sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_IMAGE);
+				sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_AUDIO);
+				sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_VIDEO);
+				sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_TEXT);
+				sparqlQueryString.append(TripleStoreConstants.PREFIX_RDF);
+				sparqlQueryString.append(TripleStoreConstants.PREFIX_DUBLIN_CORE);
+				sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_STUDENT);
+				
+				sparqlQueryString.append(" SELECT ?object ");
+				sparqlQueryString.append(" WHERE { ");
+				sparqlQueryString.append("<" + learningObjectType + learningObject.getId() + ">");
+				sparqlQueryString.append(" <" + TripleStoreConstants.URI_PREDICATE_TEN_STORY_PROVIDED  + "> ?object .");			
+				sparqlQueryString.append(" }");
+				
+				log.debug("SEARCH QUERY:  " + sparqlQueryString.toString());
+				
+				//STEP 2 - Create query
+				Query sparql = QueryFactory.create(sparqlQueryString.toString());
+				
+				VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql, graph);
+		
+				//STEP 3 - Execute
+				ResultSet results = vqe.execSelect();
+				boolean storyProvided = false;
+				while (results.hasNext()) {
+					QuerySolution result = results.nextSolution();
+				    RDFNode objectNode = result.get("object");
+				    log.debug(graph + " { " +  objectNode + "  }");	     
+				    if("true".equalsIgnoreCase(objectNode.toString())){
+				    	storyProvided = true;
+				    }
+				}
+				
+				if(storyProvided){
+					returnList.add(learningObject);
+				}
+			}
+		}catch (Exception ex) {
+			log.error(ex);
+			throw ex;
+		}finally{			
+			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
+		}
+		return returnList;
 	}
 }

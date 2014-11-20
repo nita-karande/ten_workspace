@@ -30,8 +30,35 @@ public class UploadTextAction extends ActionSupport{
     private String fileName;
     private DigitalRightsManagementBean digitalRightsManagementBean;
     private Date date;
+    private String creatorSameAs;
+    private String contributorSameAs;
+    private String publisherSameAs;
         
-    public void setUpload(File file) {
+    public String getCreatorSameAs() {
+		return creatorSameAs;
+	}
+
+	public void setCreatorSameAs(String creatorSameAs) {
+		this.creatorSameAs = creatorSameAs;
+	}
+
+	public String getContributorSameAs() {
+		return contributorSameAs;
+	}
+
+	public void setContributorSameAs(String contributorSameAs) {
+		this.contributorSameAs = contributorSameAs;
+	}
+
+	public String getPublisherSameAs() {
+		return publisherSameAs;
+	}
+
+	public void setPublisherSameAs(String publisherSameAs) {
+		this.publisherSameAs = publisherSameAs;
+	}
+
+	public void setUpload(File file) {
        this.file = file;
     }
 

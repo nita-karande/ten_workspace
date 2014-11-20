@@ -7,9 +7,6 @@
 <head>
 	<meta charset="UTF-8">
 	
-	<!-- Stylesheets -->
-	<link rel="stylesheet" type="text/css" href="css/page_layout.css">
-	
 	<title>Tribal Education Network Annotate Video page</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>
@@ -18,7 +15,7 @@
 		}
 	</script>
 </head>
-<body>
+<body style="background-image: url('${pageContext.request.contextPath}/images/background_annotator.jpg');background-attachment: fixed; background-position: right; background-repeat:no-repeat">
 	<form name="annotateVideoForm" id="annotateVideoMainForm" action="${pageContext.request.contextPath}/annotate/annotatevideo.action" method="post" enctype="multipart/form-data">
 	<%@include file="include_header.jsp"%>
 	
@@ -39,7 +36,7 @@
 		</td></tr>
 	</table>
 	
-	<table>
+	<table style="width:700px">
 		 <tr><td>Annotate Video</td></tr>
   		  <c:choose>
 	  		 <c:when test="${(actionType == 'display') && (requestScope.learningObjectDetailsBean == null)}">
@@ -54,7 +51,7 @@
 			  </tr>
 			  <tr>
 			  	<td>
-			  		<video width="100%" height="80%" controls>
+			  		<video width="auto" height="auto" controls>
 			  			 <source src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></source>
 			  		</video>
 			  	</td>				
@@ -66,7 +63,8 @@
 		  		    <%@include file="ten_annotations.jsp"%>	  		    		 
 				 </div>
 			   </td>
- 			  </tr>		 		  			 	
+ 			  </tr>		
+ 			  <tr><td><input type="submit" value="Annotate Video"/></td></tr> 		  			 	
   			 </c:otherwise>
   		</c:choose>		
 	</table>

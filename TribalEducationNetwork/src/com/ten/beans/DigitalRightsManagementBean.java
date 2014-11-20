@@ -16,14 +16,16 @@ public class DigitalRightsManagementBean {
 	String intaker;
 	String dateOfUpload; //date of upload
 	String storyProvided;
+	String story;
+	String storyContext;
 	
 	//copy right holder related fields
 	String copyRightHolderId;
 	String copyRightHolderNotAvailable;
 	String copyRightHolderFinderInfo;
 	String copyRightHolderApproved;	
-	String copyRightHolderEmail;
 	String copyRightHolderCellPhone;
+	String copyRightHolderEmail;
 	String copyRightHolderOfficePhone;
 	String copyRightHolderFax;
 	String copyRightHolderStreetAddress;
@@ -35,8 +37,8 @@ public class DigitalRightsManagementBean {
 	//creator related fields
 	String creator;
 	String creatorApproved;
-	String creatorEmail;
 	String creatorCellPhone;
+	String creatorEmail;
 	String creatorOfficePhone;
 	String creatorFax;
 	String creatorStreetAddress;
@@ -70,6 +72,19 @@ public class DigitalRightsManagementBean {
 	String contributorCity;
 	String contributorState;
 	String contributorZipCode;
+	String contributorTribalAffiliation;
+	
+	//story provider fields
+	String storyProvider;
+	String storyProviderEmail;
+	String storyProviderCellPhone;
+	String storyProviderOfficePhone;
+	String storyProviderFax;
+	String storyProviderStreetAddress;
+	String storyProviderOtherAddress;
+	String storyProviderCity;
+	String storyProviderState;
+	String storyProviderZipCode;
 	
 	public String getPhysicalDescription() {
 		return physicalDescription;
@@ -105,22 +120,6 @@ public class DigitalRightsManagementBean {
 
 	public String getHandlingInstructions() {
 		return handlingInstructions;
-	}
-
-	public String getCopyRightHolderEmail() {
-		return copyRightHolderEmail;
-	}
-
-	public void setCopyRightHolderEmail(String copyRightHolderEmail) {
-		this.copyRightHolderEmail = copyRightHolderEmail;
-	}
-
-	public String getCreatorEmail() {
-		return creatorEmail;
-	}
-
-	public void setCreatorEmail(String creatorEmail) {
-		this.creatorEmail = creatorEmail;
 	}
 
 	public String getPublisherEmail() {
@@ -173,6 +172,270 @@ public class DigitalRightsManagementBean {
 
 	public void setStoryProvided(String storyProvided) {
 		this.storyProvided = storyProvided;
+	}
+
+	public String getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+
+	public String getPublisherApproved() {
+		return publisherApproved;
+	}
+
+	public void setPublisherApproved(String publisherApproved) {
+		this.publisherApproved = publisherApproved;
+	}
+
+	public String getPublisherCellPhone() {
+		return publisherCellPhone;
+	}
+
+	public void setPublisherCellPhone(String publisherCellPhone) {
+		this.publisherCellPhone = publisherCellPhone;
+	}
+
+	public String getPublisherOfficePhone() {
+		return publisherOfficePhone;
+	}
+
+	public void setPublisherOfficePhone(String publisherOfficePhone) {
+		this.publisherOfficePhone = publisherOfficePhone;
+	}
+
+	public String getPublisherFax() {
+		return publisherFax;
+	}
+
+	public void setPublisherFax(String publisherFax) {
+		this.publisherFax = publisherFax;
+	}
+
+	public String getPublisherStreetAddress() {
+		return publisherStreetAddress;
+	}
+
+	public void setPublisherStreetAddress(String publisherStreetAddress) {
+		this.publisherStreetAddress = publisherStreetAddress;
+	}
+
+	public String getPublisherOtherAddress() {
+		return publisherOtherAddress;
+	}
+
+	public void setPublisherOtherAddress(String publisherOtherAddress) {
+		this.publisherOtherAddress = publisherOtherAddress;
+	}
+
+	public String getPublisherCity() {
+		return publisherCity;
+	}
+
+	public void setPublisherCity(String publisherCity) {
+		this.publisherCity = publisherCity;
+	}
+
+	public String getPublisherState() {
+		return publisherState;
+	}
+
+	public void setPublisherState(String publisherState) {
+		this.publisherState = publisherState;
+	}
+
+	public String getPublisherZipCode() {
+		return publisherZipCode;
+	}
+
+	public void setPublisherZipCode(String publisherZipCode) {
+		this.publisherZipCode = publisherZipCode;
+	}
+
+	public String getContributor() {
+		return contributor;
+	}
+
+	public void setContributor(String contributor) {
+		this.contributor = contributor;
+	}
+
+	public String getContributorApproved() {
+		return contributorApproved;
+	}
+
+	public void setContributorApproved(String contributorApproved) {
+		this.contributorApproved = contributorApproved;
+	}
+
+	public String getContributorCellPhone() {
+		return contributorCellPhone;
+	}
+
+	public void setContributorCellPhone(String contributorCellPhone) {
+		this.contributorCellPhone = contributorCellPhone;
+	}
+
+	public String getContributorOfficePhone() {
+		return contributorOfficePhone;
+	}
+
+	public void setContributorOfficePhone(String contributorOfficePhone) {
+		this.contributorOfficePhone = contributorOfficePhone;
+	}
+
+	public String getContributorFax() {
+		return contributorFax;
+	}
+
+	public void setContributorFax(String contributorFax) {
+		this.contributorFax = contributorFax;
+	}
+
+	public String getContributorStreetAddress() {
+		return contributorStreetAddress;
+	}
+
+	public void setContributorStreetAddress(String contributorStreetAddress) {
+		this.contributorStreetAddress = contributorStreetAddress;
+	}
+
+	public String getContributorOtherAddress() {
+		return contributorOtherAddress;
+	}
+
+	public void setContributorOtherAddress(String contributorOtherAddress) {
+		this.contributorOtherAddress = contributorOtherAddress;
+	}
+
+	public String getContributorCity() {
+		return contributorCity;
+	}
+
+	public void setContributorCity(String contributorCity) {
+		this.contributorCity = contributorCity;
+	}
+
+	public String getContributorState() {
+		return contributorState;
+	}
+
+	public void setContributorState(String contributorState) {
+		this.contributorState = contributorState;
+	}
+
+	public String getContributorZipCode() {
+		return contributorZipCode;
+	}
+
+	public void setContributorZipCode(String contributorZipCode) {
+		this.contributorZipCode = contributorZipCode;
+	}
+
+	public String getStory() {
+		return story;
+	}
+
+	public void setStory(String story) {
+		this.story = story;
+	}
+
+	public String getStoryProvider() {
+		return storyProvider;
+	}
+
+	public void setStoryProvider(String storyProvider) {
+		this.storyProvider = storyProvider;
+	}
+
+	public String getStoryProviderEmail() {
+		return storyProviderEmail;
+	}
+
+	public void setStoryProviderEmail(String storyProviderEmail) {
+		this.storyProviderEmail = storyProviderEmail;
+	}
+
+	public String getStoryProviderCellPhone() {
+		return storyProviderCellPhone;
+	}
+
+	public void setStoryProviderCellPhone(String storyProviderCellPhone) {
+		this.storyProviderCellPhone = storyProviderCellPhone;
+	}
+
+	public String getStoryProviderOfficePhone() {
+		return storyProviderOfficePhone;
+	}
+
+	public void setStoryProviderOfficePhone(String storyProviderOfficePhone) {
+		this.storyProviderOfficePhone = storyProviderOfficePhone;
+	}
+
+	public String getStoryProviderFax() {
+		return storyProviderFax;
+	}
+
+	public void setStoryProviderFax(String storyProviderFax) {
+		this.storyProviderFax = storyProviderFax;
+	}
+
+	public String getStoryProviderStreetAddress() {
+		return storyProviderStreetAddress;
+	}
+
+	public void setStoryProviderStreetAddress(String storyProviderStreetAddress) {
+		this.storyProviderStreetAddress = storyProviderStreetAddress;
+	}
+
+	public String getStoryProviderOtherAddress() {
+		return storyProviderOtherAddress;
+	}
+
+	public void setStoryProviderOtherAddress(String storyProviderOtherAddress) {
+		this.storyProviderOtherAddress = storyProviderOtherAddress;
+	}
+
+	public String getStoryProviderCity() {
+		return storyProviderCity;
+	}
+
+	public void setStoryProviderCity(String storyProviderCity) {
+		this.storyProviderCity = storyProviderCity;
+	}
+
+	public String getStoryProviderState() {
+		return storyProviderState;
+	}
+
+	public void setStoryProviderState(String storyProviderState) {
+		this.storyProviderState = storyProviderState;
+	}
+
+	public String getStoryProviderZipCode() {
+		return storyProviderZipCode;
+	}
+
+	public void setStoryProviderZipCode(String storyProviderZipCode) {
+		this.storyProviderZipCode = storyProviderZipCode;
+	}
+
+	public String getStoryContext() {
+		return storyContext;
+	}
+
+	public void setStoryContext(String storyContext) {
+		this.storyContext = storyContext;
+	}
+
+	public String getContributorTribalAffiliation() {
+		return contributorTribalAffiliation;
+	}
+
+	public void setContributorTribalAffiliation(String contributorTribalAffiliation) {
+		this.contributorTribalAffiliation = contributorTribalAffiliation;
 	}
 
 	public String getCopyRightHolderId() {
@@ -351,164 +614,12 @@ public class DigitalRightsManagementBean {
 		this.creatorZipCode = creatorZipCode;
 	}
 
-	public String getPublisher() {
-		return publisher;
+	public String getCopyRightHolderEmail() {
+		return copyRightHolderEmail;
 	}
 
-	public void setPublisher(String publisher) {
-		this.publisher = publisher;
-	}
-
-	public String getPublisherApproved() {
-		return publisherApproved;
-	}
-
-	public void setPublisherApproved(String publisherApproved) {
-		this.publisherApproved = publisherApproved;
-	}
-
-	public String getPublisherCellPhone() {
-		return publisherCellPhone;
-	}
-
-	public void setPublisherCellPhone(String publisherCellPhone) {
-		this.publisherCellPhone = publisherCellPhone;
-	}
-
-	public String getPublisherOfficePhone() {
-		return publisherOfficePhone;
-	}
-
-	public void setPublisherOfficePhone(String publisherOfficePhone) {
-		this.publisherOfficePhone = publisherOfficePhone;
-	}
-
-	public String getPublisherFax() {
-		return publisherFax;
-	}
-
-	public void setPublisherFax(String publisherFax) {
-		this.publisherFax = publisherFax;
-	}
-
-	public String getPublisherStreetAddress() {
-		return publisherStreetAddress;
-	}
-
-	public void setPublisherStreetAddress(String publisherStreetAddress) {
-		this.publisherStreetAddress = publisherStreetAddress;
-	}
-
-	public String getPublisherOtherAddress() {
-		return publisherOtherAddress;
-	}
-
-	public void setPublisherOtherAddress(String publisherOtherAddress) {
-		this.publisherOtherAddress = publisherOtherAddress;
-	}
-
-	public String getPublisherCity() {
-		return publisherCity;
-	}
-
-	public void setPublisherCity(String publisherCity) {
-		this.publisherCity = publisherCity;
-	}
-
-	public String getPublisherState() {
-		return publisherState;
-	}
-
-	public void setPublisherState(String publisherState) {
-		this.publisherState = publisherState;
-	}
-
-	public String getPublisherZipCode() {
-		return publisherZipCode;
-	}
-
-	public void setPublisherZipCode(String publisherZipCode) {
-		this.publisherZipCode = publisherZipCode;
-	}
-
-	public String getContributor() {
-		return contributor;
-	}
-
-	public void setContributor(String contributor) {
-		this.contributor = contributor;
-	}
-
-	public String getContributorApproved() {
-		return contributorApproved;
-	}
-
-	public void setContributorApproved(String contributorApproved) {
-		this.contributorApproved = contributorApproved;
-	}
-
-	public String getContributorCellPhone() {
-		return contributorCellPhone;
-	}
-
-	public void setContributorCellPhone(String contributorCellPhone) {
-		this.contributorCellPhone = contributorCellPhone;
-	}
-
-	public String getContributorOfficePhone() {
-		return contributorOfficePhone;
-	}
-
-	public void setContributorOfficePhone(String contributorOfficePhone) {
-		this.contributorOfficePhone = contributorOfficePhone;
-	}
-
-	public String getContributorFax() {
-		return contributorFax;
-	}
-
-	public void setContributorFax(String contributorFax) {
-		this.contributorFax = contributorFax;
-	}
-
-	public String getContributorStreetAddress() {
-		return contributorStreetAddress;
-	}
-
-	public void setContributorStreetAddress(String contributorStreetAddress) {
-		this.contributorStreetAddress = contributorStreetAddress;
-	}
-
-	public String getContributorOtherAddress() {
-		return contributorOtherAddress;
-	}
-
-	public void setContributorOtherAddress(String contributorOtherAddress) {
-		this.contributorOtherAddress = contributorOtherAddress;
-	}
-
-	public String getContributorCity() {
-		return contributorCity;
-	}
-
-	public void setContributorCity(String contributorCity) {
-		this.contributorCity = contributorCity;
-	}
-
-	public String getContributorState() {
-		return contributorState;
-	}
-
-	public void setContributorState(String contributorState) {
-		this.contributorState = contributorState;
-	}
-
-	public String getContributorZipCode() {
-		return contributorZipCode;
-	}
-
-	public void setContributorZipCode(String contributorZipCode) {
-		this.contributorZipCode = contributorZipCode;
+	public void setCopyRightHolderEmail(String copyRightHolderEmail) {
+		this.copyRightHolderEmail = copyRightHolderEmail;
 	}
 
 	public DigitalRightsManagementBean(){
@@ -523,6 +634,8 @@ public class DigitalRightsManagementBean {
 		intaker = "";
 		dateOfUpload = ""; //date of upload
 		storyProvided = "";
+		story = "";
+		storyContext="";
 
 		//copy right holder related fields
 		 copyRightHolderId = "";
@@ -537,7 +650,7 @@ public class DigitalRightsManagementBean {
 		 copyRightHolderCity = "";
 		 copyRightHolderState = "";
 		 copyRightHolderZipCode = "";	
-		
+		 
 		 //creator related fields
 		 creator = "";
 		 creatorApproved = "";
@@ -548,7 +661,7 @@ public class DigitalRightsManagementBean {
 		 creatorOtherAddress = "";
 		 creatorCity = "";
 		 creatorState = "";
-		 creatorZipCode = "";
+		 creatorZipCode = "";	
 		
 		 publisher = "";
 		 publisherApproved = "";
@@ -571,5 +684,24 @@ public class DigitalRightsManagementBean {
 		 contributorCity = "";
 		 contributorState = "";
 		 contributorZipCode = "";
+		 contributorTribalAffiliation = "";
+		 
+		 storyProvider = "";
+		 storyProviderCellPhone = "";
+		 storyProviderOfficePhone = "";
+		 storyProviderFax = "";
+		 storyProviderStreetAddress = "";
+		 storyProviderOtherAddress = "";
+		 storyProviderCity = "";
+		 storyProviderState = "";
+		 storyProviderZipCode = "";
+	}
+
+	public String getCreatorEmail() {
+		return creatorEmail;
+	}
+
+	public void setCreatorEmail(String creatorEmail) {
+		this.creatorEmail = creatorEmail;
 	}
 }

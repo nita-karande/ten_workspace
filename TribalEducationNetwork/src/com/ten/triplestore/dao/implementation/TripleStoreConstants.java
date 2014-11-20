@@ -55,12 +55,18 @@ public interface TripleStoreConstants {
 	public static final String URI_PREDICATE_TEN_DATE_UPLOAD = URI_TEN_ONTOLOGY + "uploadDate";
 	
 	public static final String URI_PREDICATE_TEN_STORY_PROVIDED = URI_TEN_ONTOLOGY + "storyProvided";
+	
+	public static final String URI_PREDICATE_TEN_STORY = URI_TEN_ONTOLOGY + "story";
+	
+	public static final String URI_PREDICATE_TEN_STORY_CONTEXT = URI_TEN_ONTOLOGY + "storyContext";
 
 	public static final String URI_PREDICATE_TEN_COPY_RIGHT_HOLDER = URI_TEN_ONTOLOGY + "copyrightHolder";	
 	
 	public static final String URI_PREDICATE_TEN_CREATOR = URI_TEN_ONTOLOGY + "creator";
 	
 	public static final String URI_PREDICATE_TEN_PUBLISHER = URI_TEN_ONTOLOGY + "publisher";
+	
+	public static final String URI_PREDICATE_TEN_STORY_PROVIDER = URI_TEN_ONTOLOGY + "storyProvider";
 	
 	public static final String URI_PREDICATE_TEN_CONTRIBUTOR = URI_TEN_ONTOLOGY + "contributor";
 	
@@ -85,6 +91,8 @@ public interface TripleStoreConstants {
 	public static final String ATTRIBUTE_CITY = "city";
 	
 	public static final String ATTRIBUTE_ZIP_CODE = "zipcode";
+	
+	public static final String ATTRIBUTE_TRIBAL_AFFILIATION = "tribalAffiliation";
 	
 	public static final String URI_PREDICATE_TEN_COPY_RIGHT_HOLDER_NOT_AVAILABLE = URI_TEN_ONTOLOGY + "copyrightHolderNotAvailable";	
 	

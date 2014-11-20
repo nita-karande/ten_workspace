@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 	
 	<!-- Stylesheets -->
-	<link rel="stylesheet" type="text/css" href="css/page_layout.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/page_layout.css">
 	
 	<title>Tribal Education Network Audio Upload</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -34,8 +34,8 @@
 				var obj,source;
 		
 				obj = document.createElement('audio');
-				$(obj).attr('width', '100%');
-				$(obj).attr('data-height', '80%');
+				$(obj).attr('width', 'auto');
+				$(obj).attr('data-height', 'auto');
 				$(obj).attr('controls', ' ');
 						
 				source = document.createElement('source');
@@ -53,7 +53,7 @@
 		}
 	</script>
 </head>
-<body>
+<body  style="background-image: url('${pageContext.request.contextPath}/images/background_intaker.jpg');background-attachment: fixed; background-position: right bottom;background-repeat:no-repeat">
 	<form action="${pageContext.request.contextPath}/upload/uploadaudio.action" method="post" enctype="multipart/form-data">
 	<%@include file="include_header.jsp"%>
 	
@@ -74,7 +74,7 @@
 		</td></tr>
 	</table>
 	
-	<table>
+	<table style="width:700px">
 		 <tr><td><input type="file" id="upload" name="upload" size="50" onchange="onFileUpload()"/></td></tr>
 		 <tr><td><div id="uploadPreview_div" style="display:none;"></div></td></tr>
   		 <tr><td>

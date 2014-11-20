@@ -1,5 +1,5 @@
-<table style="width:100%">
+<table style="width:100%" class="nav_table">
 	<tr>
-		<td><a href="${pageContext.request.contextPath}/view/courses">View Courses</a></td>
+		<th><a href="${pageContext.request.contextPath}/view/courses">View Courses</a></th>
 	</tr>
 </table>

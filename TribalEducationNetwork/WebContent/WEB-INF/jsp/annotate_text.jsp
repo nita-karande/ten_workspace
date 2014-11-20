@@ -7,9 +7,6 @@
 <head>
 	<meta charset="UTF-8">
 	
-	<!-- Stylesheets -->
-	<link rel="stylesheet" type="text/css" href="css/page_layout.css">
-	
 	<title>Tribal Education Network Annotate Text main page</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>
@@ -18,7 +15,7 @@
 		}
 	</script>
 </head>
-<body>
+<body style="background-image: url('${pageContext.request.contextPath}/images/background_annotator.jpg');background-attachment: fixed; background-position: right; background-repeat:no-repeat">
 	<form name="annotateTextForm" id="annotateTextMainForm" action="${pageContext.request.contextPath}/annotate/annotatetext.action" method="post" enctype="multipart/form-data">
 	<%@include file="include_header.jsp"%>
 	
@@ -39,34 +36,34 @@
 		</td></tr>
 	</table>
 	
-	<table>
-		 <tr><td>Annotate Text</td></tr>
+	<table style="width:700px">
+		 <tr><td style="width:100%">Annotate Text</td></tr>
   		  <c:choose>
 	  		  <c:when test="${(actionType == 'display') && (requestScope.learningObjectDetailsBean == null)}">
-	  		 	 <tr><td>Text cannot be found</td><td></td></tr>
+	  		 	 <tr><td>Text cannot be found</td></tr>
   			 </c:when>
   			 <c:otherwise>  			 	
  			 <c:set var="objectType" scope="request" value="Text"/>
  			  <c:if test="${(requestScope.learningObjectDetailsBean != null)}">
 	 		  <tr>
 				<td>Text Preview</td>
-				<td></td>
 			  </tr>
 			  <tr>
 			  	<td>
-					<object width="100%" height="100%" >
-				  		 <embed src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></embed>
+					<object>
+				  		 <embed  width="100%" height="400" src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></embed>
 				  	</object>
 			  	</td>
  		 	  </tr>
  		 	  </c:if>
  			  <tr>
-				<td colspan="2">
+				<td>
 		  		 <div id="annotations_div">
 		  		    <%@include file="ten_annotations.jsp"%>	  		    		 
 				 </div>
 			   </td>
- 			  </tr>	  	 		  			 	
+ 			  </tr>
+ 			  <tr><td><input type="submit" value="Annotate Text"/></td></tr>		  			 	
   			 </c:otherwise>
   		</c:choose>		
 	</table>

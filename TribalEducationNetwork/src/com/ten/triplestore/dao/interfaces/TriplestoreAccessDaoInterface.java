@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import com.ten.beans.CourseAnnotationsBean;
 import com.ten.beans.DigitalRightsManagementBean;
+import com.ten.beans.LearningObjectBean;
 import com.ten.beans.StudentAnnotationsBean;
 import com.ten.beans.TenLearningObjectAnnotationsBean;
 
@@ -52,4 +53,6 @@ public interface TriplestoreAccessDaoInterface {
 	public void updateStudentAnnotations(String user_name, StudentAnnotationsBean studentAnnotationsBean) throws Exception;
 	
 	public  HashMap<String, ArrayList<String>> queryDefaultLearningObjects(String keywords, String andSearchTerms) throws Exception;
+	
+	public ArrayList<LearningObjectBean> removeItemsWithoutStory(ArrayList<LearningObjectBean> learningObjects, String learningObjectType) throws Exception;
 }

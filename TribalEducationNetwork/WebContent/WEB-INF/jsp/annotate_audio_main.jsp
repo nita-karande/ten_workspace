@@ -5,9 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	
-	<!-- Stylesheets -->
-	<link rel="stylesheet" type="text/css" href="css/page_layout.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/page_layout.css">
 	
 	<title>Tribal Education Network Annotate Audio main page</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -18,7 +16,7 @@
 		}
 	</script>
 </head>
-<body>
+<body style="background-image: url('${pageContext.request.contextPath}/images/background_annotator.jpg');background-attachment: fixed; background-position: right; background-repeat:no-repeat">
 	<form name="annotateAudioMainForm" id="annotateAudioMainForm" action="${pageContext.request.contextPath}/annotate/annotateaudio.action" method="post" enctype="multipart/form-data">
 	<%@include file="include_header.jsp"%>
 	<section>

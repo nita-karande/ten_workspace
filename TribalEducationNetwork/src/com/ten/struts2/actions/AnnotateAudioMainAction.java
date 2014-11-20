@@ -11,6 +11,9 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.ten.beans.LearningObjectBean;
 import com.ten.dao.implementation.DbAccessDaoImpl;
 import com.ten.dao.interfaces.DbAccessDaoInterface;
+import com.ten.triplestore.dao.implementation.TripleStoreConstants;
+import com.ten.triplestore.dao.implementation.VirtuosoAccessDaoImpl;
+import com.ten.triplestore.dao.interfaces.TriplestoreAccessDaoInterface;
 
 /**
  * 
@@ -49,6 +52,10 @@ public class AnnotateAudioMainAction extends ActionSupport{
 				//get audios from database
 				DbAccessDaoInterface dbAccessDaoInterface = new DbAccessDaoImpl();
 				learningObjects = dbAccessDaoInterface.getUnannotatedAudios();
+				
+				//remove learning objects which do not have a story associated with it, user cannot annotate them
+				TriplestoreAccessDaoInterface tdbAccessDaoInterface = new VirtuosoAccessDaoImpl();
+				learningObjects = tdbAccessDaoInterface.removeItemsWithoutStory(learningObjects, TripleStoreConstants.URI_AUDIO);
 				
 				result = ActionConstants.FORWARD_SUCCESS;
 			}catch(Exception ex){

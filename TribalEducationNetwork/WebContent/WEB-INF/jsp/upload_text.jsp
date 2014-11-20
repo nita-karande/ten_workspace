@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 	
 	<!-- Stylesheets -->
-	<link rel="stylesheet" type="text/css" href="css/page_layout.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/page_layout.css">
 	
 	<title>Tribal Education Network Image Upload</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -34,7 +34,7 @@
 				obj = document.createElement('object');
 				$(obj).attr('data', _file.target.result);
 				$(obj).attr('width', '100%');
-				$(obj).attr('height', '80%');
+				$(obj).attr('height', '400px');
 				$(obj).attr('type', file.type);
 				
 				embed = document.createElement('embed');
@@ -52,7 +52,7 @@
 		}
 	</script>
 </head>
-<body>
+<body  style="background-image: url('${pageContext.request.contextPath}/images/background_intaker.jpg');background-attachment: fixed; background-position: right bottom;background-repeat:no-repeat">
 	<form action="${pageContext.request.contextPath}/upload/uploadtext.action" method="post" enctype="multipart/form-data">
 	<%@include file="include_header.jsp"%>
 	
@@ -72,10 +72,10 @@
 		</td></tr>
 	</table>
 	
-	<table>
+		<table style="width:700px">
 		 <tr><td><input type="file" id="upload" name="upload" size="50" onchange="onFileUpload()"/></td></tr>
 		 <tr><td></td></tr>
-		 <tr><td><div id="uploadPreview_div" style="display:none;"></div></td></tr>
+		 <tr><td style="width:60%;"><div id="uploadPreview_div" style="display:none;" ></div></td></tr>
    		 <tr><td>
 	  		 <div id="annotations_div" style="display:none">
 	  		    <%@include file="digital_rights_management.jsp"%>	
