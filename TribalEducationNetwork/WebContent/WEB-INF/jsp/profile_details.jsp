@@ -37,7 +37,7 @@
 		</td></tr>
 	</table>
 	
-	<table>
+	<table style="width:700px;">
 		 <tr><td width='50%'>Tribe Name </td><td width='50%'><input type="text" id="tribe" name="studentAnnotationsBean.tribe" value="${studentAnnotationsBean.tribe}"/></td></tr>
 		 <tr><td width='50%'>Language </td>
 		 	<td>

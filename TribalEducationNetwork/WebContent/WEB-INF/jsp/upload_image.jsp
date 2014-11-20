@@ -36,7 +36,11 @@
 				$(obj).attr('height', 'auto');
 				
 		    	$("#uploadPreview_div").empty();
-		    	$("#uploadPreview_div").append(obj);
+		    	if(file.size > 1024000){
+					$("#uploadPreview_div").append('<p style="color:red;"><b>Preview not available as the file size is large<b><br><br>');
+				}else{
+					$("#uploadPreview_div").append(obj);
+				}
 		  };
 		}
 		

@@ -715,7 +715,7 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 			    }else if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO).equals(rdfNodeObject.toString())){
 			    	videoList.add(rdfNodeSubject.toString());
 			    }else if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT).equals(rdfNodeObject.toString())){
-			    	videoList.add(rdfNodeSubject.toString());
+			    	textList.add(rdfNodeSubject.toString());
 			    }
 			 }
 		}		
@@ -2202,9 +2202,7 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 			sparqlQueryString.append(" SELECT ?predicate ?object ");
 			sparqlQueryString.append(" WHERE { ");
 			sparqlQueryString.append("<" + TripleStoreConstants.URI_STUDENT + user_name + ">");
-			sparqlQueryString.append(" a TenOntology:");
-			sparqlQueryString.append(TripleStoreConstants.TYPE_STUDENT);	
-			sparqlQueryString.append(" ;?predicate ?object .");			
+			sparqlQueryString.append(" ?predicate ?object .");			
 			sparqlQueryString.append(" }");
 			
 			log.debug("SEARCH QUERY:  " + sparqlQueryString.toString());

@@ -49,7 +49,16 @@
 					<td>Image Preview</td>
 				 </tr>
 				  <tr>
-					<td><img src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" /></td>
+					<td>
+						<c:choose>
+						<c:when test="${fn:length(learningObjectDetailsBean.content) < 1024000}">
+							<img src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" />
+						</c:when>
+				  		<c:otherwise>
+							<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+						</c:otherwise>	
+						</c:choose>
+					</td>
 	 		 	  </tr>
 	 		  </c:if>
  			  <tr>

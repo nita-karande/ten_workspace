@@ -4,7 +4,7 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
  <struts>
     <constant name="struts.devMode" value="true" />
-    <constant name="struts.multipart.maxSize" value="5000000" /> <!-- 1MB = 1000 * 1024 Bytes -->
+    <constant name="struts.multipart.maxSize" value="10000000" /> <!-- 1MB = 1000 * 1024 Bytes -->
     
     <constant name="struts.enable.SlashesInActionNames" value="true"/>
 	<constant name="struts.mapper.alwaysSelectFullNamespace" value="false"/>    

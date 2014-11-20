@@ -55,7 +55,7 @@
   		 <tr><td><input type="submit" value="Search learning objects"/></td></tr>
 	</table>
 	<c:if test="${requestScope.mapLearningObjects != null}" >
-		<table>
+		<table style="width:700px;">
 		<c:choose>
 			<c:when test="${fn:length(requestScope.mapLearningObjects) == 0 }">
 				<tr><td><header><c:out value="${'No matching learning objects found'}" /></header></td></tr>
@@ -64,35 +64,68 @@
 				<c:forEach var="learningObject" items="${requestScope.mapLearningObjects}">
 						<c:set var="learningObjectDetailsBean" value="${learningObject.value}" />
 						<!-- Display image -->
-						<c:if test="${typeOfLearningObject == 'Image'}">						
+						<c:if test="${typeOfLearningObject == 'Image'}">												
 							<tr><td>Image Name:</td><td><c:out value="${learningObjectDetailsBean.fileName}" /></td></tr>
-							<tr><td><img src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" width="100%" height="100%"/></td></tr>
+							<tr><td>
+								<c:choose>
+								<c:when test="${fn:length(learningObjectDetailsBean.content) < 1024000}">								
+									<img src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" width="auto" height="auto"/>
+								</c:when>
+								<c:otherwise>
+									<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+								</c:otherwise>	
+								</c:choose>
+							</td></tr>
 						</c:if>
 						
 						<!-- Display Audio -->
 						<c:if test="${typeOfLearningObject == 'Audio'}">						
 							<tr><td>Audio Name:</td><td><c:out value="${learningObjectDetailsBean.fileName}" /></td></tr>
-							<tr><td><audio controls>
+							<tr><td>
+								<c:choose>
+								<c:when test="${fn:length(learningObjectDetailsBean.content) < 1024000}">
+									<audio controls>
 			  						<source src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></source>
 			  						</audio>
+			  					</c:when>
+			  					<c:otherwise>
+									<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+								</c:otherwise>	
+								</c:choose>
 			  				</td></tr>
 						</c:if>
 						
 						<!-- Display Video -->
 						<c:if test="${typeOfLearningObject == 'Video'}">						
 							<tr><td>Video Name:</td><td><c:out value="${learningObjectDetailsBean.fileName}" /></td></tr>
-							<tr><td><video width="100%" height="80%" controls>
+							<tr><td>
+								<c:choose>
+								<c:when test="${fn:length(learningObjectDetailsBean.content) < 1024000}">
+									<video width="auto" height="auto" controls>
 						  			 <source src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></source>
-						  		</video>
+						  			</video>
+						  		</c:when>
+						  		<c:otherwise>
+									<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+								</c:otherwise>	
+								</c:choose>
 			  				</td></tr>
 						</c:if>
 						
 						<!-- Display Text -->
 						<c:if test="${typeOfLearningObject == 'Text'}">						
 							<tr><td>Document Name:</td><td><c:out value="${learningObjectDetailsBean.fileName}" /></td></tr>
-							<tr><td><object width="100%" height="80%" >
-							  		 <embed src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></embed>
-							  	</object>
+							<tr><td>
+								<c:choose>
+								<c:when test="${fn:length(learningObjectDetailsBean.content) < 1024000}">
+									<object>
+								  		 <embed  width="100%" height="400px" src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></embed>
+								  	</object>
+								</c:when>
+								<c:otherwise>
+									<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+								</c:otherwise>	
+								</c:choose>
 			  				</td></tr>
 						</c:if>
 				</c:forEach>

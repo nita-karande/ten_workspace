@@ -54,9 +54,16 @@
 			  </tr>
 			  <tr>
 				<td>
-			  		<audio controls>
-			  			<source src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></source>
-			  		</audio>
+					<c:choose>
+					<c:when test="${fn:length(learningObjectDetailsBean.content) < 1024000}">
+			  			<audio controls>
+			  				<source src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></source>
+			  			</audio>
+			  		</c:when>
+			  		<c:otherwise>
+						<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+					</c:otherwise>	
+					</c:choose>
 			  	</td>
  		 	  </tr>
  		 	  </c:if>

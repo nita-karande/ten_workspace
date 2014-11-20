@@ -50,9 +50,16 @@
 			  </tr>
 			  <tr>
 			  	<td>
-					<object>
-				  		 <embed  width="100%" height="400" src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></embed>
-				  	</object>
+			  		<c:choose>
+					<c:when test="${fn:length(learningObjectDetailsBean.content) < 1024000}">
+						<object>
+					  		 <embed  width="100%" height="400" src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></embed>
+					  	</object>
+					</c:when>
+			  		<c:otherwise>
+						<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+					</c:otherwise>	
+					</c:choose>
 			  	</td>
  		 	  </tr>
  		 	  </c:if>

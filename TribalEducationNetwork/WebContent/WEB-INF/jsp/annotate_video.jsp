@@ -51,9 +51,16 @@
 			  </tr>
 			  <tr>
 			  	<td>
-			  		<video width="auto" height="auto" controls>
-			  			 <source src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></source>
-			  		</video>
+			  		<c:choose>
+					<c:when test="${fn:length(learningObjectDetailsBean.content) < 1024000}">
+				  		<video width="auto" height="auto" controls>
+				  			 <source src="data:<c:out value='${learningObjectDetailsBean.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.content}'/>" ></source>
+				  		</video>
+				  	</c:when>
+			  		<c:otherwise>
+						<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+					</c:otherwise>	
+					</c:choose>
 			  	</td>				
  		 	  </tr>
  		 	  </c:if>

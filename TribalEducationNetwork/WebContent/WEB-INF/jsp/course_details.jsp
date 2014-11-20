@@ -36,16 +36,16 @@
 		</td></tr>
 	</table>
 	
-	<table>
-		 <tr><td width='50%'>Course Name </td><td width='50%'><input type="text" id="courseName" name="courseName" value="${courseName}" readonly/></td></tr>
-		 <tr><td width='50%'>Description </td><td width='50%'><input type="text" value="${requestScope.courseAnnotationsBean.description}" readonly/></td></tr>
-		 <tr><td></td></tr>
+	<table style="width:800px">
+		 <tr><td width='70%'>Course Name </td><td width='50%'><input type="text" id="courseName" name="courseName" value="${courseName}" readonly/></td></tr>
+		 <tr><td width='30%'>Description </td><td width='50%'><input type="text" value="${requestScope.courseAnnotationsBean.description}" readonly/></td></tr>
+		 <tr><td></td><td></td></tr>
 	</table>
 	<br>
 	<!-- RECOMMENDED LEARNING OBJECTS -->
-	<table>
+	<table style="width:800px">
 	<c:if test="${requestScope.mapLearningObjects != null}" >
-		<tr><td width="50%"><header><b><c:out value="${'RECOMMENDED LEARNING OBJECTS'}" /></b></header></td></tr>
+		<tr><td width="80%"><h1><c:out value="${'RECOMMENDED LEARNING OBJECTS'}" /></h1></td></tr>
 		<c:choose>
 			<c:when test="${recommendedLearningObjects == 0}">
 				<tr><td><header><c:out value="${'No recommended learning objects other than the default ones found'}" /></header></td></tr>
@@ -56,28 +56,57 @@
 						<!-- Display image -->
 						<c:if test="${learningObjectMapEntry.key == 'Image'}">
 							<c:forEach var="learningObjectDetailsBean" items="${learningObjectsList}">		
-								<tr><td>Image Name:</td><td><c:out value="${learningObjectDetailsBean.value.fileName}" /></td></tr>
-								<tr><td><img src="data:<c:out value='${learningObjectDetailsBean.value.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.value.content}'/>" width="100%" height="100%"/></td></tr>
+								<tr><td><h2>Image Name:</h2></td><td><h2><c:out value="${learningObjectDetailsBean.value.fileName}" /></h2></td></tr>
+								<tr><td></td></tr>
+								<tr><td>
+									<c:choose>
+									<c:when test="${fn:length(learningObjectDetailsBean.value.content) < 1024000}">
+										<img src="data:<c:out value='${learningObjectDetailsBean.value.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.value.content}'/>" width="auto" height="auto"/>
+									</c:when>
+									<c:otherwise>
+										<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+									</c:otherwise>	
+									</c:choose>
+									</td></tr>
 							</c:forEach>
 						</c:if>
 						
 						<!-- Display Audio -->
 						<c:if test="${learningObjectMapEntry.key == 'Audio'}">	
 							<c:forEach var="learningObjectDetailsBean" items="${learningObjectsList}">					
-								<tr><td>Audio Name:</td><td><c:out value="${learningObjectDetailsBean.value.fileName}" /></td></tr>
-								<tr><td><audio controls>
+								<tr><td><h2>Audio Name:</h2></td><td><h2><c:out value="${learningObjectDetailsBean.value.fileName}" /></h2></td></tr>
+								<tr><td></td></tr>
+								<tr><td>
+									<c:choose>
+										<c:when test="${fn:length(learningObjectDetailsBean.value.content) < 1024000}">
+										<audio controls>
 				  						<source src="data:<c:out value='${learningObjectDetailsBean.value.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.value.content}'/>" ></source>
 				  						</audio>
+				  						</c:when>
+										<c:otherwise>
+											<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+										</c:otherwise>	
+									</c:choose>
 				  				</td></tr>
 			  				</c:forEach>
 						</c:if>
 						
 						<!-- Display Video -->
 						<c:if test="${learningObjectMapEntry.key == 'Video'}">	
-							<c:forEach var="learningObjectDetailsBean" items="${learningObjectsList}">					
-								<tr><td><video width="100%" height="80%" controls>
+							<c:forEach var="learningObjectDetailsBean" items="${learningObjectsList}">	
+								<tr><td><h2>Video Name:</h2></td><td><h2><c:out value="${learningObjectDetailsBean.value.fileName}" /></h2></td></tr>	
+								<tr><td></td></tr>		
+								<tr><td>
+								<c:choose>
+									<c:when test="${fn:length(learningObjectDetailsBean.value.content) < 1024000}">
+									<video width="auto" height="auto" controls>
 							  			 <source src="data:<c:out value='${learningObjectDetailsBean.value.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.value.content}'/>" ></source>
 							  		</video>
+							  		</c:when>
+									<c:otherwise>
+										<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+									</c:otherwise>	
+									</c:choose>
 				  				</td></tr>
 			  				</c:forEach>
 						</c:if>
@@ -85,10 +114,19 @@
 						<!-- Display Text -->
 						<c:if test="${learningObjectMapEntry.key == 'Text'}">	
 							<c:forEach var="learningObjectDetailsBean" items="${learningObjectsList}">						
-								<tr><td>Document Name:</td><td><c:out value="${learningObjectDetailsBean.value.fileName}" /></td></tr>
-								<tr><td><object width="100%" height="80%" >
-								  		 <embed src="data:<c:out value='${learningObjectDetailsBean.value.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.value.content}'/>" ></embed>
+							<tr><td><h2>Document Name:</h2></td><td><h2><c:out value="${learningObjectDetailsBean.value.fileName}" /></h2></td></tr>
+								<tr><td></td></tr>
+								<tr><td colspan="2">
+									<c:choose>
+									<c:when test="${fn:length(learningObjectDetailsBean.value.content) < 1024000}">
+									<object>
+								  		 <embed width="100%" height="400px"  src="data:<c:out value='${learningObjectDetailsBean.value.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.value.content}'/>" ></embed>
 								  	</object>
+								  	</c:when>
+									<c:otherwise>
+										<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+									</c:otherwise>	
+									</c:choose>
 				  				</td></tr>
 			  				</c:forEach>
 						</c:if>
@@ -98,9 +136,10 @@
 	</c:if>	
 	<tr><td></td></tr>
 	<tr><td></td></tr>
+	
 	<!-- DEFAULT LEARNING OBJECTS -->
 	<c:if test="${requestScope.mapDefaultLearningObjects != null}" >
-		<tr><td width="50%"><header><b><c:out value="${'DEFAULT LEARNING OBJECTS'}" /></b></header></td></tr>
+		<tr><td width="80%"><h1><c:out value="${'DEFAULT LEARNING OBJECTS'}" /></h1></td></tr>
 		<c:choose>
 			<c:when test="${defaultLearningObjects == 0 }">
 				<tr><td><header><c:out value="${'No default learning objects other than the recommended ones found'}" /></header></td><td></td></tr>
@@ -111,28 +150,57 @@
 						<!-- Display image -->
 						<c:if test="${learningObjectMapEntry.key == 'Image'}">
 							<c:forEach var="learningObjectDetailsBean" items="${learningObjectsList}">		
-								<tr><td>Image Name:</td><td><c:out value="${learningObjectDetailsBean.value.fileName}" /></td></tr>
-								<tr><td><img src="data:<c:out value='${learningObjectDetailsBean.value.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.value.content}'/>" width="100%" height="100%"/></td></tr>
+								<tr><td><h2>Image Name:</h2></td><td><h2><c:out value="${learningObjectDetailsBean.value.fileName}" /></h2></td></tr>
+								<tr><td></td></tr>
+								<tr><td>
+								<c:choose>
+									<c:when test="${fn:length(learningObjectDetailsBean.value.content) < 1024000}">
+										<img src="data:<c:out value='${learningObjectDetailsBean.value.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.value.content}'/>" width="auto" height="auto"/>
+									</c:when>
+									<c:otherwise>
+										<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+									</c:otherwise>
+								</c:choose>
+								</td></tr>
 							</c:forEach>
 						</c:if>
 						
 						<!-- Display Audio -->
 						<c:if test="${learningObjectMapEntry.key == 'Audio'}">	
 							<c:forEach var="learningObjectDetailsBean" items="${learningObjectsList}">					
-								<tr><td>Audio Name:</td><td><c:out value="${learningObjectDetailsBean.value.fileName}" /></td></tr>
-								<tr><td><audio controls>
+								<tr><td><h2>Audio Name:</h2></td><td><h2><c:out value="${learningObjectDetailsBean.value.fileName}" /></h2></td></tr>
+								<tr><td></td></tr>
+								<tr><td>
+									<c:choose>
+									<c:when test="${fn:length(learningObjectDetailsBean.value.content) < 1024000}">
+										<audio controls>
 				  						<source src="data:<c:out value='${learningObjectDetailsBean.value.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.value.content}'/>" ></source>
 				  						</audio>
+				  					</c:when>
+									<c:otherwise>
+										<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+									</c:otherwise>	
+									</c:choose>
 				  				</td></tr>
 			  				</c:forEach>
 						</c:if>
 						
 						<!-- Display Video -->
 						<c:if test="${learningObjectMapEntry.key == 'Video'}">	
-							<c:forEach var="learningObjectDetailsBean" items="${learningObjectsList}">					
-								<tr><td><video width="100%" height="80%" controls>
+							<c:forEach var="learningObjectDetailsBean" items="${learningObjectsList}">		
+								<tr><td><h2>Video Name:</h2></td><td><h2><c:out value="${learningObjectDetailsBean.value.fileName}" /></h2></td></tr>
+								<tr><td></td></tr>			
+								<tr><td>
+									<c:choose>
+									<c:when test="${fn:length(learningObjectDetailsBean.value.content) < 1024000}">
+									<video width="auto" height="auto" controls>
 							  			 <source src="data:<c:out value='${learningObjectDetailsBean.value.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.value.content}'/>" ></source>
 							  		</video>
+							  		</c:when>
+									<c:otherwise>
+										<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+									</c:otherwise>	
+									</c:choose>
 				  				</td></tr>
 			  				</c:forEach>
 						</c:if>
@@ -140,10 +208,19 @@
 						<!-- Display Text -->
 						<c:if test="${learningObjectMapEntry.key == 'Text'}">	
 							<c:forEach var="learningObjectDetailsBean" items="${learningObjectsList}">						
-								<tr><td>Document Name:</td><td><c:out value="${learningObjectDetailsBean.value.fileName}" /></td></tr>
-								<tr><td><object width="100%" height="80%" >
-								  		 <embed src="data:<c:out value='${learningObjectDetailsBean.value.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.value.content}'/>" ></embed>
-								  	</object>
+								<tr><td><h2>Document Name:</h2></td><td><h2><c:out value="${learningObjectDetailsBean.value.fileName}" /></h2></td></tr>
+								<tr><td></td></tr>	
+								<tr><td>
+									<c:choose>
+									<c:when test="${fn:length(learningObjectDetailsBean.value.content) < 1024000}">
+										<object>
+									  		 <embed  width="100%" height="400px" src="data:<c:out value='${learningObjectDetailsBean.value.fileType}'></c:out>;base64,<c:out value='${learningObjectDetailsBean.value.content}'/>" ></embed>
+									  	</object>
+									</c:when>
+									<c:otherwise>
+										<p style="color:red"> <b>Preview not available as the file size is large</b></p>
+									</c:otherwise>	
+									</c:choose>
 				  				</td></tr>
 			  				</c:forEach>
 						</c:if>
