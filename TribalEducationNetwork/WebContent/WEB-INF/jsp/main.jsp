@@ -6,7 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/page_layout.css">
 	<title>Welcome to Tribal Education Network</title>
 </head>
-<body style="background-image: url('${pageContext.request.contextPath}/images/background_main.jpg');background-attachment: fixed; background-position:right bottom; background-repeat:no-repeat">
+<body style="background-image: url('${pageContext.request.contextPath}/images/background_main.jpg');background-attachment: fixed; background-position:right center; background-repeat:no-repeat">
 	<form>
 	<header>
 		<table>
@@ -56,8 +56,6 @@
 		<!--Course view links student role -->
 		 <c:if test="${sessionScope.user_details.userStudent == true}" >
 		 	 <table class="nav_table">
-		 	 <tr><td><a href="${pageContext.request.contextPath}/view/profiledetails">Update Profile</a></td></tr>
-		 	 <tr><td><br/></td></tr>
 			 <tr><td>
 		  		 <div id="course_links_div">
 		  		    <%@include file="include_view_links.jsp"%>	  		    		 

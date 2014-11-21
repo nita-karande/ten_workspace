@@ -35,7 +35,7 @@
 		</td></tr>
 	</table>
 	
-	<table>
+	<table style="width:700px">
 		 <tr>
 		 	<td width='50%'>Course Name </td><td width='50%'><input type="text" id="courseName" name="courseName" /></td></tr>
   		 <tr>

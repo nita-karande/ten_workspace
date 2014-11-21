@@ -19,7 +19,7 @@
 		}
 	</script>
 </head>
-<body>
+<body style="background-image: url('${pageContext.request.contextPath}/images/background_student.jpg');background-attachment: fixed; background-position: right bottom;background-repeat:no-repeat">
 	<form name="viewCoursesMainForm" id="viewCoursesMainForm" action="${pageContext.request.contextPath}/view/coursedetails.action" method="post" enctype="multipart/form-data">
 	<%@include file="include_header.jsp"%>
 	
@@ -40,8 +40,8 @@
 		</td></tr>
 	</table>
 	
-	<table>
-		 <tr><td>LIST OF COURSES</td></tr>
+	<table class="nav_table" style="width:700px">
+		 <tr><td style="width:50%">LIST OF COURSES</td></tr>
   		  <c:choose>
 	  		  <c:when test="${(requestScope.listCourses == null) || (fn:length(requestScope.listCourses) == 0)}">
 	  		 	 <tr><td>No courses available to view</td></tr>

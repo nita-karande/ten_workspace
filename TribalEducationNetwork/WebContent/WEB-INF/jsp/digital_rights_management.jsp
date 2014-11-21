@@ -184,7 +184,7 @@
 	</tr>
 			
 	<tr><td><br></td></tr>	
-	<tr><td>Physical Description</td><td><div title="${'The description of the artifact'}" ><input type="text" id="physicalDescriptionId" name="digitalRightsManagementBean.physicalDescription" />  ?</div></td></tr>
+	<tr><td>Physical Description</td><td><div title="${'The description of the artifact e.g. the format in which the artifact was provided such as hard copy, compact disc'}" ><input type="text" id="physicalDescriptionId" name="digitalRightsManagementBean.physicalDescription" />  ?</div></td></tr>
 	
 	<tr><td><br></td></tr>	
 	<tr><td>Loan Period </td><td><div title="${'The intended lenght of time for loan'}" ><input type="text" id="loadPeriodId" name="digitalRightsManagementBean.loanPeriod" />  ?</div></td></tr>
@@ -213,7 +213,7 @@
 	</tr>
 	<tr class="storyClass" style="display:none;"><td>Story </td><td><div title="${'Story provided by tribe with the artifact'}"><textarea id="storyId" name="digitalRightsManagementBean.story" rows="4"></textarea>  ?</div></td>
 	</tr>
-	<tr class="storyClass" style="display:none;"><td>Story context </td><td><div title="${'Story provided by tribe in which formate e.g. as a recording, on paper, audio'}"><input type="text" id="storyContext" name="digitalRightsManagementBean.storyContext" />  ?</div></td>
+	<tr class="storyClass" style="display:none;"><td>Story context </td><td><div title="${'Story provided by tribe in which format e.g. as a recording, on paper, audio'}"><input type="text" id="storyContext" name="digitalRightsManagementBean.storyContext" />  ?</div></td>
 	</tr>
 	
 	<tr><td><br></td></tr>

@@ -256,93 +256,6 @@ public class VirtuosoAccessDaoImpl implements TriplestoreAccessDaoInterface{
 	   	return true;
 	}
 	
-	@Override
-	/**
-	 * This method is used to query triple store for 
-	 */
-	/*public ArrayList<String> queryLearningObject(String learningObjectType, ArrayList<String> orSearchTerms, ArrayList<String> andSearchTerms) throws Exception{
-		
-		String LOG_METHOD_NAME = "void queryLearningObject(String)";
-		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
-		ArrayList<String> returnValue = new ArrayList<String>();
-		
-		try{
-		
-			StringBuffer sparqlQueryString = new StringBuffer();
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_ONTOLOGY);
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_IMAGE);
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_AUDIO);
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_VIDEO);
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_TEXT);
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_RDF);
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_DUBLIN_CORE);
-			
-			sparqlQueryString.append(" SELECT ?learning_object ?predicate ?object ");
-			sparqlQueryString.append(" WHERE { ");
-			sparqlQueryString.append(" ?learning_object a TenOntology:");
-			sparqlQueryString.append(learningObjectType);	
-			sparqlQueryString.append(" ;?predicate ?object .");	
-			
-			//add filter for orSearchTerms
-			sparqlQueryString.append(" FILTER (");				
-			int i=0;
-	        for(String searchTerm:orSearchTerms){
-	        	sparqlQueryString.append("(regex(?object, \"");
-	        	sparqlQueryString.append(searchTerm);
-	        	sparqlQueryString.append("\", \"i\"))");
-	        	//if this is not the last element add ||
-	        	if(i != (orSearchTerms.size()-1)){
-	        		sparqlQueryString.append(" || ");
-	        	}
-	        	i++;
-	        }	
-	        //exclude type predicate
-	        sparqlQueryString.append(" && (?predicate != rdf:type)");
-	        
-	        //add filter for and search terms
-	        if((andSearchTerms != null) && (andSearchTerms.size()>0)){
-	        	i=0;
-	        	sparqlQueryString.append(" && ");
-	        	for(String searchTerm:andSearchTerms){
-		        	sparqlQueryString.append("(regex(?object, \"");
-		        	sparqlQueryString.append(searchTerm);
-		        	sparqlQueryString.append("\", \"i\"))");
-		        	//if this is not the last element add &&
-		        	if(i != (andSearchTerms.size()-1)){
-		        		sparqlQueryString.append(" && ");
-		        	}
-		        	i++;
-		        }	
-	        }
-			sparqlQueryString.append(" ) .}");
-			
-			log.debug("SEARCH QUERY:  " + sparqlQueryString.toString());
-			
-			//STEP 1 - Connect to virtuoso database
-			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
-			
-			//STEP 2 - Create query
-			Query sparql = QueryFactory.create(sparqlQueryString.toString());
-			
-			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql, graph);
-	
-			//STEP 3 - Execute
-			ResultSet results = vqe.execSelect();
-			while (results.hasNext()) {
-				QuerySolution result = results.nextSolution();
-			    RDFNode rdfNode = result.get("learning_object");
-			    returnValue.add(rdfNode.toString());
-			    log.debug(graph + " { " + rdfNode + "  }");
-			}
-		}catch (Exception ex) {
-			log.error(ex);
-			throw ex;
-		}finally{			
-			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
-		}
-		return returnValue;
-	}*/
-	
 public ArrayList<String> queryLearningObject(String learningObjectType, ArrayList<String> orSearchTerms, ArrayList<String> andSearchTerms) throws Exception{
 		
 		String LOG_METHOD_NAME = "void queryLearningObject(String)";
@@ -437,138 +350,12 @@ public ArrayList<String> queryLearningObject(String learningObjectType, ArrayLis
 		return returnValue;
 	}
 	
-/*public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(StudentAnnotationsBean studentAnnotationsBean, String keywords) throws Exception{
-		
-		String LOG_METHOD_NAME = "void queryLearningObject(StudentAnnotationsBean studentAnnotationsBean, ArrayList<String> orSearchTerms)";
-		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
-		ArrayList<String> imagesList = new ArrayList<String>();
-		ArrayList<String> audioList = new ArrayList<String>();
-		ArrayList<String> videoList = new ArrayList<String>();
-		ArrayList<String> textList = new ArrayList<String>();
-		HashMap<String, ArrayList<String>> returnMap = new HashMap<String, ArrayList<String>>();
-		try{
-		
-			StringBuffer sparqlQueryString = new StringBuffer();
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_ONTOLOGY);
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_IMAGE);
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_AUDIO);
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_VIDEO);
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_TEN_TEXT);
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_RDF);
-			sparqlQueryString.append(TripleStoreConstants.PREFIX_DUBLIN_CORE);
-			
-			sparqlQueryString.append(" SELECT DISTINCT ?learning_object ?learningObjectType ");
-			sparqlQueryString.append(" WHERE { ");
-			sparqlQueryString.append(" ?learning_object a ?learningObjectType");
-			sparqlQueryString.append(" ;?predicate ?object");	
-			
-			//exclude type predicate
-			sparqlQueryString.append(" . FILTER (");
-	        sparqlQueryString.append(" (?predicate != rdf:type)");
-	        
-			//add filter for orSearchTerms
-	        if(!Utils.isEmptyOrNull(keywords)){
-	        	ArrayList<String> orSearchTerms = new ArrayList<String>();
-				StringTokenizer st = new StringTokenizer(keywords);
-				while (st.hasMoreTokens()) {
-					orSearchTerms.add(st.nextToken().trim());
-				}
-				
-	        	int i = 0;
-	        	if((orSearchTerms != null) && (orSearchTerms.size()>0)){
-		        	i=0;
-		        	sparqlQueryString.append(" && ");
-			        for(String searchTerm:orSearchTerms){
-			        	sparqlQueryString.append("(regex(?object, \"");
-			        	sparqlQueryString.append(searchTerm);
-			        	sparqlQueryString.append("\", \"i\"))");
-			        	//if this is not the last element add ||
-			        	if(i != (orSearchTerms.size()-1)){
-			        		sparqlQueryString.append(" || ");
-			        	}
-			        	i++;
-			        }	
-	        	}
-	        }
-	        sparqlQueryString.append(" )");
-	        
-	        //add learning object type preference
-			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredLearningObjectType())){
-				sparqlQueryString.append("FILTER ( ?learningObjectType = TenOntology:" +  studentAnnotationsBean.getPreferredLearningObjectType() + " )");
-			}else{
-				sparqlQueryString.append("FILTER ((?learningObjectType = TenOntology:" +  TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE + " )");
-				sparqlQueryString.append("|| (?learningObjectType = TenOntology:" +  TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT + " )");
-				sparqlQueryString.append("|| (?learningObjectType = TenOntology:" +  TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO + " )");
-				sparqlQueryString.append("|| (?learningObjectType = TenOntology:" +  TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO + " )");
-				sparqlQueryString.append(" )");
-			}
-			
-			//Add tribe
-			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getTribe())){
-				sparqlQueryString.append(" OPTIONAL { ?learning_object <" + TripleStoreConstants.URI_PREDICATE_TEN_LO_TRIBE + "> ?tribe . ");
-				sparqlQueryString.append(" FILTER (regex(?tribe, \"" + studentAnnotationsBean.getTribe() + "\", \"i\" ))}" );
-			}
-			
-			//Add language preference
-			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredLanguage())){
-				sparqlQueryString.append(" OPTIONAL { ?learning_object <" + TripleStoreConstants.URI_PREDICATE_DC_LANGUAGE + "> ?language . ");
-				sparqlQueryString.append(" FILTER (regex(?language, \"" + studentAnnotationsBean.getPreferredLanguage() + "\", \"i\" ))}" );
-			}
-			
-			//Add preferred text type
-			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredTextContent())){
-				sparqlQueryString.append(" OPTIONAL { ?learning_object <" + TripleStoreConstants.URI_PREDICATE_TEN_TEXT_TYPE + "> ?textType . ");
-				sparqlQueryString.append(" FILTER (regex(?textType, \"" + studentAnnotationsBean.getPreferredTextContent() + "\", \"i\" ))}" );
-			}
-			
-			//Add preferred image type
-			if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredImageContent())){
-				sparqlQueryString.append(" OPTIONAL { ?learning_object <" + TripleStoreConstants.URI_PREDICATE_TEN_IMAGE_TYPE + "> ?imageType . ");
-				sparqlQueryString.append(" FILTER (regex(?imageType, \"" + studentAnnotationsBean.getPreferredImageContent() + "\", \"i\" )) }" );
-			}
-			
-			sparqlQueryString.append(" }");
-			
-			log.debug("SEARCH QUERY:  " + sparqlQueryString.toString());
-			
-			//STEP 1 - Connect to virtuoso database
-			VirtGraph graph = new VirtGraph (TripleStoreConstants.VIRTUOSO_GRAPH_URI, m_ds);
-			
-			Query sparql = QueryFactory.create(sparqlQueryString.toString());
-			
-			VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create(sparql.toString(), graph);
-	
-			//STEP 3 - Execute
-			ResultSet results = vqe.execSelect();
-			while (results.hasNext()) {
-				QuerySolution result = results.nextSolution();
-			    RDFNode rdfNodeSubject = result.get("learning_object");
-			    RDFNode rdfNodeObject = result.get("learningObjectType");
-			    if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE).equals(rdfNodeObject.toString())){
-			    	imagesList.add(rdfNodeSubject.toString());
-			    }else if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO).equals(rdfNodeObject.toString())){
-			    	audioList.add(rdfNodeSubject.toString());
-			    }else if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO).equals(rdfNodeObject.toString())){
-			    	videoList.add(rdfNodeSubject.toString());
-			    }else if((TripleStoreConstants.URI_TEN_ONTOLOGY + TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT).equals(rdfNodeObject.toString())){
-			    	videoList.add(rdfNodeSubject.toString());
-			    }
-			 }
-			
-			returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_IMAGE, imagesList);
-			returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_AUDIO, audioList);
-			returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_VIDEO, videoList);
-			returnMap.put(TripleStoreConstants.LEARNING_OBJECT_TYPE_TEXT, textList);
-			
-		}catch (Exception ex) {
-			log.error(ex);
-			throw ex;
-		}finally{			
-			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
-		}
-		return returnMap;
-	}*/
-
+/**
+ * This method will retrieve the learning objects which match user profile
+ * If the preferred object type is not set, any learning object which matches the course requirement and student profile is displayed in recommended
+ * If the preferred object type is set, only the learning objects of this type which match the course requirement and student preference are displayed
+ * 
+ */
 public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(StudentAnnotationsBean studentAnnotationsBean, String keywords) throws Exception{
 	
 	String LOG_METHOD_NAME = "void queryLearningObject(StudentAnnotationsBean studentAnnotationsBean, ArrayList<String> orSearchTerms)";
@@ -626,7 +413,7 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
         }
         baseQuery.append(" )");
         
-        //add learning object type preference
+         //add learning object type preference
 		if(!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredLearningObjectType())){
 			baseQuery.append("FILTER ( ?learningObjectType = TenOntology:" +  studentAnnotationsBean.getPreferredLearningObjectType() + " )");
 		}else{
@@ -687,6 +474,13 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 			sparqlQueryString.append(" { ?learning_object <" + TripleStoreConstants.URI_PREDICATE_TEN_IMAGE_TYPE + "> ?imageType . ");
 			sparqlQueryString.append(" FILTER (regex(?imageType, \"" + studentAnnotationsBean.getPreferredImageContent() + "\", \"i\" )) " );
 			sparqlQueryString.append(" } ");
+			upperCondition = true;
+		}
+		
+		
+		//display learning objects of type as recommeded
+		if((upperCondition == false) && (!Utils.isEmptyOrNull(studentAnnotationsBean.getPreferredLearningObjectType()))){
+			sparqlQueryString.append(baseQuery.toString());
 			upperCondition = true;
 		}
 		

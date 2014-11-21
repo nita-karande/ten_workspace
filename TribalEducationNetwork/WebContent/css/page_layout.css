@@ -34,7 +34,7 @@ html, body { margin: 0; padding: 0; }
 	
 .nav_table a:link, a:visited {
     display: block;
-    width: 152px;
+    width: 180px;
     font-weight: bold;
     color: #FFFFFF;
     background-color: lightgrey;

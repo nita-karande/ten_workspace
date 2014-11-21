@@ -48,7 +48,7 @@
 		<tr><td width="80%"><h1><c:out value="${'RECOMMENDED LEARNING OBJECTS'}" /></h1></td></tr>
 		<c:choose>
 			<c:when test="${recommendedLearningObjects == 0}">
-				<tr><td><header><c:out value="${'No recommended learning objects other than the default ones found'}" /></header></td></tr>
+				<tr><td colspan=2><h2><c:out value="${'No recommended learning objects other than the default ones found'}" /></h2></td></tr>
 			</c:when>		
 			<c:otherwise>				
 				<c:forEach var="learningObjectMapEntry" items="${requestScope.mapLearningObjects}">
@@ -142,7 +142,7 @@
 		<tr><td width="80%"><h1><c:out value="${'DEFAULT LEARNING OBJECTS'}" /></h1></td></tr>
 		<c:choose>
 			<c:when test="${defaultLearningObjects == 0 }">
-				<tr><td><header><c:out value="${'No default learning objects other than the recommended ones found'}" /></header></td><td></td></tr>
+				<tr><td colspan=2><h2><c:out value="${'No default learning objects other than the recommended ones found'}" /></h2></td><td></td></tr>
 			</c:when>		
 			<c:otherwise>				
 				<c:forEach var="learningObjectMapEntry" items="${requestScope.mapDefaultLearningObjects}">
@@ -210,7 +210,7 @@
 							<c:forEach var="learningObjectDetailsBean" items="${learningObjectsList}">						
 								<tr><td><h2>Document Name:</h2></td><td><h2><c:out value="${learningObjectDetailsBean.value.fileName}" /></h2></td></tr>
 								<tr><td></td></tr>	
-								<tr><td>
+								<tr><td colspan=2>
 									<c:choose>
 									<c:when test="${fn:length(learningObjectDetailsBean.value.content) < 1024000}">
 										<object>

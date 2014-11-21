@@ -15,7 +15,7 @@
 		
 	</script>
 </head>
-<body>
+<body style="background-image: url('${pageContext.request.contextPath}/images/background_student.jpg');background-attachment: fixed; background-position: right bottom;background-repeat:no-repeat">
 	<form action="${pageContext.request.contextPath}/view/profiledetails.action" method="post" enctype="multipart/form-data">
 	<header>
 		<%@include file="include_header.jsp"%>
