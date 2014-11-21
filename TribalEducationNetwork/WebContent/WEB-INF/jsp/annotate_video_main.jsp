@@ -40,7 +40,7 @@
 	</table>
 	
 	<table>
-		 <tr><td>ANNOTATE VIDEO</td></tr>
+		 <tr><td><h1>ANNOTATE VIDEO</h1></td></tr>
   		  <c:choose>
 	  		  <c:when test="${(requestScope.learningObjects == null) || (fn:length(requestScope.learningObjects) == 0)}">
 	  		 	 <tr><td>No videos to be annotated</td></tr>
@@ -48,7 +48,7 @@
   			 <c:otherwise>
   			 	<c:forEach items="${requestScope.learningObjects}" var="learningObject">
   			 		 <tr>
- 		 				<td>Annotate Video <a href="#" onclick="annotateVideo('${learningObject.id}');"><c:out value="${learningObject.fileName}"></c:out></a></td>
+ 		 				<td><a href="#" onclick="annotateVideo('${learningObject.id}');"><c:out value="${learningObject.fileName}"></c:out></a></td>
   			 		 </tr>
   			 	</c:forEach>
   			 </c:otherwise>

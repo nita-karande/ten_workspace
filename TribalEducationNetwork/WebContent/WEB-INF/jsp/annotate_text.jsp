@@ -6,6 +6,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/page_layout.css">
 	
 	<title>Tribal Education Network Annotate Text main page</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -37,7 +38,7 @@
 	</table>
 	
 	<table style="width:700px">
-		 <tr><td style="width:100%">Annotate Text</td></tr>
+		 <tr><td style="width:100%"><h1>ANNOTATE TEXT</h1></td></tr>
   		  <c:choose>
 	  		  <c:when test="${(actionType == 'display') && (requestScope.learningObjectDetailsBean == null)}">
 	  		 	 <tr><td>Text cannot be found</td></tr>

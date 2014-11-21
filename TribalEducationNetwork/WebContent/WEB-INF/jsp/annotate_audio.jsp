@@ -40,7 +40,7 @@
 	</table>
 	
 	<table style="width:700px">
-		 <tr><td>Annotate audio</td></tr>
+		 <tr><td><h1>ANNOTATE AUDIO</h1></td></tr>
   		  <c:choose>
 	  		 <c:when test="${(actionType == 'display') && (requestScope.learningObjectDetailsBean == null)}">
 	  		 	 <tr><td>Audio cannot be found</td><td></td></tr>

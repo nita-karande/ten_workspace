@@ -38,7 +38,7 @@
 	</table>
 	
 	<table>
-		 <tr><td>ANNOTATE IMAGE</td></tr>
+		 <tr><td><h1>ANNOTATE IMAGE</h1></td></tr>
   		  <c:choose>
 	  		  <c:when test="${(requestScope.learningObjects == null) || (fn:length(requestScope.learningObjects) == 0)}">
 	  		 	 <tr><td>No images to be annotated</td></tr>
@@ -46,7 +46,7 @@
   			 <c:otherwise>
   			 	<c:forEach items="${requestScope.learningObjects}" var="learningObject">
   			 		 <tr>
- 		 				<td>Annotate Image <a href="#" onclick="annotateImage('${learningObject.id}');"><c:out value="${learningObject.fileName}"></c:out></a></td>
+ 		 				<td><a href="#" onclick="annotateImage('${learningObject.id}');"><c:out value="${learningObject.fileName}"></c:out></a></td>
   			 		 </tr>
   			 	</c:forEach>
   			 </c:otherwise>

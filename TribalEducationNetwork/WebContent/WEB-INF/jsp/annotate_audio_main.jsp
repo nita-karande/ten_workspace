@@ -37,7 +37,7 @@
 	</table>
 	
 	<table>
-		 <tr><td>ANNOTATE AUDIO</td></tr>
+		 <tr><td><h1>ANNOTATE AUDIO</h1></td></tr>
   		  <c:choose>
 	  		  <c:when test="${(requestScope.learningObjects == null) || (fn:length(requestScope.learningObjects) == 0)}">
 	  		 	 <tr><td>No audios to be annotated</td></tr>
@@ -45,7 +45,7 @@
   			 <c:otherwise>
   			 	<c:forEach items="${requestScope.learningObjects}" var="learningObject">
   			 		 <tr>
- 		 				<td>Annotate Audio <a href="#" onclick="annotateAudio('${learningObject.id}');"><c:out value="${learningObject.fileName}"></c:out></a></td>
+ 		 				<td><a href="#" onclick="annotateAudio('${learningObject.id}');"><c:out value="${learningObject.fileName}"></c:out></a></td>
   			 		 </tr>
   			 	</c:forEach>
   			 </c:otherwise>

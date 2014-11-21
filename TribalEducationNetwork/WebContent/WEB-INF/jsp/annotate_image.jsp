@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/page_layout.css">
 	<title>Tribal Education Network Annotate Image main page</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>
@@ -37,7 +37,7 @@
 	</table>
 	
 	<table style="width:700px">
-		 <tr><td>Annotate image</td></tr>
+		 <tr><td><h1>ANNOTATE IMAGE</h1></td></tr>
   		  <c:choose>
 	  		  <c:when test="${(actionType == 'display') && (requestScope.learningObjectDetailsBean == null)}">
 	  		 	 <tr><td>Image cannot be found</td><td></td></tr>

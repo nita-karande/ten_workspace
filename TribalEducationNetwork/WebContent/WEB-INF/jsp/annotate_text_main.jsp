@@ -40,7 +40,7 @@
 	</table>
 	
 	<table>
-		 <tr><td>ANNOTATE TEXT</td></tr>
+		 <tr><td><h1>ANNOTATE TEXT</h1></td></tr>
   		  <c:choose>
 	  		  <c:when test="${(requestScope.learningObjects == null) || (fn:length(requestScope.learningObjects) == 0)}">
 	  		 	 <tr><td>No texts to be annotated</td></tr>
@@ -48,7 +48,7 @@
   			 <c:otherwise>
   			 	<c:forEach items="${requestScope.learningObjects}" var="learningObject">
   			 		 <tr>
- 		 				<td>Annotate Text <a href="#" onclick="annotateText('${learningObject.id}');"><c:out value="${learningObject.fileName}"></c:out></a></td>
+ 		 				<td><a href="#" onclick="annotateText('${learningObject.id}');"><c:out value="${learningObject.fileName}"></c:out></a></td>
   			 		 </tr>
   			 	</c:forEach>
   			 </c:otherwise>
