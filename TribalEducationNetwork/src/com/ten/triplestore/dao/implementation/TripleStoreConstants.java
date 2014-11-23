@@ -62,7 +62,7 @@ public interface TripleStoreConstants {
 
 	public static final String URI_PREDICATE_TEN_COPY_RIGHT_HOLDER = URI_TEN_ONTOLOGY + "copyrightHolder";	
 	
-	public static final String URI_PREDICATE_TEN_CREATOR = URI_TEN_ONTOLOGY + "creator";
+	public static final String URI_PREDICATE_DC_CREATOR = URI_DUBLIN_CORE + "creator";
 	
 	public static final String URI_PREDICATE_TEN_PUBLISHER = URI_TEN_ONTOLOGY + "publisher";
 	

@@ -773,31 +773,10 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
-			//source
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getSource())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_SOURCE);
-				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getSource());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
 			//language	
 			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getLanguage())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_LANGUAGE);
 				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getLanguage());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
-			//relation	
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getRelation())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_RELATION);
-				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getRelation());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
-			//coverage		
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getCoverage())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_COVERAGE);
-				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getCoverage());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
@@ -807,13 +786,6 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getTribe());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}			
-			
-			//rating
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getRating())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_LO_RATING);
-				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getRating());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
 			
 			//image type
 			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getImageType())){
@@ -863,14 +835,7 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_FORMAT);
 				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getFormat());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
-			//identifier	
-			if(!Utils.isEmptyOrNull(tenLearningObjectAnnotationsBean.getIdentifier())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_IDENTIFIER);
-				predicate_value = Node.createLiteral(tenLearningObjectAnnotationsBean.getIdentifier());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}	
+			}			
 		}catch(Exception ex)
 		{
 			log.error(ex);
@@ -1398,124 +1363,7 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 		return tripleList;
 	}
 	
-	/**
-	 * Add creator annotation triples
-	 */
-	public ArrayList<Triple> addCreatorAnnotationTriples(Node subject ,DigitalRightsManagementBean digitalRightsManagementBean){
-		
-		String LOG_METHOD_NAME = " ArrayList<Triple> addCreatorAnnotationTriples(Node, DigitalRightsManagementBean)";
-		log.debug(this.getClass() + TripleStoreConstants.LOG_BEGIN + LOG_METHOD_NAME);
-		
-		ArrayList<Triple> tripleList = new ArrayList<>();
-		Node predicate = null, predicate_value=null;
-		try{						
-			//copy right holder information
-			predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_CREATOR);
-			StringBuffer creatorAttributes = new StringBuffer();
-			
-			//id
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreator())){
-				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_ID);
-				creatorAttributes.append("=");
-				creatorAttributes.append(digitalRightsManagementBean.getCreator());
-				creatorAttributes.append(";");
-			}
-			
-			//email
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorEmail())){
-				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_EMAIL);
-				creatorAttributes.append("=");
-				creatorAttributes.append(digitalRightsManagementBean.getCreatorEmail());
-				creatorAttributes.append(";");
-			}
-			
-			//approved
-			boolean approved = (!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorApproved()) 
-					&& "true".equals(digitalRightsManagementBean.getCreatorApproved()))?true:false;
-			creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_APPROVED);
-			creatorAttributes.append("=");
-			creatorAttributes.append(approved);
-			creatorAttributes.append(";");
-			
-			
-			//cell phone
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorCellPhone())){
-				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_CELL_PHONE);
-				creatorAttributes.append("=");
-				creatorAttributes.append(digitalRightsManagementBean.getCreatorCellPhone());
-				creatorAttributes.append(";");
-			}
-			
-			//office phone
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorOfficePhone())){
-				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_OFFICE_PHONE);
-				creatorAttributes.append("=");
-				creatorAttributes.append(digitalRightsManagementBean.getCreatorOfficePhone());
-				creatorAttributes.append(";");
-			}
-			
-			//FAX
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorFax())){
-				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_FAX);
-				creatorAttributes.append("=");
-				creatorAttributes.append(digitalRightsManagementBean.getCreatorFax());
-				creatorAttributes.append(";");
-			}
-			
-			//street address
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorStreetAddress())){
-				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_STREET_ADDRESS);
-				creatorAttributes.append("=");
-				creatorAttributes.append(digitalRightsManagementBean.getCreatorStreetAddress());
-				creatorAttributes.append(";");
-			}
-			
-			//other address
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorOtherAddress())){
-				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_OTHER_ADDRESS);
-				creatorAttributes.append("=");
-				creatorAttributes.append(digitalRightsManagementBean.getCreatorOtherAddress());
-				creatorAttributes.append(";");
-			}
-			
-			//city
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorCity())){
-				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_CITY);
-				creatorAttributes.append("=");
-				creatorAttributes.append(digitalRightsManagementBean.getCreatorCity());
-				creatorAttributes.append(";");
-			}
-			
-			//state
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorState())){
-				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_STATE);
-				creatorAttributes.append("=");
-				creatorAttributes.append(digitalRightsManagementBean.getCreatorState());
-				creatorAttributes.append(";");
-			}
-			
-			//state
-			if(!Utils.isEmptyOrNull(digitalRightsManagementBean.getCreatorZipCode())){
-				creatorAttributes.append(TripleStoreConstants.ATTRIBUTE_ZIP_CODE);
-				creatorAttributes.append("=");
-				creatorAttributes.append(digitalRightsManagementBean.getCreatorZipCode());
-				creatorAttributes.append(";");
-			}
-			
-			predicate_value = Node.createLiteral(creatorAttributes.toString());
-			tripleList.add(new Triple(subject, predicate, predicate_value));
-		}catch(Exception ex)
-		{
-			log.error(ex);
-			throw ex;
-		}finally{
-			log.debug(this.getClass() + TripleStoreConstants.LOG_END + LOG_METHOD_NAME);
-		}
-		
-		return tripleList;
-	}
-	
-	
+
 	/**
 	 * Add contributor annotation triples
 	 */
@@ -1746,13 +1594,6 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
 			
-			//isPartOf	
-			if(!Utils.isEmptyOrNull(courseAnnotationBean.getIsPartOf())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_COMMON_ISPARTOF);
-				predicate_value = Node.createLiteral(courseAnnotationBean.getIsPartOf());
-				tripleList.add(new Triple(subject, predicate, predicate_value));
-			}
-			
 			//hasPart	
 			if(!Utils.isEmptyOrNull(courseAnnotationBean.getHasPart())){
 				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_COMMON_HASPART);
@@ -1762,7 +1603,7 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 			
 			//creator
 			if(!Utils.isEmptyOrNull(courseAnnotationBean.getCreator())){
-				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_TEN_CREATOR);
+				predicate = Node.createURI(TripleStoreConstants.URI_PREDICATE_DC_CREATOR);
 				predicate_value = Node.createLiteral(courseAnnotationBean.getCreator());
 				tripleList.add(new Triple(subject, predicate, predicate_value));
 			}
@@ -1955,7 +1796,7 @@ public HashMap<String, ArrayList<String>> queryRecommendedLearningObjects(Studen
 			    }else if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_TEN_COMMON_HASPART)){
 			    	//hasPart
 			    	courseAnnotationsBean.setHasPart(objectNode.toString());
-			    }else if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_TEN_CREATOR)){
+			    }else if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_DC_CREATOR)){
 			    	//creator
 			    	courseAnnotationsBean.setCreator(objectNode.toString());
 			    }else if(predicateNode.toString().contains(TripleStoreConstants.URI_PREDICATE_DC_DESCRIPTION)){

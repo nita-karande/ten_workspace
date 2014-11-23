@@ -7,7 +7,6 @@
 		body.body_class {
 			background-attachment: fixed; 
 			background-position: center;
-			background-color:lightgrey;
 			background-image: url('/Ten/images/background_login.jpg');
 		}
 		

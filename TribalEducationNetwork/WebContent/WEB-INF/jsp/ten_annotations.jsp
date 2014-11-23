@@ -28,13 +28,9 @@
 		  ?</div></td>
 	  </tr>
 	 </c:if>
-</table>
-<br/>
-<table style="width:100%">
 	<tr><td width='50%'>Title</td><td width='50%'><div title="${'The name given to the resource eg. The sound of music'}" ><input type="text" name="tenLearningObjectAnnotationsBean.title" />  ?</div></td></tr>
 	<tr><td>Subject</td><td><div title="${'The topic of the content of the resource typically keywords separated by semi-colons eg. Street, Picabo'}" ><input type="text" name="tenLearningObjectAnnotationsBean.subject" />  ?</div></td></tr>
 	<tr><td>Description</td><td><div title="${'An account of the content of the resource eg. an abstract, table of contents, reference to a graphical representation of content or a free-text account of the content.'}" ><textarea name="tenLearningObjectAnnotationsBean.description" rows="4" cols="22" ></textarea>  ?</div></td></tr>
-	<tr><td>Source </td><td><div title="${'A Reference to a resource from which the present resource is derived eg. Image from page 54 of the 1922 edition of Romeo and Juliet'}" ><input type="text" name="tenLearningObjectAnnotationsBean.source" />  ?</div></td></tr>
 	<tr><td>Language </td>
 	<td>
 		<div title="${'A language of the intellectual content of the resource eg. en-GB for English used in the United Kingdom'}" >
@@ -45,8 +41,6 @@
 			<option value="Fr" <c:if test="${tenLearningObjectAnnotationsBean.language == 'Fr'}">selected</c:if>>Fr</option>
 		</select>
        ?</div></td></tr>
-	<tr><td>Relation </td><td><div title="${'A reference to a related resource'}" ><input type="text" name="tenLearningObjectAnnotationsBean.relation" /> ?</div></td></tr>
-	<tr><td>Coverage </td><td><div title="${'The extent or scope of the content of the resource either spatial location, temporal period  or jurisdiction '}" ><input type="text" name="tenLearningObjectAnnotationsBean.coverage" />  ?</div></td></tr>
 	<tr><td>Tribe</td><td><div title="${'A reference to tribes referenced in the content'}" ><input type="text" name="tenLearningObjectAnnotationsBean.tribe" />  ?</div></td></tr>
 </table>
 

@@ -60,14 +60,14 @@
 	<tr>
 		<td style="width:40%"><b>Copyright Holder Information</b></td>
 		<td><input type="checkbox" name="digitalRightsManagementBean.copyRightHolderNotAvailable" onchange="onCopyRightHolderChange(this)"/>
-		 Copyright holder contact information not available</td>
+		 Copyright holder information not available</td>
 	</tr>
 	<tr class="copyRightHolderData">
 		<td>Copyright Holder Name</td>
 		<td><div title="${'An entity which is the copyright holder of the resource e.g. author of the article, creator of artifact, photographer of a picture or artist of a structure'}"><input type="text" id="copyRightHolderId" name="digitalRightsManagementBean.copyRightHolderId" />  ?</div></td>
 	</tr>
 	<tr id="copyRightHolderFinderInfo_div" style="display:none;">
-		<td>Potential copy right holder information</td><td><div title="${'Information that can help in finding the potential copyright holder'}" ><input type="text" name="digitalRightsManagementBean.copyRightHolderFinderInfo" id ="copyRightHolderFinderInfo" />  ?</div></td>
+		<td>Potential copy right holder information</td><td><div title="${'Information about the potential copy right holder or any information that can help finding the copy right holder.'}" ><input type="text" name="digitalRightsManagementBean.copyRightHolderFinderInfo" id ="copyRightHolderFinderInfo" />  ?</div></td>
 	</tr>
 	<tr class="copyRightHolderData">
 		<td>Email </td><td><input type="text" id="copyRightHolderEmail" name="digitalRightsManagementBean.copyRightHolderEmail" /></td>
@@ -108,7 +108,7 @@
 	</tr>
 	<tr>
 		<td>Publisher Name</td>
-		<td><div title="${'The entity holding publishing rights e.g. publisher of book to which the given artifact belongs '}" ><input type="text" id="publisherId" name="digitalRightsManagementBean.publisher" />  ?</div></td>
+		<td><div title="${'The entity holding publishing rights on the artifact e.g. publisher of book to which the given artifact belongs '}" ><input type="text" id="publisherId" name="digitalRightsManagementBean.publisher" />  ?</div></td>
 	</tr>
 	<tr>
 		<td>Email </td><td><input type="text" id="publisherEmail" name="digitalRightsManagementBean.publisherEmail" /></td>
@@ -150,7 +150,7 @@
 	</tr>	
 	<tr>
 		<td>Contributor Name</td>
-		<td><div title="${'An entity responsible for providing the resource or making aware obout the artifact or handing artifact'}" ><input type="text" id="contributorId" name="digitalRightsManagementBean.contributor" />  ?</div></td>
+		<td><div title="${'An entity responsible for providing or handing over the artifact for use in TEN.'}" ><input type="text" id="contributorId" name="digitalRightsManagementBean.contributor" />  ?</div></td>
 	</tr>
 	<tr>
 		<td>Email </td><td><input type="text" id="contributorEmail" name="digitalRightsManagementBean.contributorEmail" /></td>
@@ -187,16 +187,16 @@
 	<tr><td>Physical Description</td><td><div title="${'The description of the artifact e.g. the format in which the artifact was provided such as hard copy, compact disc'}" ><input type="text" id="physicalDescriptionId" name="digitalRightsManagementBean.physicalDescription" />  ?</div></td></tr>
 	
 	<tr><td><br></td></tr>	
-	<tr><td>Loan Period </td><td><div title="${'The intended lenght of time for loan'}" ><input type="text" id="loadPeriodId" name="digitalRightsManagementBean.loanPeriod" />  ?</div></td></tr>
+	<tr><td>Loan Period End Date</td><td><div title="${'End date for the loan of artifact in yyyy-MM-dd format. Blank indicates unrestricted use of artifact.'}" ><input type="text" id="loadPeriodId" name="digitalRightsManagementBean.loanPeriod" />  ?</div></td></tr>
 	
 	<tr><td><br></td></tr>	
-	<tr><td>Identifier </td><td><div title="${'The identifier of the resource to which this artifact belongs'}" ><input type="text" id="identifierId" name="digitalRightsManagementBean.identifier" />  ?</div></td></tr>
+	<tr><td>Source Identifier </td><td><div title="${'The identifier of the resource to which this artifact belongs. E.g. for an article from a book, ISBN (International Standard Book Number) of book.'}" ><input type="text" id="identifierId" name="digitalRightsManagementBean.identifier" />  ?</div></td></tr>
 	
 	<tr><td><br></td></tr>
-	<tr><td>Identifier Description </td><td><div title="${'The identifier description'}" ><input type="text" id="identifierDescId" name="digitalRightsManagementBean.identifierDescription" />  ?</div></td></tr>
+	<tr><td>Source Description </td><td><div title="${'The description of the source to which this artifact belongs e.g. for an article from book, description of book'}" ><input type="text" id="identifierDescId" name="digitalRightsManagementBean.identifierDescription" />  ?</div></td></tr>
 	
 	<tr><td><br></td></tr>
-	<tr><td>Handling instructions </td><td><div title="${'Instructions on how the resource should be maintained e.g an image might be required to be in dry weather'}" ><input type="text" id="handlingInstructionsId" name="digitalRightsManagementBean.handlingInstructions" />  ?</div></td></tr>
+	<tr><td>Handling instructions </td><td><div title="${'Instructions on how the resource should be maintained in case of rare image or book e.g an image might be required to be in dry weather'}" ><input type="text" id="handlingInstructionsId" name="digitalRightsManagementBean.handlingInstructions" />  ?</div></td></tr>
 	
 	<tr><td><br></td></tr>
 	<tr><td>Rights </td><td><div title="${'The Rights element may be used for either a textual statement or a URL pointing to a rights statement, or a combination'}" ><input type="text" id="rightsId" name="digitalRightsManagementBean.rights" />  ?</div></td></tr>
@@ -211,9 +211,9 @@
 	<tr>
 		<td>Story provided with the artifact</td><td> <input type="checkbox" name="digitalRightsManagementBean.storyProvided" value="true" onchange="onStoryProvidedChange(this)"/></td>
 	</tr>
-	<tr class="storyClass" style="display:none;"><td>Story </td><td><div title="${'Story provided by tribe with the artifact'}"><textarea id="storyId" name="digitalRightsManagementBean.story" rows="4"></textarea>  ?</div></td>
+	<tr class="storyClass" style="display:none;"><td>Story </td><td><div title="${'Story provided by tribe with the artifact that will be used by annotators to tag the artifact'}"><textarea id="storyId" name="digitalRightsManagementBean.story" rows="4"></textarea>  ?</div></td>
 	</tr>
-	<tr class="storyClass" style="display:none;"><td>Story context </td><td><div title="${'Story provided by tribe in which format e.g. as a recording, on paper, audio'}"><input type="text" id="storyContext" name="digitalRightsManagementBean.storyContext" />  ?</div></td>
+	<tr class="storyClass" style="display:none;"><td>Story context </td><td><div title="${'Information about context of story provided by tribe such as the format it was provided in e.g. as a recording, on paper, audio'}"><input type="text" id="storyContext" name="digitalRightsManagementBean.storyContext" />  ?</div></td>
 	</tr>
 	
 	<tr><td><br></td></tr>
@@ -223,7 +223,7 @@
 	</tr>
 	<tr class="storyClass"  style="display:none;">
 		<td>Story Provider Name</td>
-		<td><div title="${'An entity which provided the story with the resource'}"><input type="text" id="storyProviderId" name="digitalRightsManagementBean.storyProvider" />  ?</div></td>
+		<td><div title="${'An entity responsible for providing the story associated with the artifact'}"><input type="text" id="storyProviderId" name="digitalRightsManagementBean.storyProvider" />  ?</div></td>
 	</tr>
 	<tr class="storyClass"  style="display:none;">
 		<td>Email </td><td><input type="text" id="storyProviderEmail" name="digitalRightsManagementBean.storyProviderEmail" /></td>
